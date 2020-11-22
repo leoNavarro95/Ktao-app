@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import  'package:keyboard_actions/keyboard_actions.dart';
 import 'package:preferencias_de_usuario/src/widgets/keyboard.dart';
-import 'package:preferencias_de_usuario/src/widgets/keyboard/custom_input.dart';
 
 import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
 import 'package:preferencias_de_usuario/src/widgets/menu_lateral_widget.dart';
