@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import  'package:keyboard_actions/keyboard_actions.dart';
-import 'package:preferencias_de_usuario/src/widgets/keyboard.dart';
 
 import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
 import 'package:preferencias_de_usuario/src/widgets/menu_lateral_widget.dart';
@@ -15,27 +13,6 @@ class CalculadoraPage extends StatefulWidget {
 class _CalculadoraPageState extends State<CalculadoraPage> {
   final prefs = new PreferenciasUsuario();
 
-  final FocusNode _mynode = FocusNode();
-  final mycustomNotifier = ValueNotifier<String>("0");
-  
-  /// Creates the [KeyboardActionsConfig] to hook up the fields
-  /// and their focus nodes to our [FormKeyboardActions].
-  KeyboardActionsConfig _buildConfig(BuildContext context) {
-    return KeyboardActionsConfig(
-      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
-      keyboardBarColor: Colors.blue[200],
-      nextFocus: true,
-      actions: [
-        KeyboardActionsItem(
-          focusNode: _mynode,
-          footerBuilder: (_) => CustumNumericKeyboard(
-            notifier: mycustomNotifier,
-          ),
-        ),
-
-      ],
-    );
-  }
 
   String _generoStr = 'masculino';
   int _genero   = 1;
@@ -83,51 +60,12 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
         Divider(),
         _resultadoIMC(),
         Divider(),
-        _customInputField(),
         
       ],
     );
   }
 
-Widget _customInputField(){
-  return Container(
-    height: 200,
-    width: 200,
-    child: KeyboardActions(
-        // autoScroll: false,
-        disableScroll: true,
-        // tapOutsideToDismiss: true,
-        config: _buildConfig(context),
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(15.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                KeyboardCustomInput<String>(
-                  focusNode: _mynode,
-                  height: 65,
-                  notifier: mycustomNotifier,
-                  builder: (context, val, hasFocus) {
-                    return Container(
-                      alignment: Alignment.center,
-                      color: hasFocus ? Colors.blue[200] : Colors.white,
-                      child: Text(
-                        val,
-                        style: TextStyle(fontSize: 20),
-                        //TODO: Tratar de usar un campo de texto TextField
-                      ),
-                    );
-                  },
-                ),
-                
-              ],
-            ),
-          ),
-        ),
-      ),
-  );
-}
+
 
   Widget _seleccionGenero() {
     return Container(
