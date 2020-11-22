@@ -53,8 +53,6 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
           ),
         ),
         Divider(),
-        _seleccionGenero(),
-        Divider(),
         _creaFormulario(),
         _crearBotonIMC(),
         Divider(),
