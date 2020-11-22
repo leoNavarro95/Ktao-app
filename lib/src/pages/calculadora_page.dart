@@ -12,6 +12,13 @@ class CalculadoraPage extends StatefulWidget {
 }
 
 class _CalculadoraPageState extends State<CalculadoraPage> {
+
+  @override
+  void initState(){
+    prefs.ultimaPagina = CalculadoraPage.routeName;
+    super.initState();
+  }
+
   final prefs = new PreferenciasUsuario();
 
 
