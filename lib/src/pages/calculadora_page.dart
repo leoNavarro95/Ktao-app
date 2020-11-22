@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
 import 'package:preferencias_de_usuario/src/widgets/menu_lateral_widget.dart';
@@ -64,7 +65,7 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
   }
 
 
-
+  // de momento no se emplea este método, en un futuro se usará
   Widget _seleccionGenero() {
     return Container(
       color: Colors.grey[200],
@@ -126,7 +127,9 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
     return Container(
         padding: EdgeInsets.symmetric(horizontal: 10.0),
         child: TextField(
-          keyboardType: TextInputType.numberWithOptions(),
+          
+          inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ,-]')),],
+          keyboardType: TextInputType.numberWithOptions(decimal: true),
           controller: textController,
           decoration: InputDecoration(labelText: titulo, helperText: subTitulo),
           onChanged: (val) {
