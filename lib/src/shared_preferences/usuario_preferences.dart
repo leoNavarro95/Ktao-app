@@ -110,4 +110,12 @@ class PreferenciasUsuario {
     _prefs.setDouble('peso', value);
   }
 
+  get imc {
+    return _prefs.getDouble('imc') ?? 0.0;
+  }
+
+  set imc(double value){
+    _prefs.setDouble('imc', value);
+  }
+
 }

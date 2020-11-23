@@ -16,6 +16,10 @@ class _CalculadoraIMCPageState extends State<CalculadoraIMCPage> {
   @override
   void initState(){
     prefs.ultimaPagina = CalculadoraIMCPage.routeName;
+    _textCtrEstatura.text = prefs.estatura.toString();
+    _textCtrPeso.text = prefs.peso.toString();
+    _imc = prefs.imc.toString();
+
     super.initState();
   }
 
@@ -102,9 +106,11 @@ class _CalculadoraIMCPageState extends State<CalculadoraIMCPage> {
 
             if( titulo == "Peso"){
               _peso = valor;
+              prefs.peso = _peso; 
             }
             else if( titulo == "Estatura"){
               _estatura = valor;
+              prefs.estatura = _estatura;
             }
           },
         ));
@@ -119,7 +125,8 @@ class _CalculadoraIMCPageState extends State<CalculadoraIMCPage> {
         label: Text('Calcular IMC'),
         onPressed: () {
           setState(() {
-            _imc = (_peso / (_estatura * _estatura)).toDouble().toStringAsFixed(2);
+            _imc = (prefs.peso / (prefs.estatura * prefs.estatura)).toDouble().toStringAsFixed(2);
+            prefs.imc = double.parse(_imc);
           });
         },
       ),
