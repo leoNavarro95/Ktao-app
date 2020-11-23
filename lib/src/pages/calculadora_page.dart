@@ -52,6 +52,9 @@ class _CalculadorasMainPageState extends State<CalculadorasMainPage> {
 
   Widget _crearBottomNavBar() {
     return BottomNavigationBar(
+        elevation: 20.0,
+        backgroundColor: (prefs.colorSecundario) ? Colors.blueGrey : Colors.blue[100],
+        iconSize: 40.0,
         currentIndex: _pageIndex,
         onTap: (index) {
           setState(() {
