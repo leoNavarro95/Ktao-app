@@ -50,11 +50,6 @@ class PreferenciasUsuario {
     this._prefs = await SharedPreferences.getInstance();
   }
 
-  //ninguna de estas propiedades se usa
-  // bool   _colorSecundario;
-  // int    _genero;
-  // String _nombre;
-
   // GET y SET del género
 
   get genero {
@@ -97,6 +92,22 @@ class PreferenciasUsuario {
 
   set ultimaPagina( String value ) {
     _prefs.setString('ultimaPagina', value);
+  }
+
+  get estatura {
+    return _prefs.getDouble('estatura') ?? 0.0;
+  }
+  
+  set estatura( double val){
+    _prefs.setDouble('estatura', val);
+  }
+
+  get peso {
+    return _prefs.getDouble('peso') ?? 0.0;
+  }
+
+  set peso(double value){
+    _prefs.setDouble('peso', value);
   }
 
 }

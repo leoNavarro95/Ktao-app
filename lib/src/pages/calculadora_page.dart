@@ -61,7 +61,7 @@ class _CalculadorasMainPageState extends State<CalculadorasMainPage> {
         items: [
           BottomNavigationBarItem(label: 'IMC', icon: Icon(Icons.handyman)),
           BottomNavigationBarItem(label: 'IMS', icon: Icon(Icons.backup)),
-          BottomNavigationBarItem(label: 'ITR', icon: Icon(Icons.today)),
+          BottomNavigationBarItem(label: 'ITR', icon: Icon(Icons.healing)),
         ]);
   }
 
