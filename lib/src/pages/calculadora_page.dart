@@ -24,6 +24,7 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
 
   String _generoStr = 'masculino';
   int _genero   = 1;
+
   double _estatura = 0;
   double _peso     = 0;
   String _imc   = "0.0";
@@ -45,7 +46,19 @@ class _CalculadoraPageState extends State<CalculadoraPage> {
             (prefs.colorSecundario) ? Colors.blueGrey : Colors.blue,
       ),
       body: _principal(),
+      bottomNavigationBar: _crearBottomNavBar(),
     );
+  }
+
+  Widget _crearBottomNavBar(){
+    return BottomNavigationBar(
+      currentIndex: 0,
+      onTap: (index){},
+      items: [
+        BottomNavigationBarItem(label: 'IMC',icon: Icon(Icons.handyman)),
+        BottomNavigationBarItem(label: 'IMS',icon: Icon(Icons.backup)),
+        BottomNavigationBarItem(label: 'ITR',icon: Icon(Icons.today)),
+      ]);
   }
 
   Widget _principal() {
