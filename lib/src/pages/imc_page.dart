@@ -4,18 +4,18 @@ import 'package:flutter/services.dart';
 import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
 
 
-class CalculadoraPage extends StatefulWidget {
+class CalculadoraIMCPage extends StatefulWidget {
   static final String routeName = 'calculadora';
 
   @override
-  _CalculadoraPageState createState() => _CalculadoraPageState();
+  _CalculadoraIMCPageState createState() => _CalculadoraIMCPageState();
 }
 
-class _CalculadoraPageState extends State<CalculadoraPage> {
+class _CalculadoraIMCPageState extends State<CalculadoraIMCPage> {
 
   @override
   void initState(){
-    prefs.ultimaPagina = CalculadoraPage.routeName;
+    prefs.ultimaPagina = CalculadoraIMCPage.routeName;
     super.initState();
   }
 

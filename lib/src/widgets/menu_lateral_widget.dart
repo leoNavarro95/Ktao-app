@@ -38,7 +38,7 @@ class MenuLateral extends StatelessWidget {
               title: Text('Calculadora'),
               trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
               onTap: () {
-                Navigator.pushReplacementNamed(context, CalculadoraPage.routeName);
+                Navigator.pushReplacementNamed(context, CalculadorasMainPage.routeName);
               },
 
             ),

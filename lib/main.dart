@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
 
         HomePage.routeName        : ( BuildContext context ) => HomePage(),
         SettingsPage.routeName    : ( BuildContext context ) => SettingsPage(),
-        CalculadoraPage.routeName : ( BuildContext context ) => CalculadoraPage(),
+        CalculadorasMainPage.routeName : ( BuildContext context ) => CalculadorasMainPage(),
         
       },
 
