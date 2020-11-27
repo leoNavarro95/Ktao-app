@@ -61,7 +61,7 @@ class MenuLateral extends StatelessWidget {
               trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
               onTap: (){
                 // Navigator.pop(context); //permite cerrar el menu de navegacion vertical
-                Navigator.pushReplacementNamed(context, GetxPage.routeName);
+                Navigator.pushReplacementNamed(context, 'GetX');
               } 
             ),
 

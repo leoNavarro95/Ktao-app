@@ -7,7 +7,6 @@ import 'package:preferencias_de_usuario/src/widgets/menu_lateral_widget.dart';
 
 class GetxPage extends StatelessWidget {
   
-  static final String routeName = 'GetX';
 
   @override
   Widget build(BuildContext context) {

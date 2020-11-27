@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:preferencias_de_usuario/src/pages/getx_page.dart';
 
 import 'package:preferencias_de_usuario/src/pages/home_page.dart';
 import 'package:preferencias_de_usuario/src/pages/settings_page.dart';
+import 'package:preferencias_de_usuario/src/pages/splash_page.dart';
 import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
 import 'package:preferencias_de_usuario/src/pages/calculadora_page.dart';
 
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
         HomePage.routeName             : ( BuildContext context ) => HomePage(),
         SettingsPage.routeName         : ( BuildContext context ) => SettingsPage(),
         CalculadorasMainPage.routeName : ( BuildContext context ) => CalculadorasMainPage(),
-        GetxPage.routeName             : ( BuildContext context ) => GetxPage(),
+        'GetX'                         : ( BuildContext context ) => SplashPage(),
         
       },
 

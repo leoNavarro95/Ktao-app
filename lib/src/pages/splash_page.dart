@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:preferencias_de_usuario/src/controllers/splash_controller.dart';
 
 class SplashPage extends StatelessWidget {
+  
   @override
   Widget build(BuildContext context) {
     return GetBuilder <SplashController>(
