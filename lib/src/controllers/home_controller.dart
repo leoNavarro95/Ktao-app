@@ -11,5 +11,6 @@ class HomeController extends GetxController{
 
   increment(){
     this._counter++;
+    update(); //refresca la vista para actualizar los nuevos datos
   }
 }
