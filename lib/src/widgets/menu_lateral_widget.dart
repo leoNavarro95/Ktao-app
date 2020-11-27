@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:preferencias_de_usuario/src/pages/calculadora_page.dart';
+import 'package:preferencias_de_usuario/src/pages/getx_page.dart';
 import 'package:preferencias_de_usuario/src/pages/home_page.dart';
 import 'package:preferencias_de_usuario/src/pages/settings_page.dart';
 
@@ -52,7 +53,16 @@ class MenuLateral extends StatelessWidget {
                 // Navigator.pop(context); //permite cerrar el menu de navegacion vertical
                 Navigator.pushReplacementNamed(context, SettingsPage.routeName);
               } 
+            ),
 
+            ListTile(
+              leading: Icon(Icons.gradient, color: Colors.blue,),
+              title: Text('GetX tests'),
+              trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
+              onTap: (){
+                // Navigator.pop(context); //permite cerrar el menu de navegacion vertical
+                Navigator.pushReplacementNamed(context, GetxPage.routeName);
+              } 
             ),
 
         ],
