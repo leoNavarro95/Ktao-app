@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+
 import 'package:preferencias_de_usuario/src/pages/calculadora_page.dart';
-import 'package:preferencias_de_usuario/src/pages/getx_page.dart';
 import 'package:preferencias_de_usuario/src/pages/home_page.dart';
 import 'package:preferencias_de_usuario/src/pages/settings_page.dart';
 
