@@ -12,20 +12,37 @@ class GetxPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder <HomeController>(
       init: HomeController(), //la clase donde está definido el controlador de estado
-      builder: (_) => Scaffold(
+      builder: (_) {
+
+        print('renderizado home');
+        return Scaffold(
         drawer: MenuLateral(),
         appBar: AppBar(
           title: Text('GetX ejemplo'),
           // backgroundColor: (prefs.colorSecundario) ? Colors.blueGrey : Colors.blue,
         ),
-        body: Center(child: Text(_.counter.toString()),),
+        body: Center(
+
+          //OJO: de esta forma haciendo uso del parámetro id: se logra solo renderizar el 
+          //objeto que se desee al lanzar desde el controller el método update(['nombre id'])
+          //, esto hace que donde se implemente el GetBuilder con tal id, es donde único se 
+          //va a renderizar la vista. Como esta vez el getbuilder es un hijo de otro, no es necesario usar el parámetro init: con su respectivo conrolador
+          child: GetBuilder<HomeController>(
+            id: 'texto',
+            builder: (_) {
+              print( 'renderizado texto' );
+              return Text(_.counter.toString());
+            } 
+            ),
+          ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.plus_one),
           onPressed: (){
             _.increment();
           },
         ),
-      ),
+      );
+      } 
     );
   }
 }

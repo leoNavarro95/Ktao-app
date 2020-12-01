@@ -29,6 +29,14 @@ class HomeController extends GetxController{
 
   increment(){
     this._counter++;
-    update(); //refresca la vista para actualizar los nuevos datos
+    //OJO: si a update se le pasa una lista de Strings (que serían los ids), solo se 
+    //actualizaran las vistas cuyos id coincidan con los de tal lista. Esto permite refrescar 
+    //lugares específicos de la aplicacion sin estar redibujando la pantalla completa
+    //update(['id1','id2'], condicion) , el segundo parámetro de update() es la condición 
+    //para que se renderice, mientras condicion no se cumpla, pues no va a renderizar el 
+    //Widget construido por GetBuilder<MyController> por ejemplo: 
+    // update(['texto'], _counter >= 5); solo renderizará el Widget con id 'texto' si el 
+    // contador es mayor o igual a 5
+    update(['texto']); //refresca la vista para actualizar los nuevos datos
   }
 }
