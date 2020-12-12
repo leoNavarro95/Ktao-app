@@ -3,8 +3,12 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:preferencias_de_usuario/src/controllers/home_controller.dart';
 
 class TextHome extends StatelessWidget {
+  
+  const TextHome({String text});
+
   @override
   Widget build(BuildContext context) {
+    
     return Container(
       child: GetBuilder<HomeController>(
           id: 'texto',

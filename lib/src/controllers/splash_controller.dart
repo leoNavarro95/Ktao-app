@@ -7,7 +7,7 @@ class SplashController extends GetxController {
 
   @override
   void onReady() {
-    Future.delayed(Duration(seconds: 2), (){
+    Future.delayed(Duration(seconds: 1), (){
 
       // Get.to(GetxPage(), transition: Transition.zoom); //equivale a push navega a GetxPage pero deja aun funcionando a la pantalla Splash
       Get.off(GetxPage(), transition: Transition.zoom); // equivale a pushReplacement, que elimina a la pagina actual luego de entrar en GetxPage
