@@ -20,6 +20,9 @@ class HomeList extends StatelessWidget {
               return ListTile(
                 title: Text(user.firstName),
                 subtitle: Text(user.email),
+                onTap: (){
+                  return _.showUserProfile(user);
+                },
               );
             },
             itemCount: _.users.length,
