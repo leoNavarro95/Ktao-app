@@ -3,7 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 //OJO este método para trabajar con almacenamiento persistenente en nuestra app puede ser implementado fácilmente con esta clase.
 //Debe poner el sigiente código en el main.dart:
 /**
- * import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
+ * import 'package:healthCalc/src/shared_preferences/usuario_preferences.dart';
  * 
  * void main() async{
  * 

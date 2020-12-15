@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
-import 'package:preferencias_de_usuario/src/widgets/menu_lateral_widget.dart';
+import 'package:healthCalc/src/shared_preferences/usuario_preferences.dart';
+import 'package:healthCalc/src/widgets/menu_lateral_widget.dart';
 
 
 

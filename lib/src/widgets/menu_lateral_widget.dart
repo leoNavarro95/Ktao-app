@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
 
-import 'package:preferencias_de_usuario/src/pages/calculadora_page.dart';
-import 'package:preferencias_de_usuario/src/pages/home_page.dart';
-import 'package:preferencias_de_usuario/src/pages/settings_page.dart';
+import 'package:healthCalc/src/pages/calculadora_page.dart';
+import 'package:healthCalc/src/pages/getx_page.dart';
+import 'package:healthCalc/src/pages/home_page.dart';
+import 'package:healthCalc/src/pages/settings_page.dart';
 
 class MenuLateral extends StatelessWidget {
   @override
@@ -60,8 +62,21 @@ class MenuLateral extends StatelessWidget {
               title: Text('GetX tests'),
               trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
               onTap: (){
-                // Navigator.pop(context); //permite cerrar el menu de navegacion vertical
-                Navigator.pushReplacementNamed(context, 'GetX');
+                // Navigator.pop(context); //?permite cerrar el menu de navegacion vertical
+                // Navigator.pushReplacementNamed(context, 'GetX');
+                Get.offNamed('GetX');//? Equivalente a pushReplacementNamed
+              } 
+            ),
+
+            ListTile(
+              leading: Icon(Icons.code, 
+              color: Colors.blue,),
+              title: Text('GetX Responsive'),
+              trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
+              onTap: (){
+                // Navigator.pop(context); //?permite cerrar el menu de navegacion vertical
+                // Navigator.pushReplacementNamed(context, 'GetX');
+                Get.offNamed('GetX');//? Equivalente a pushReplacementNamed
               } 
             ),
 

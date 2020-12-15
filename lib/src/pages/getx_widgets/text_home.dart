@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:preferencias_de_usuario/src/controllers/home_controller.dart';
+import 'package:healthCalc/src/controllers/home_controller.dart';
 
 class TextHome extends StatelessWidget {
   

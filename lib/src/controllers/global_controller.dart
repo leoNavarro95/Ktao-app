@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:get/state_manager.dart';
-import 'package:preferencias_de_usuario/models/producto_model.dart';
+import 'package:healthCalc/models/producto_model.dart';
 
 class GlobalController extends GetxController {
 

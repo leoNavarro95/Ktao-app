@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:preferencias_de_usuario/models/producto_model.dart';
-import 'package:preferencias_de_usuario/src/controllers/global_controller.dart';
+import 'package:healthCalc/models/producto_model.dart';
+import 'package:healthCalc/src/controllers/global_controller.dart';
 
 class ProductList extends StatelessWidget {
   const ProductList({Key key}) : super(key: key);

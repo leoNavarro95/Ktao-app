@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 import 'package:get/route_manager.dart';
 
-import 'package:preferencias_de_usuario/src/controllers/profile_controller.dart';
+import 'package:healthCalc/src/controllers/profile_controller.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key key}) : super(key: key);

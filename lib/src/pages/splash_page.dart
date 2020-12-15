@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 
-import 'package:preferencias_de_usuario/src/controllers/splash_controller.dart';
+import 'package:healthCalc/src/controllers/splash_controller.dart';
 
 class SplashPage extends StatelessWidget {
   @override

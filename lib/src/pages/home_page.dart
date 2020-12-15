@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
-import 'package:preferencias_de_usuario/src/widgets/menu_lateral_widget.dart';
+import 'package:healthCalc/src/shared_preferences/usuario_preferences.dart';
+import 'package:healthCalc/src/widgets/menu_lateral_widget.dart';
 
 class HomePage extends StatefulWidget {
   
@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           
           children: <Widget>[
-            Text('Color secundario: ${prefs.colorSecundario}'),
+            Text('Color: ${prefs.colorSecundario}'),
             Divider(),
             Text('Genero: ${prefs.genero}'),
             Divider(),

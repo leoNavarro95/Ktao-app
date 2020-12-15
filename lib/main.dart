@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:preferencias_de_usuario/src/pages/home_page.dart';
-import 'package:preferencias_de_usuario/src/pages/settings_page.dart';
-import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
-import 'package:preferencias_de_usuario/src/pages/calculadora_page.dart';
-import 'package:preferencias_de_usuario/src/pages/splash_page.dart';
-import 'package:preferencias_de_usuario/src/controllers/global_controller.dart';
-
+import 'package:healthCalc/src/pages/home_page.dart';
+import 'package:healthCalc/src/pages/settings_page.dart';
+import 'package:healthCalc/src/shared_preferences/usuario_preferences.dart';
+import 'package:healthCalc/src/pages/calculadora_page.dart';
+import 'package:healthCalc/src/pages/splash_page.dart';
+import 'package:healthCalc/src/controllers/global_controller.dart';
 
 void main() async{
   /**
-   * como está implementado el patrón Singleton, esta instancia prefs va a ser la misma en 
-   * todo el programa. Esto permite hacer que la app antes de iniciarse, espere a crear la 
-   * instancia y inicializarla. Recordar que prefs es para usar almacenamiento persistente 
-   * en nuestra app
+   * !como está implementado el patrón Singleton, esta instancia prefs va a ser la misma en 
+   * !todo el programa. Esto permite hacer que la app antes de iniciarse, espere a crear la 
+   * !instancia y inicializarla. Recordar que prefs es para usar almacenamiento persistente 
+   * !en nuestra app
    */
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = new PreferenciasUsuario();
@@ -38,7 +37,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       
       debugShowCheckedModeBanner: false,
-      title: 'Preferencias de Usuario',
+      title: 'Health Calculator',
 
       routes: {
 

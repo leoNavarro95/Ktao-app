@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 import 'package:get/route_manager.dart';
 
-import 'package:preferencias_de_usuario/src/controllers/home_controller.dart';
-import 'package:preferencias_de_usuario/src/pages/getx_widgets/home_list.dart';
-import 'package:preferencias_de_usuario/src/pages/getx_widgets/products_list.dart';
-import 'package:preferencias_de_usuario/src/widgets/menu_lateral_widget.dart';
+import 'package:healthCalc/src/controllers/home_controller.dart';
+import 'package:healthCalc/src/pages/getx_widgets/home_list.dart';
+import 'package:healthCalc/src/pages/getx_widgets/products_list.dart';
+import 'package:healthCalc/src/widgets/menu_lateral_widget.dart';
 
 //esta vista va a ser para aprender a usar GetX como gestor
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
+import 'package:healthCalc/src/shared_preferences/usuario_preferences.dart';
 
 
 class CalculadoraIMCPage extends StatefulWidget {

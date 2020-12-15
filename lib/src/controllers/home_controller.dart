@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
 
-import 'package:preferencias_de_usuario/api/users_api.dart';
-import 'package:preferencias_de_usuario/models/user_model.dart';
-import 'package:preferencias_de_usuario/src/pages/profile_page.dart';
+import 'package:healthCalc/api/users_api.dart';
+import 'package:healthCalc/models/user_model.dart';
+import 'package:healthCalc/src/pages/profile_page.dart';
 
 //este archivo va a contener las variables y funciones de la aplicacion que van a ser reactivas
 class HomeController extends GetxController {

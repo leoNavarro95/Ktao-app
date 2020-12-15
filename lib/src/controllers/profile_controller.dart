@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 import 'package:get/route_manager.dart';
-import 'package:preferencias_de_usuario/models/user_model.dart';
+import 'package:healthCalc/models/user_model.dart';
 
 class ProfileController extends GetxController {
   User _user;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
-import 'package:preferencias_de_usuario/models/user_model.dart';
-import 'package:preferencias_de_usuario/src/controllers/home_controller.dart';
+import 'package:healthCalc/models/user_model.dart';
+import 'package:healthCalc/src/controllers/home_controller.dart';
 
 class HomeList extends StatelessWidget {
   const HomeList({Key key}) : super(key: key);

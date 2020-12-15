@@ -1,6 +1,6 @@
 
 import 'package:dio/dio.dart';
-import 'package:preferencias_de_usuario/models/user_model.dart';
+import 'package:healthCalc/models/user_model.dart';
 
 class UserAPI {
   UserAPI._internal();//para Singleton

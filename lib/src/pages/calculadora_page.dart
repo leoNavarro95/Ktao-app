@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:preferencias_de_usuario/src/pages/imc_page.dart';
+import 'package:healthCalc/src/pages/imc_page.dart';
 
-import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
-import 'package:preferencias_de_usuario/src/widgets/menu_lateral_widget.dart';
+import 'package:healthCalc/src/shared_preferences/usuario_preferences.dart';
+import 'package:healthCalc/src/widgets/menu_lateral_widget.dart';
 
 import 'area_superf_page.dart';
 

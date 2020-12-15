@@ -1,4 +1,4 @@
-import 'package:preferencias_de_usuario/src/pages/getx_page.dart';
+import 'package:healthCalc/src/pages/getx_page.dart';
 
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get/route_manager.dart';
