@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
+import 'package:get/get.dart';
 
 import 'package:preferencias_de_usuario/src/pages/home_page.dart';
 import 'package:preferencias_de_usuario/src/pages/settings_page.dart';
-import 'package:preferencias_de_usuario/src/pages/splash_page.dart';
 import 'package:preferencias_de_usuario/src/shared_preferences/usuario_preferences.dart';
 import 'package:preferencias_de_usuario/src/pages/calculadora_page.dart';
+import 'package:preferencias_de_usuario/src/pages/splash_page.dart';
+import 'package:preferencias_de_usuario/src/controllers/global_controller.dart';
 
 
 void main() async{
@@ -30,6 +31,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    // aquí se define el controlador global de la app a traves de Getx
+    Get.put(GlobalController()); //esto permite usar este controlador desde cualquier parte del codigo sin necesidad de hacer init etc..
+
     return GetMaterialApp(
       
       debugShowCheckedModeBanner: false,

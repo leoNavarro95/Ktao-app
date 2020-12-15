@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
+import 'package:get/route_manager.dart';
+
 import 'package:preferencias_de_usuario/src/controllers/home_controller.dart';
 import 'package:preferencias_de_usuario/src/pages/getx_widgets/home_list.dart';
+import 'package:preferencias_de_usuario/src/pages/getx_widgets/products_list.dart';
 import 'package:preferencias_de_usuario/src/widgets/menu_lateral_widget.dart';
 
 //esta vista va a ser para aprender a usar GetX como gestor
@@ -25,9 +28,10 @@ class GetxPage extends StatelessWidget {
         body: HomeList(),
 
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.plus_one),
+          child: Icon(Icons.shopping_cart),
           onPressed: (){
-            _.increment();
+            // _.increment();
+            Get.to(ProductList());
           },
         ),
       );
