@@ -7,6 +7,7 @@ import 'package:healthCalc/src/shared_preferences/usuario_preferences.dart';
 import 'package:healthCalc/src/pages/calculadora_page.dart';
 import 'package:healthCalc/src/pages/splash_page.dart';
 import 'package:healthCalc/src/controllers/global_controller.dart';
+import 'package:healthCalc/src/pages/getx_reactive_page.dart';
 
 void main() async{
   /**
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         SettingsPage.routeName         : ( BuildContext context ) => SettingsPage(),
         CalculadorasMainPage.routeName : ( BuildContext context ) => CalculadorasMainPage(),
         'GetX'                         : ( BuildContext context ) => SplashPage(),
-        
+        'GetReactive'                  : ( BuildContext context ) => GetReactivePage(),
       },
 
       initialRoute: prefs.ultimaPagina,
