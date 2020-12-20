@@ -5,6 +5,8 @@ import 'package:healthCalc/app/routes/app_routes.dart';
 
 
 class MenuLateral extends StatelessWidget {
+  final double _iconsSize = 40.0;
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -24,20 +26,19 @@ class MenuLateral extends StatelessWidget {
             ),
             
             ListTile(
-              leading: Icon(Icons.home, color: Colors.blue,),
+              leading: Icon(Icons.home, color: Colors.blue, size: _iconsSize,),
               title: Text('Inicio'),
               trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
               onTap: () {
                 // Navigator.pushReplacementNamed(context, HomePage.routeName);
-                // Get.offNamed(AppRoutes.HOME);
-                Get.toNamed(AppRoutes.HOME);
+                Get.offNamed(AppRoutes.HOME);
+                // Get.toNamed(AppRoutes.HOME);
               },
-
             ),
 
 
             ListTile(
-              leading: Icon(Icons.info, color: Colors.blue,),
+              leading: Icon(Icons.info, color: Colors.blue, size: _iconsSize,),
               title: Text('Detalles'),
               trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
               onTap: () {
@@ -46,7 +47,17 @@ class MenuLateral extends StatelessWidget {
                 Get.back();
                 Get.toNamed(AppRoutes.DETAIL);
               },
+            ),
 
+            ListTile(
+              leading: Icon(Icons.calculate, color: Colors.blue, size: _iconsSize,),
+              title: Text('Calculadora de consumo'),
+              trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
+              onTap: () {
+                // Navigator.pushReplacementNamed(context, HomePage.routeName);
+                Get.offNamed(AppRoutes.CALCULADORA);
+                // Get.toNamed(AppRoutes.HOME);
+              },
             ),
 
         ],
