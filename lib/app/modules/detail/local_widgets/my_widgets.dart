@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
   Widget fondoApp(){
     
@@ -65,23 +66,34 @@ import 'package:flutter/material.dart';
 
   Widget titulo() {
 
-    final estilo1 = TextStyle(color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.bold);
+    final estilo1 = TextStyle(color: Colors.white, fontSize: 30.0, fontWeight: FontWeight.bold);
     final estilo2 = TextStyle(color: Colors.white, fontSize: 15.0);
 
     return Container(
 
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
       child: SafeArea(
-
-        child: Column(
+        child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: IconButton(
+                icon: Icon(
+                  Icons.arrow_back, color:Colors.white, size: 35,), 
+                  onPressed: (){
+                    Get.back();
+                  }),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
 
-          children: <Widget>[
-            Text('Classify transaction', style: estilo1,),
-            SizedBox(height: 10.0),
-            Text('Classify this transaction into a particular category', style: estilo2),
-          ]
-          ,),
+              children: <Widget>[
+                Text('Detalles', style: estilo1,),
+                Text('Texto prueba de subtitulo', style: estilo2),
+              ]
+              ,),
+          ],
+        ),
       ),
       );
   }
