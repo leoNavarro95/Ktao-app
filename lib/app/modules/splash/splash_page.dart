@@ -10,7 +10,14 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<SplashController>(builder: (_){
       return Scaffold(
-        body: Center(child: Text("Splash page")),
+        body: Center(
+          child: Column(
+            children: [
+              CircularProgressIndicator(),
+              Text("Loading..."),
+            ],
+            )
+          ),
       );
     });
   }
