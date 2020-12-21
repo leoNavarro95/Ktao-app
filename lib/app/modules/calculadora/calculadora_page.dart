@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
 import 'package:healthCalc/app/global_widgets/menu_lateral.dart';
-import 'package:healthCalc/app/modules/calculadora/calculadora_binding.dart';
 import 'package:healthCalc/app/modules/calculadora/calculadora_controller.dart';
+import 'package:healthCalc/app/modules/calculadora/local_widgets/campo_texto.dart';
+import 'package:healthCalc/app/modules/calculadora/local_widgets/tabla_widget.dart';
+import 'package:healthCalc/app/theme/text_theme.dart';
 
 
 class CalculadoraPage extends StatelessWidget {
@@ -12,6 +14,8 @@ class CalculadoraPage extends StatelessWidget {
   final _textCtrLectura2 = new TextEditingController();
   
   final calcCtr = new CalculadoraController();
+
+  // final temaTexto = new TemaTexto();
 
   @override
   Widget build(BuildContext context) {
@@ -36,83 +40,53 @@ class CalculadoraPage extends StatelessWidget {
         Text(
           'Calcula el consumo en kWh',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.bold
+          style: TemaTexto().titulo,
           ),
-        ),
         Divider(),
         _creaFormulario(),
-        _crearBotonIMC(),
         Divider(),
-        Obx(()=>Text("consumo: ${calcCtr.consumo.value}"),),
-        Obx(()=>Text("costo: ${calcCtr.costo.value}"),),
+        Obx(()=>Text("consumo: ${calcCtr.consumo.value} kWh"),),
+        Obx(()=>Text("costo: ${calcCtr.costo.value.toStringAsFixed(2)} Pesos"),),
+        Obx(()=>Text("listaConsumo: ${calcCtr.listConsumo}"),),
+        Obx(()=>Text("listaPrecio: ${calcCtr.listPrecio}"),),
+        
+        Obx(()=>Tabla(
+          titleRow: ['Rango','Consumo', 'Precio', 'Importe'],
+          titleColor: Colors.lightGreen,
+
+          cuerpo: [
+            [100,150,200,250,300,350,500,1000,5000, 5001],  //rango
+            calcCtr.listConsumo,                                           //consumo
+            [0.4,1.3,1.75,3.0,4.0,7.50,9.0,10.0,15.0,25.0], //precios por rango
+            calcCtr.listPrecio,                                            //importe
+            ],
+          ),),
         
       ],
     );
   }
 
   Widget _creaFormulario() {
-    return Column(
-      children: [
-        _campoTexto(
-            textController: _textCtrLectura1,
-            titulo: 'Lectura 1',
-            subTitulo: 'Introduzca la primera lectura',
-            ),
-        _campoTexto(
-            textController: _textCtrLectura2,
-            titulo: 'Lectura 2',
-            subTitulo: 'Introduzca la segunda lectura',
-            ),
-      ],
-    );
-  }
-
-  Widget _campoTexto(
-      {
-        TextEditingController textController,
-        String titulo,
-        String subTitulo,
-      }) {
     return Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.0),
-        child: TextField(
-          
-          inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ .,-]')),],
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
-          controller: textController,
-          decoration: InputDecoration(labelText: titulo, helperText: subTitulo),
-          onChanged: (val) {
-            
-            int valor = int.parse(val).toInt();
-
-            if( titulo == "Lectura 1"){
-              //TODO: Implementar uso de user_preferences para guardar Lecturas
-              calcCtr.lectura1.value = valor;
-              calcCtr.calcular();
-              // print("lectura1 = ${calcCtr.lectura1.value.toString()} ");
-            }
-            else if( titulo == "Lectura 2"){
-              
-              calcCtr.lectura2.value = valor;
-              calcCtr.calcular();
-            }
-          },
-        ),
-        );   
-  }
-
-  Widget _crearBotonIMC() {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 50.0),
-      child: ElevatedButton.icon(
-        // style: ButtonStyle(),
-        icon: Icon(Icons.calculate),
-        label: Text('Calcular'),
-        onPressed: () {
-          
-        },
+      // alignment: Alignment.center,
+      
+      padding: EdgeInsets.all(10),
+      color: Colors.blue[100],
+      child: Column(
+        children: [
+          CampoTexto(
+            textController: _textCtrLectura1, 
+            titulo: "Lectura 1", 
+            calcCtr: calcCtr
+            ),
+            SizedBox(height: 10),
+            CampoTexto(
+            textController: _textCtrLectura2, 
+            titulo: "Lectura 2", 
+            calcCtr: calcCtr
+            ),
+          SizedBox(height: 10),
+        ],
       ),
     );
   }

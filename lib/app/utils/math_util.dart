@@ -35,8 +35,9 @@ List<double> precios = [0.4,1.3,1.75,3.0,4.0,7.50,9.0,10.0,15.0,25.0];
  * 
  */
 
-double calcCosto(int consumo){ //170
+Map<String, dynamic> calcCosto(int consumo){ //170
 
+  //! TODO: [BUG] cuando se le entra valores mayores a los 5000kwh de consumo no los calcula
   double costoAcumulado = 0.0;
   List<double> precioXrango = [];
   List<int> consumoXrango = [];
@@ -67,6 +68,10 @@ double calcCosto(int consumo){ //170
   }
 
 
-  print("| $consumoXrango | $precioXrango"); 
-  return costoTotal;
+  // print("| $consumoXrango | $precioXrango"); 
+  return {
+    "costo"         : costoTotal,
+    "listaConsumo"  : consumoXrango,
+    "listaPrecio"   : precioXrango,
+    };
 }
