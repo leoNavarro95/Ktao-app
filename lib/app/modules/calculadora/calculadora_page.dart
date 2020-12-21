@@ -45,7 +45,8 @@ class CalculadoraPage extends StatelessWidget {
         _creaFormulario(),
         _crearBotonIMC(),
         Divider(),
-        Obx(()=>Text("lect1: ${calcCtr.lectura1.value}  lect2: ${calcCtr.lectura2.value}  consumo: ${calcCtr.consumo.value}"),),
+        Obx(()=>Text("consumo: ${calcCtr.consumo.value}"),),
+        Obx(()=>Text("costo: ${calcCtr.costo.value}"),),
         
       ],
     );
@@ -78,26 +79,24 @@ class CalculadoraPage extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: 10.0),
         child: TextField(
           
-          inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ ,-]')),],
+          inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ .,-]')),],
           keyboardType: TextInputType.numberWithOptions(decimal: true),
           controller: textController,
           decoration: InputDecoration(labelText: titulo, helperText: subTitulo),
           onChanged: (val) {
-            // prefs.nombreUser = val;
-            // double valor = double.parse(val).toDouble();
+            
             int valor = int.parse(val).toInt();
 
             if( titulo == "Lectura 1"){
-              //TODO: guardar Lectura 1
+              //TODO: Implementar uso de user_preferences para guardar Lecturas
               calcCtr.lectura1.value = valor;
               calcCtr.calcular();
-              print("lectura1 = ${calcCtr.lectura1.value.toString()} ");
+              // print("lectura1 = ${calcCtr.lectura1.value.toString()} ");
             }
             else if( titulo == "Lectura 2"){
-              //TODO: guardar lectura2
+              
               calcCtr.lectura2.value = valor;
               calcCtr.calcular();
-              print("lectura2 = ${calcCtr.lectura2.value.toString()} ");
             }
           },
         ),
@@ -112,7 +111,7 @@ class CalculadoraPage extends StatelessWidget {
         icon: Icon(Icons.calculate),
         label: Text('Calcular'),
         onPressed: () {
-          calcCtr.calcular();
+          
         },
       ),
     );
