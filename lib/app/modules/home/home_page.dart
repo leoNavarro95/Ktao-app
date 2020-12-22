@@ -4,6 +4,8 @@ import 'package:healthCalc/app/global_widgets/menu_lateral.dart';
 
 import 'package:healthCalc/app/modules/home/home_controller.dart';
 
+import 'local_widgets/tarjeta_contador.dart';
+
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -12,8 +14,9 @@ class HomePage extends StatelessWidget {
       return Scaffold(
         drawer: MenuLateral(),
         appBar: AppBar(title: Text('Inicio'), centerTitle: true,),
-        body: Text("Home page")
+        body: Tarjeta()
         );
     });
   }
 }
+

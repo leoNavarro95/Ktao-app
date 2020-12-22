@@ -60,7 +60,7 @@ class Tabla extends StatelessWidget {
         //* si la casilla posee datos
         if(i < cuerpo[j].length){
           String _titulo;
-          // si es un string, no se hace la conversion
+          // si no es un numero, no se hace la conversion
           if(num.tryParse(cuerpo[j][i].toString()) == null){
             _titulo = cuerpo[j][i];
           } else {
