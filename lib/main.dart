@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:healthCalc/app/modules/splash/splash_binding.dart';
 import 'package:healthCalc/app/modules/splash/splash_page.dart';
 import 'package:healthCalc/app/routes/app_pages.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
       home: SplashPage(),
       initialBinding: SplashBinding(),
       getPages: AppPages.pages,
-
+      // showPerformanceOverlay: true,
       
     );
   }

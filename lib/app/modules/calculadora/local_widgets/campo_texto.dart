@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:healthCalc/app/modules/calculadora/calculadora_controller.dart';
 
-class CampoTexto extends StatelessWidget {
+class CampoTextoCalculadora extends StatelessWidget {
   
   final CalculadoraController calcCtr;
   final TextEditingController textController;
   final String titulo;
 
-  const CampoTexto(
+  const CampoTextoCalculadora(
     {
       @required this.textController, 
       @required this.titulo,

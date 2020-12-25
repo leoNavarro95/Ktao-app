@@ -74,13 +74,13 @@ class CalculadoraPage extends StatelessWidget {
       color: Colors.blue[100],
       child: Column(
         children: [
-          CampoTexto(
+          CampoTextoCalculadora(
             textController: _textCtrLectura1, 
             titulo: "Lectura 1", 
             calcCtr: calcCtr
             ),
             SizedBox(height: 10),
-            CampoTexto(
+            CampoTextoCalculadora(
             textController: _textCtrLectura2, 
             titulo: "Lectura 2", 
             calcCtr: calcCtr
