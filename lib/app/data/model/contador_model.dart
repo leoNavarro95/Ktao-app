@@ -9,19 +9,22 @@ String contadorModelToJson( ContadorModel data ) => json.encode(data.toJson());
 
 class ContadorModel {
 
+  int id;
   String nombre;
   int consumo;
-  double costoMesActual;
+  num costoMesActual;   //* para manejar puntos flotantes en la base de datos sqlite
   String ultimaLectura; ///! Buscar como manejar el tiempo (alguna clase para ello???)
 
   ContadorModel({
+    this.id,
     this.nombre,
     this.consumo,
     this.costoMesActual,
     this.ultimaLectura
   });
 
-  factory ContadorModel.fromJson(Map<String, dynamic> json) => ContadorModel(
+  factory ContadorModel.fromJson(Map<String, dynamic> json) => new ContadorModel(
+    id             : json["id"],
     nombre         : json["nombre"],
     consumo        : json["consumo"],
     costoMesActual : json["costoMesActual"],
@@ -29,6 +32,7 @@ class ContadorModel {
   );
 
   Map<String, dynamic> toJson() => {
+    "id"             : id,
     "nombre"         : nombre,
     "consumo"        : consumo,
     "costoMesActual" : costoMesActual,
