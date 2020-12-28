@@ -1,11 +1,11 @@
 ///Esta clase abstrae todo lo referente a los datos 
 ///de los contadores que va a gestionar la app
 
-import 'dart:convert';
+// import 'dart:convert';
 
 
-ContadorModel contadorModelFromJson(String str) => ContadorModel.fromJson(json.decode(str));
-String contadorModelToJson( ContadorModel data ) => json.encode(data.toJson());
+// ContadorModel contadorModelFromJson(String str) => ContadorModel.fromJson(json.decode(str));
+// String contadorModelToJson( ContadorModel data ) => json.encode(data.toJson());
 
 class ContadorModel {
 

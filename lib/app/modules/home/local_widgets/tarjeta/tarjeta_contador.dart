@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:healthCalc/app/modules/home/local_widgets/bottom_sheet_opciones.dart';
 import 'package:healthCalc/app/modules/home/local_widgets/tarjeta/tarjeta_controller.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 
 class TarjetaContador extends StatelessWidget {
 
-  final String titulo;
-  final String consumo;
+  final ContadorModel contador;
 
   const TarjetaContador({
     Key key,
-    @required this.titulo, 
-    this.consumo,
+    this.contador,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final _borderR = 10.0;
-    
     return GetBuilder<TarjetaController>(
       init: TarjetaController(),
-      id: titulo,
+      id: contador.id.toString(),
       builder: (_){
         return Card(
       
@@ -29,13 +28,15 @@ class TarjetaContador extends StatelessWidget {
       elevation: _.elevacion,
       child: InkWell(
         splashColor: Colors.blue.withAlpha(50),
-        onLongPress: (){
+        
+        onLongPress: () async{
           //TODO: ante longPress mostrar cuadro de opciones, borrar, editar, etc
           print('tarjeta presionada con duracion');
+          await bottomSheetOpciones( contador );
         },
         onTap: (){
           print('tarjeta presionada');
-          _.presionada(titulo); // hace el efecto de que se presione visualmente, variando la elevvacion
+          _.presionada(contador.id.toString()); // hace el efecto de que se presione visualmente, variando la elevvacion
           
         },
         child: Container(
@@ -44,7 +45,7 @@ class TarjetaContador extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _header(this.titulo, _borderR),
+              _header(this.contador.nombre, _borderR),
               _body(),
             ],
           )
@@ -79,13 +80,13 @@ class TarjetaContador extends StatelessWidget {
         InputChip(
           onPressed: (){},
           padding: EdgeInsets.all(10),
-          label: Text('545kWh',style: TemaTexto().cuerpoTarjeta),
+          label: Text('${contador.id}kWh',style: TemaTexto().cuerpoTarjeta),
           avatar: CircleAvatar(child: Icon(Icons.flash_on))
           ),
           InputChip(
             onPressed: (){},
             padding: EdgeInsets.all(10),
-            label: Text('10,000', style: TemaTexto().cuerpoTarjeta),
+            label: Text('${contador.costoMesActual} CUP', style: TemaTexto().cuerpoTarjeta),
             avatar: CircleAvatar(
               child: Icon(Icons.attach_money),
               )

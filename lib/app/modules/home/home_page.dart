@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:healthCalc/app/data/provider/data_base_provider.dart';
+import 'package:healthCalc/app/global_widgets/dialogos.dart';
 import 'package:healthCalc/app/global_widgets/menu_lateral.dart';
 
 import 'package:healthCalc/app/modules/home/home_controller.dart';
@@ -40,7 +43,7 @@ class HomePage extends StatelessWidget {
     List<TableRow> _lista = [];
     List<Widget> _fila = [];
     int cantidadFilas = 0;
-    int cantidadColumnas = 2;
+    const int cantidad_columnas = 2;
 
     //calculando el numero de filas necesario
     if(contadores.length % 2 == 0){ //si es par
@@ -52,7 +55,7 @@ class HomePage extends StatelessWidget {
     int index = 0;
 
     for (int i = 0; i < cantidadFilas ; i++){
-      for(int j = 0; j < cantidadColumnas; j++){
+      for(int j = 0; j < cantidad_columnas; j++){
         if(index >= contadores.length){
           _fila.add(Container());  
         } else {
@@ -67,24 +70,6 @@ class HomePage extends StatelessWidget {
 
 
     return Table(children: _lista);
-      
-      
-    // return Table(
-    //           children: [
-    //             TableRow(
-    //               children: [
-    //                 TarjetaContador(titulo: 'Titulo1',),
-    //                 TarjetaContador(titulo: 'Titulo4',)
-    //               ]
-    //             ),
-    //             TableRow(
-    //               children: [
-    //                 TarjetaContador(titulo: 'Titulo3',),
-    //                 TarjetaContador(titulo: 'Titulo2',)
-    //               ]
-    //             ),
-    //           ],
-    //         );
   }
 
   AppBar buildAppBar(HomeController _) {
@@ -96,73 +81,39 @@ class HomePage extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.add), 
             onPressed: ()async{
-              String nombre = await _adicionarContador();
+              String nombre = await addContadorDialog( _formKey );
+
               if(nombre != null){
-                _.adicionarTarjeta(TarjetaContador(titulo: nombre,));
+                
+                final contador = ContadorModel( nombre: nombre, consumo: 0, costoMesActual: 0.0, ultimaLectura: 'Hoy');
+                int id = await DBProvider.db.nuevoContador(contador);
+                Get.snackbar('Exito', 'Nuevo contador en la base de datos');
+                //!OJO hay que hacer depender el front-end de la base de datos, para mostrar datos guardados en la misma
+                await _.updateVisualFromDB();
+              } else{
+                Get.snackbar('No se efectuo ningun cambio', 'Se mantienen los datos anteriores');
               }
             }
-            )
-          ],
-    );
-  }
+            ),
 
-  Future<String> _adicionarContador() async{
-    String _valorInput = '';
+            IconButton(
+              icon: Icon(Icons.delete), 
+              onPressed: ()async{
+                bool aceptas = await borraTodoDialog();
 
-    return await Get.dialog(
-      AlertDialog(
-        
-          backgroundColor: Colors.lightBlue[50],
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Adicionar contador'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      
-                      decoration: InputDecoration(
-                        labelText: 'Nombre contador',
-                        icon: Icon(Icons.add_box),
-                      ),
-
-                      validator: (value){
-                        if(value.isEmpty){
-                          return 'Introduzca un nombre';
-                        }
-                        _valorInput = value;
-                        return null;
-                      },
-                    ),
-                  ],
-                  ),
-                ),
-              
-            ],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                //validate() devuelve true si el formulario es valido
-                if(_formKey.currentState.validate()){
-                 Get.back( result: _valorInput); 
+                if( aceptas ){
+                  final cantidad = await DBProvider.db.deleteallContadores();
+                  Get.snackbar('Se eliminaron los contadores', '$cantidad contadores eliminados.');
+                } else {
+                  Get.snackbar('Ningun contador eliminado.', 'Se mantienen los datos');
                 }
               },
-              ),
-              FlatButton(
-              child: Text('CANCEL'),
-              onPressed: () => Get.back(), //! va a retornar null, manejarlo del otro lado
-              ),
+              )
           ],
-        ),
-      barrierDismissible: false,
     );
-    
   }
 
+  
+  
 }
 

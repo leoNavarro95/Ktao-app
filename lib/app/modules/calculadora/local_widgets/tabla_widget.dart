@@ -9,18 +9,16 @@ class Tabla extends StatelessWidget {
 
   final List<List<dynamic>> cuerpo;
 
-  //? TODO: falta implementear el Body
   
   const Tabla(
-    {
-      Key key, 
+    { 
       @required this.titleRow, 
       this.titleColor     = Colors.blueGrey,  
       this.primaryColor   = Colors.grey, 
       this.secundaryColor = Colors.blueGrey, 
       this.cuerpo,
 
-    }) : super(key: key);
+    });
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +87,7 @@ class Loza extends StatelessWidget {
   final Color color;
   final String title;
 
-  const Loza({Key key, @required this.color, @required this.title}) : super(key: key);
+  const Loza({@required this.color, @required this.title});
 
   @override
   Widget build(BuildContext context) {

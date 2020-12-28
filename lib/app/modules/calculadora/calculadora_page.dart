@@ -13,7 +13,7 @@ class CalculadoraPage extends StatelessWidget {
   final _textCtrLectura1 = new TextEditingController();
   final _textCtrLectura2 = new TextEditingController();
   
-  final calcCtr = new CalculadoraController();
+  // final calcCtr = new CalculadoraController();
 
   // final temaTexto = new TemaTexto();
 
@@ -26,14 +26,14 @@ class CalculadoraPage extends StatelessWidget {
           drawer: MenuLateral(),
           
           body: Center(
-          child: _principal()
+          child: _principal(_)
     ),
     );
       }
       );
   }
 
-  Widget _principal() {
+  Widget _principal(CalculadoraController _) {
     return ListView(
       children: <Widget>[
         Text(
@@ -42,11 +42,10 @@ class CalculadoraPage extends StatelessWidget {
           style: TemaTexto().titulo,
           ),
         Divider(),
-        _creaFormulario(),
+        _creaFormulario(_),
         Divider(),
-        Obx(()=>Text("consumo: ${calcCtr.consumo.value} kWh"),),
-        Obx(()=>Text("costo: ${calcCtr.costo.value.toStringAsFixed(2)} Pesos"),),
-        
+        Obx(()=>Text("consumo: ${_.consumo.value} kWh"),),
+        Obx(()=>Text("costo: ${_.costo.value.toStringAsFixed(2)} Pesos"),),
         
         Obx(()=>Tabla(
           titleRow: ['Rango','Consumo', 'Precio', 'Importe'],
@@ -56,9 +55,9 @@ class CalculadoraPage extends StatelessWidget {
 
           cuerpo: [
             ['0 a 100','101 a 150','151 a 200','201 a 250','251 a 300','301 a 350','351 a 500','501 a 1000','1001 a 5000', '+ 5000'],  //rango
-            calcCtr.listConsumo,                                           //consumo
+            _.listConsumo,                                           //consumo
             [0.4,1.3,1.75,3.0,4.0,7.50,9.0,10.0,15.0,25.0], //precios por rango
-            calcCtr.listPrecio,                                            //importe
+            _.listPrecio,                                            //importe
             ],
           ),),
         
@@ -66,7 +65,7 @@ class CalculadoraPage extends StatelessWidget {
     );
   }
 
-  Widget _creaFormulario() {
+  Widget _creaFormulario( CalculadoraController _) {
     return Container(
       // alignment: Alignment.center,
       
@@ -77,13 +76,13 @@ class CalculadoraPage extends StatelessWidget {
           CampoTextoCalculadora(
             textController: _textCtrLectura1, 
             titulo: "Lectura 1", 
-            calcCtr: calcCtr
+            calcCtr: _
             ),
             SizedBox(height: 10),
             CampoTextoCalculadora(
             textController: _textCtrLectura2, 
             titulo: "Lectura 2", 
-            calcCtr: calcCtr
+            calcCtr: _
             ),
           SizedBox(height: 10),
         ],
