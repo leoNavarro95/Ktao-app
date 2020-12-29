@@ -13,9 +13,14 @@ class HomeController extends GetxController{
   void onReady() {
     super.onReady();
     // this.resultado.value = 'hola';
-
     updateVisualFromDB();
   }
+
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   updateVisualFromDB();
+  // }
 
   void adicionarTarjeta( TarjetaContador tarjeta){
     tarjetas.add(tarjeta);

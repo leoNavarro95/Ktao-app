@@ -26,18 +26,21 @@ class HomePage extends StatelessWidget {
       return Scaffold(
         drawer: MenuLateral(),
         appBar: buildAppBar(_),
-        body: ListView(
-          children: <Widget>[
-            Column(
-              children: [
-                Obx(()=>buildTableContadores(contadores: _.tarjetas),),
-                // Obx(()=>Text('Texto: ${_.resultado.value}')),
-            ],
-          ),
-          ]),
+        body: Obx((){
+          if(_.tarjetas.isNotEmpty){
+            return ListView(
+              children: <Widget>[
+                buildTableContadores(contadores: _.tarjetas),
+              ],
+            );
+          }
+          return TarjetaContador();
+        }),
           );
     });
   }
+
+  
 
   Table buildTableContadores({List<TarjetaContador> contadores}) {
     List<TableRow> _lista = [];
@@ -89,7 +92,8 @@ class HomePage extends StatelessWidget {
                 int id = await DBProvider.db.nuevoContador(contador);
                 Get.snackbar('Exito', 'Nuevo contador en la base de datos');
                 //!OJO hay que hacer depender el front-end de la base de datos, para mostrar datos guardados en la misma
-                await _.updateVisualFromDB();
+                final controlador = Get.find<HomeController>();
+                await controlador.updateVisualFromDB();
               } else{
                 Get.snackbar('No se efectuo ningun cambio', 'Se mantienen los datos anteriores');
               }

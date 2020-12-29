@@ -17,6 +17,10 @@ class TarjetaContador extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _borderR = 10.0;
+
+    if(contador == null){
+      return _cardNoContador();
+    }
     return GetBuilder<TarjetaController>(
       init: TarjetaController(),
       id: contador.id.toString(),
@@ -56,7 +60,12 @@ class TarjetaContador extends StatelessWidget {
       });
   }
 
-  ClipRRect _header( String titulo, double _borderR) {
+  ClipRRect _header( String titulo, double _borderR, {Color titlebkg}) {
+    
+    if(titlebkg == null){
+      titlebkg = Colors.blue[300];
+    }
+
     return ClipRRect(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(_borderR),
@@ -65,7 +74,7 @@ class TarjetaContador extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(10),
-                color: Colors.blue[300],
+                color: titlebkg,
                 child: Text(titulo, textAlign: TextAlign.center, style: TemaTexto().tituloTarjeta,)
                 ),
             );
@@ -95,5 +104,52 @@ class TarjetaContador extends StatelessWidget {
     );
   }
 
+  Widget _cardNoContador() {
+    final _borderR = 10.0;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Card(
+            margin: EdgeInsets.all(10),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_borderR)),
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(50),
+              
+              onTap: (){
+                //TODO: agregar nuevo contador 
+                print('tarjeta presionada');
+                
+              },
+              child: Container(
+                width: 300,
+                height: 300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _header('No hay contador', _borderR, titlebkg: Colors.grey[400]),
+                    
+                    SizedBox(height: 50),
+                    
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Icon(
+                        Icons.add_box_rounded,
+                        size: 100,
+                        color: Colors.grey[400],
+                        ),
+                    ),
+
+                    Text('Agregar uno nuevo', style: TemaTexto().bottomSheetBody,)
+
+                  ],
+                )
+                ),
+            ),
+      ),
+        ],
+        ),
+    );
+  } 
   
 }

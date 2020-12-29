@@ -7,6 +7,8 @@ import 'package:healthCalc/app/modules/home/home_controller.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 
 ///Despliega un dialogo con las opciones para cada contador
+///tiene las opciones de editar y borrar contador
+///se activa ante el longPress de la tarjetaContador respectiva
 Future<void> bottomSheetOpciones( ContadorModel contador ){
   return Get.bottomSheet(
             BottomSheet(
