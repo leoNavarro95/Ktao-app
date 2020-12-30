@@ -94,18 +94,26 @@ class HomePage extends StatelessWidget {
               icon: Icon(Icons.delete), 
               onPressed: ()async{
                 bool aceptas = await borraTodoDialog();
-
-                if( aceptas ){
-                  final cantidad = await DBProvider.db.deleteallContadores();
-                  Get.snackbar('Se eliminaron los contadores', '$cantidad contadores eliminados.');
-                  await homeCtr.updateVisualFromDB();
-                } else {
-                  Get.snackbar('Ningun contador eliminado.', 'Se mantienen los datos');
-                }
+                _eliminarContadores( aceptas );
               },
               )
           ],
     );
+  }
+
+  void buildSnackbar({String title, String subtitle, IconData icon}) {
+
+    if (icon == null)
+      icon = Icons.warning;
+    
+    return Get.snackbar(
+                  title,
+                  subtitle,
+                  borderWidth: 2,
+                  borderColor: Colors.black12,
+                  colorText: Colors.black,
+                  icon: Icon(icon, color: Colors.red,),
+                  );
   }
 
   Future<void> _agregarContador(String nombre) async {
@@ -120,6 +128,37 @@ class HomePage extends StatelessWidget {
 
     } else{
         Get.snackbar('No se efectuo ningun cambio', 'Se mantienen los datos anteriores');
+      }
+  }
+
+  Future<void> _eliminarContadores(bool aceptas) async {
+    if( aceptas ){
+      
+      final cantidad = await DBProvider.db.deleteallContadores();
+      String _mensaje;
+      switch(cantidad){
+        case 0:
+          _mensaje = 'Ningun contador eliminado';
+        break;
+        case 1:
+          _mensaje = '1 contador eliminado';
+        break;
+        default:
+          _mensaje = '$cantidad contadores eliminados';
+          break;
+      }
+
+        buildSnackbar(
+          title: 'Accion de eliminar contador',
+          subtitle: '$_mensaje',
+          icon: Icons.delete,
+        );
+        await homeCtr.updateVisualFromDB();
+    } else {
+        buildSnackbar(
+          title:'Ningun contador eliminado',
+          subtitle:'Se mantienen los datos',
+          );
       }
   }
 
