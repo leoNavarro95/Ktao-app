@@ -13,6 +13,7 @@ class HomePage extends StatelessWidget {
 
   //? Para hacer validacion del campo de texto
   final _formKey = GlobalKey<FormState>();
+  final homeCtr = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +21,12 @@ class HomePage extends StatelessWidget {
 
     return GetBuilder<HomeController>(
       
-      init: HomeController(), //TODO: No se porque no me deja usar los datos observables del controller si no pongo esto, no se entiende que con el binding se resueelva esto
+      // init: HomeController(), //TODO: No se porque no me deja usar los datos observables del controller si no pongo esto, no se entiende que con el binding se resueelva esto
 
       builder: (_){
       return Scaffold(
         drawer: MenuLateral(),
-        appBar: buildAppBar(_),
+        appBar: buildAppBar(),
         body: Obx((){
           if(_.tarjetas.isNotEmpty){
             return ListView(
@@ -75,7 +76,7 @@ class HomePage extends StatelessWidget {
     return Table(children: _lista);
   }
 
-  AppBar buildAppBar(HomeController _) {
+  AppBar buildAppBar() {
     return AppBar(
         title: Text('Inicio'),
         centerTitle: true,
@@ -85,18 +86,7 @@ class HomePage extends StatelessWidget {
             icon: Icon(Icons.add), 
             onPressed: ()async{
               String nombre = await addContadorDialog( _formKey );
-
-              if(nombre != null){
-                
-                final contador = ContadorModel( nombre: nombre, consumo: 0, costoMesActual: 0.0, ultimaLectura: 'Hoy');
-                int id = await DBProvider.db.nuevoContador(contador);
-                Get.snackbar('Exito', 'Nuevo contador en la base de datos');
-                //!OJO hay que hacer depender el front-end de la base de datos, para mostrar datos guardados en la misma
-                final controlador = Get.find<HomeController>();
-                await controlador.updateVisualFromDB();
-              } else{
-                Get.snackbar('No se efectuo ningun cambio', 'Se mantienen los datos anteriores');
-              }
+              _agregarContador( nombre );
             }
             ),
 
@@ -108,6 +98,7 @@ class HomePage extends StatelessWidget {
                 if( aceptas ){
                   final cantidad = await DBProvider.db.deleteallContadores();
                   Get.snackbar('Se eliminaron los contadores', '$cantidad contadores eliminados.');
+                  await homeCtr.updateVisualFromDB();
                 } else {
                   Get.snackbar('Ningun contador eliminado.', 'Se mantienen los datos');
                 }
@@ -115,6 +106,21 @@ class HomePage extends StatelessWidget {
               )
           ],
     );
+  }
+
+  Future<void> _agregarContador(String nombre) async {
+    if(nombre != null){
+      
+      final contador = ContadorModel( nombre: nombre, consumo: 0, costoMesActual: 0.0, ultimaLectura: 'Hoy');
+      int id = await DBProvider.db.nuevoContador(contador);
+      Get.snackbar('Exito', 'Nuevo contador en la base de datos');
+      //!OJO hay que hacer depender el front-end de la base de datos, para mostrar datos guardados en la misma
+      
+      await homeCtr.updateVisualFromDB();
+
+    } else{
+        Get.snackbar('No se efectuo ningun cambio', 'Se mantienen los datos anteriores');
+      }
   }
 
   

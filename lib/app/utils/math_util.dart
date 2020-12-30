@@ -1,9 +1,11 @@
 
 //! Archivo que contiene funciones utiles para la realizacion de calculos:
 
-List<int> rango = [100,150,200,250,300,350,500,1000,5000];
-List<double> precios = [0.4,1.3,1.75,3.0,4.0,7.50,9.0,10.0,15.0,25.0];
+List<int> rango = [100,150,200,250,300,350,400,450,500,600,700,1000,1800,2600,3400,4200,5000];
+List<double> precios = [0.33,1.07,1.43,2.46,3.00,4.00,5.00,6.00,7.00,9.20,9.45,9.85,10.80,11.80,12.90,13.95,15.00,20.00];
 
+//*Para mostrar en la tabla, no se usa en este archivo 
+List<String> rangos = ['0 a 100','101 a 150','151 a 200','201 a 250','251 a 300','301 a 350','351 a 400','401 a 450','451 a 500', '501 a 600', '601 a 700', '701 a 1000', '1001 a 1800', '1801 a 2600', '2601 a 3400', '3401 a 4200', '4201 a 5000', '+ 5000'];
 
 /**
  *  Usada para calcular el costo en moneda nacional del consumo electrico.
@@ -63,7 +65,7 @@ Map<String, dynamic> calcCosto(int consumo){ //170
       precioXrango.add(costoAcumulado);
       costoTotal += costoAcumulado;
       
-      index = 10; //para que salga del bucle for()
+      index = 20; //TODO: buscar una mejor forma para que salga del bucle for()
     }
   }
 

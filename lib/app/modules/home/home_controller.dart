@@ -9,18 +9,15 @@ class HomeController extends GetxController{
   RxString resultado = ''.obs;
   RxList<TarjetaContador> tarjetas = List<TarjetaContador>().obs;
 
+
   @override
-  void onReady() {
-    super.onReady();
-    // this.resultado.value = 'hola';
-    updateVisualFromDB();
+  void onInit() {
+    super.onInit();
+    //if(!inicializado) //si no se ha inicializado se actualiza la vista
+      updateVisualFromDB();
+    
   }
 
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   updateVisualFromDB();
-  // }
 
   void adicionarTarjeta( TarjetaContador tarjeta){
     tarjetas.add(tarjeta);

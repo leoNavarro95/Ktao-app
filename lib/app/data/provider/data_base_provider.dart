@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -112,6 +113,7 @@ class DBProvider{
 
     final db        = await database;
     final resultado = await db.delete('ListaContadores', where: 'id = ?', whereArgs: [id]);
+    Get.back(); //para cerrar el bottom_sheet
     return resultado; //entero con la cantidad de registros eliminados
 
   }

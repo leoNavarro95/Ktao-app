@@ -16,9 +16,4 @@ class TarjetaController extends GetxController{
     });
   }
   
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
 }

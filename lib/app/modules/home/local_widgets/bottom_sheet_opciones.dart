@@ -10,6 +10,7 @@ import 'package:healthCalc/app/theme/text_theme.dart';
 ///tiene las opciones de editar y borrar contador
 ///se activa ante el longPress de la tarjetaContador respectiva
 Future<void> bottomSheetOpciones( ContadorModel contador ){
+  final homeCtr = Get.find<HomeController>();
   return Get.bottomSheet(
             BottomSheet(
               backgroundColor: Colors.lightBlue[50],
@@ -52,8 +53,8 @@ Future<void> bottomSheetOpciones( ContadorModel contador ){
                           if( aceptas ){
                             await DBProvider.db.deleteContador( contador.id );
                             Get.snackbar('Exito', 'El contador ${contador.nombre} fue eliminado.');
-                            HomeController().updateVisualFromDB();
-                            // Get.back();
+
+                            homeCtr.updateVisualFromDB();
                           } else {
                             Get.snackbar('Accion cancelada', 'Se mantienen los datos');
                             // Get.back();
