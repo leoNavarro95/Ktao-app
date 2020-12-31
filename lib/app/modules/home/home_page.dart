@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/global_widgets/dialogos.dart';
+import 'package:healthCalc/app/global_widgets/widgets.dart';
 import 'package:healthCalc/app/global_widgets/menu_lateral.dart';
 
 import 'package:healthCalc/app/modules/home/home_controller.dart';
@@ -41,8 +41,6 @@ class HomePage extends StatelessWidget {
     });
   }
 
-  
-
   Table buildTableContadores({List<TarjetaContador> contadores}) {
     List<TableRow> _lista = [];
     List<Widget> _fila = [];
@@ -66,12 +64,10 @@ class HomePage extends StatelessWidget {
           _fila.add(contadores[index]);
         }
         index++;
-        
       }
       _lista.add(TableRow(children: _fila.toList()));
       _fila.clear();
     }
-
 
     return Table(children: _lista);
   }
@@ -84,39 +80,19 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.add), 
-            onPressed: ()async{
-              String nombre = await addContadorDialog( _formKey );
-              _agregarContador( nombre );
-            }
+            onPressed: _agregarContador,
             ),
 
             IconButton(
               icon: Icon(Icons.delete), 
-              onPressed: ()async{
-                bool aceptas = await borraTodoDialog();
-                _eliminarContadores( aceptas );
-              },
+              onPressed:_eliminarContadores,
               )
           ],
     );
   }
 
-  void buildSnackbar({String title, String subtitle, IconData icon}) {
-
-    if (icon == null)
-      icon = Icons.warning;
-    
-    return Get.snackbar(
-                  title,
-                  subtitle,
-                  borderWidth: 2,
-                  borderColor: Colors.black12,
-                  colorText: Colors.black,
-                  icon: Icon(icon, color: Colors.red,),
-                  );
-  }
-
-  Future<void> _agregarContador(String nombre) async {
+  Future<void> _agregarContador() async {
+    String nombre = await addContadorDialog( _formKey );
     if(nombre != null){
       
       final contador = ContadorModel( nombre: nombre, consumo: 0, costoMesActual: 0.0, ultimaLectura: 'Hoy');
@@ -131,7 +107,8 @@ class HomePage extends StatelessWidget {
       }
   }
 
-  Future<void> _eliminarContadores(bool aceptas) async {
+  Future<void> _eliminarContadores() async {
+    bool aceptas = await borraTodoDialog();
     if( aceptas ){
       
       final cantidad = await DBProvider.db.deleteallContadores();
@@ -147,15 +124,14 @@ class HomePage extends StatelessWidget {
           _mensaje = '$cantidad contadores eliminados';
           break;
       }
-
-        buildSnackbar(
+        mySnackbar(
           title: 'Accion de eliminar contador',
           subtitle: '$_mensaje',
           icon: Icons.delete,
         );
         await homeCtr.updateVisualFromDB();
     } else {
-        buildSnackbar(
+        mySnackbar(
           title:'Ningun contador eliminado',
           subtitle:'Se mantienen los datos',
           );

@@ -113,3 +113,19 @@ Future<bool> borraTodoDialog() async{
     );
     
   }
+
+
+void mySnackbar({String title, String subtitle, IconData icon}) {
+
+    if (icon == null)
+      icon = Icons.warning;
+    
+    return Get.snackbar(
+                  title,
+                  subtitle,
+                  borderWidth: 2,
+                  borderColor: Colors.black12,
+                  colorText: Colors.black,
+                  icon: Icon(icon, color: Colors.red,),
+                  );
+  }

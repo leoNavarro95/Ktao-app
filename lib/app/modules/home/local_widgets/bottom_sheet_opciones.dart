@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/global_widgets/dialogos.dart';
+import 'package:healthCalc/app/global_widgets/widgets.dart';
 import 'package:healthCalc/app/modules/home/home_controller.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 
