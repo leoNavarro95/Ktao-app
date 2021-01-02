@@ -25,34 +25,76 @@ class DBProvider{
     return _database;
   }
 
+  //Constanes
+  static final String databaseName = 'ktao4.db'; //nombre de la base de datos
+  static int version = 2;
+  
+  //Parametros de la tabla: contadores
+  static final String contadoresTable        = 'contadores';
+  static final String columnContadoresId     = 'id';
+  static final String columnContadoresNombre = 'nombre';
+  static final String columnContadoresConsumo = 'consumo';
+  static final String columnContCostoMesActual = 'costoMesActual';
+  static final String columnContUltimaLectura = 'ultimaLectura';
+
+  //Sentencias SQL para crear la tabla contadores
+  static final String createTableContadores = 
+  'CREATE TABLE $contadoresTable ('
+  ' $columnContadoresId INTEGER PRIMARY KEY,'
+  ' $columnContadoresNombre TEXT NOT NULL,'
+  " $columnContadoresConsumo INTEGER DEFAULT '0',"
+  " $columnContCostoMesActual REAL DEFAULT '0.0',"
+  " $columnContUltimaLectura TEXT DEFAULT 'no fecha'"
+
+  ');';
+
+  
+  ///Parametros de la tabla: lecturas
+  static final String lecturasTable            = 'lecturas';
+  static final String columnLecturasId         = 'id';
+  static final String columnLecturasValor      = 'valor';
+  static final String columnLecturasFecha      = 'fecha';
+  static final String columnLecturasContadorId = 'id_contador';
+
+  //Sentencias SQL para crear la tabla Lecturas
+  static final String createTableLecturas = 
+  'CREATE TABLE $lecturasTable ('
+  ' $columnLecturasId INTEGER PRIMARY KEY,'
+  ' $columnLecturasValor INTEGER NOT NULL,'
+  " $columnLecturasFecha TEXT DEFAULT 'no disponible',"
+  ' $columnLecturasContadorId INTERGER,'
+  ' FOREIGN KEY($columnLecturasContadorId) REFERENCES $contadoresTable($columnContadoresId) ON DELETE CASCADE'
+  ');';
+
   initDB() async {
     // Get a location using getDatabasesPath
     String databasesPath = await getDatabasesPath(); //obtiene el path en donde se ubican los datos de la aplicacion
-    final path = join(databasesPath, 'ktaoTest.db'); //se le agrega el nombre del archivo .db donde se va a almacenar la bbdd
+    final path = join(databasesPath, databaseName); //se le agrega el nombre del archivo .db donde se va a almacenar la bbdd
 
     return await openDatabase(
       path,
-      version: 1,
+      version: version,
       onOpen: (db){},
       // onCreate callback se ejecuta ya una vez creada la base de datos
-      onCreate: (Database db , int version) async {
-        //se usa para crear las tablas de la base de datos,
-        //si ya existe una instancia db creada no la vuelve a crear,
-        await db.execute(
-          'CREATE TABLE ListaContadores ('  //! OJO con el nombre de la tabla
-          ' id INTEGER PRIMARY KEY,' // id auto-incrementado
-          ' nombre TEXT,'             // nombre del contador (dado por el usuario)
-          ' consumo INTERGER,'    //consumo antes de cerrar el mes
-          ' costoMesActual REAL,'       //OJO hay que definirlo como num en dart
-          ' ultimaLectuara TEXT'      //va a ser un string con la fecha y hora
-          ')'
-        );
-
-
-      }
+      onCreate: _onCreate,
+      onConfigure: _onConfigure,
       );
 
 
+  }
+  
+  static Future _onCreate(Database db , int version) async {
+    //se usa para crear las tablas de la base de datos,
+    //si ya existe una instancia db creada no la vuelve a crear,
+    await db.execute(
+      createTableContadores + createTableLecturas
+    );
+  }
+
+
+  static Future _onConfigure(Database db) async {
+    //Permite usar las foreign keys
+    await db.execute('PRAGMA foreign_keys = ON');
   }
 
   /// Metodo para guardar en la Base de Datos una nueva instancia de ContadorModel
@@ -62,7 +104,7 @@ class DBProvider{
 
     //antes de empezar a usar la base de datos es necesario asegurar que esta ya esta disponible
     final db        = await database;
-    final resultado = await db.insert('ListaContadores', nuevoContador.toJson());
+    final resultado = await db.insert(contadoresTable, nuevoContador.toJson());
 
     return resultado;
 
@@ -72,10 +114,10 @@ class DBProvider{
   /// Retorna una instancia de Contador dado un [id] presente en la base de datos
   ///!!! si el [id] no se encuentra en la tabla devuelve null
   Future<ContadorModel> getContadorId (int id) async {
-    //* await db.rawQuery("SELECT * FROM ListaContadores WHERE id='$id'");
+    //* await db.rawQuery("SELECT * FROM $contadoresTable WHERE id='$id'");
     
     final db        = await database;
-    final resultado = await db.query('ListaContadores', where: 'id = ?', whereArgs: [id]); //se encuesta la tabla en busqueda de un id que sea igual al id pasado como parametro
+    final resultado = await db.query(contadoresTable, where: 'id = ?', whereArgs: [id]); //se encuesta la tabla en busqueda de un id que sea igual al id pasado como parametro
     return resultado.isNotEmpty ? ContadorModel.fromJson( resultado.first ) : null;
 
   }
@@ -83,7 +125,7 @@ class DBProvider{
   Future<List<ContadorModel>> getTodosContadores() async {
     
     final db        = await database;
-    final resultado = await db.query('ListaContadores');
+    final resultado = await db.query(contadoresTable);
 
     List<ContadorModel> list = resultado.isNotEmpty 
                                 ? resultado.map((e) => ContadorModel.fromJson(e)).toList()
@@ -98,7 +140,7 @@ class DBProvider{
 
     final db        = await database;
     final resultado = await db.update(
-      'ListaContadores', 
+      contadoresTable, 
       contadorUpdated.toJson(), 
       where: 'id = ?', 
       whereArgs: [contadorUpdated.id] //para solo actualizar el registro que posea ese id
@@ -112,7 +154,7 @@ class DBProvider{
   Future<int> deleteContador( int id) async {
 
     final db        = await database;
-    final resultado = await db.delete('ListaContadores', where: 'id = ?', whereArgs: [id]);
+    final resultado = await db.delete(contadoresTable, where: 'id = ?', whereArgs: [id]);
     Get.back(); //para cerrar el bottom_sheet
     return resultado; //entero con la cantidad de registros eliminados
 
@@ -121,9 +163,9 @@ class DBProvider{
   ///Borra todos los contadores, pero deja la tabla creada
   Future<int> deleteallContadores() async {
 
-    // final resultado = await db.delete('ListaContadores');
+    // final resultado = await db.delete('$contadoresTable');
     final db        = await database;
-    final resultado = await db.rawDelete('DELETE FROM ListaContadores');
+    final resultado = await db.rawDelete('DELETE FROM $contadoresTable');
     return resultado; //entero con la cantidad de registros eliminados
 
   }

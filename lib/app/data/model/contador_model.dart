@@ -36,7 +36,7 @@ class ContadorModel {
     "nombre"         : nombre,
     "consumo"        : consumo,
     "costoMesActual" : costoMesActual,
-    "ultimaLectuara" : ultimaLectura
+    "ultimaLectura" : ultimaLectura
   };
 
 }
