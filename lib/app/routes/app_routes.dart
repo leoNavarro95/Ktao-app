@@ -6,5 +6,6 @@ class AppRoutes {
   static const HOME         = "home";
   static const DETAIL       = "detail";
   static const CALCULADORA  = "calculadora";
+  static const LECTURAS     = "lecturas";
 
 }

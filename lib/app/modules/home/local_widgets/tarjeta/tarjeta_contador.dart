@@ -34,13 +34,12 @@ class TarjetaContador extends StatelessWidget {
         splashColor: Colors.blue.withAlpha(50),
         
         onLongPress: () async{
-          //TODO: ante longPress mostrar cuadro de opciones, borrar, editar, etc
-          print('tarjeta presionada con duracion');
           await bottomSheetOpciones( contador );
         },
         onTap: (){
           print('tarjeta presionada');
-          _.presionada(contador.id.toString()); // hace el efecto de que se presione visualmente, variando la elevvacion
+          _.presionada(contador.id.toString()); // hace el efecto de que se presione visualmente, variando la elevacion
+          //TODO: navegar a pagina de lecturas OJO PASARLE COMO ARGUMENTO la INSTANCIA DEL CONTADOR
           
         },
         child: Container(

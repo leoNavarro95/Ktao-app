@@ -1,6 +1,8 @@
 import 'package:get/route_manager.dart';
 import 'package:healthCalc/app/modules/calculadora/calculadora_binding.dart';
 import 'package:healthCalc/app/modules/calculadora/calculadora_page.dart';
+import 'package:healthCalc/app/modules/lectura/lectura_binding.dart';
+import 'package:healthCalc/app/modules/lectura/lectura_page.dart';
 
 import 'package:healthCalc/app/routes/app_routes.dart';
 import 'package:healthCalc/app/modules/splash/splash_page.dart';
@@ -37,6 +39,12 @@ class AppPages{
       name:    AppRoutes.CALCULADORA, 
       page:    ()=> CalculadoraPage(), 
       binding: CalculadoraBinding()
+      ),
+
+      GetPage(
+      name:    AppRoutes.LECTURAS, 
+      page:    ()=> LecturaPage(), 
+      binding: LecturaBinding()
       ),
 
   ];
