@@ -97,13 +97,19 @@ class HomePage extends StatelessWidget {
       
       final contador = ContadorModel( nombre: nombre, consumo: 0, costoMesActual: 0.0, ultimaLectura: 'Hoy');
       int id = await DBProvider.db.nuevoContador(contador);
-      Get.snackbar('Exito', 'Nuevo contador en la base de datos');
+      mySnackbar(
+        title: 'Exito',
+        subtitle: 'Nuevo contador en la base de datos',
+        icon: Icons.dashboard_customize
+        );
+
       //!OJO hay que hacer depender el front-end de la base de datos, para mostrar datos guardados en la misma
       
       await homeCtr.updateVisualFromDB();
 
     } else{
         Get.snackbar('No se efectuo ningun cambio', 'Se mantienen los datos anteriores');
+        mySnackbar(title: 'No se efectuo ningun cambio', subtitle: 'Se mantienen los datos anteriores');
       }
   }
 
