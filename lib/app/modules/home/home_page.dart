@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:healthCalc/app/data/model/lectura_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
 import 'package:healthCalc/app/global_widgets/widgets.dart';
 import 'package:healthCalc/app/global_widgets/menu_lateral.dart';
@@ -21,8 +22,6 @@ class HomePage extends StatelessWidget {
 
     return GetBuilder<HomeController>(
       
-      // init: HomeController(), //TODO: No se porque no me deja usar los datos observables del controller si no pongo esto, no se entiende que con el binding se resueelva esto
-
       builder: (_){
       return Scaffold(
         drawer: MenuLateral(),
@@ -96,19 +95,21 @@ class HomePage extends StatelessWidget {
     if(nombre != null){
       
       final contador = ContadorModel( nombre: nombre, consumo: 0, costoMesActual: 0.0, ultimaLectura: 'Hoy');
+      
       int id = await DBProvider.db.nuevoContador(contador);
+      //! TODO: se agrega para establecer la primera relacion entre ambas tablas
+      final lectura = LecturaModel(lectura: 38, idContador: id);
+      await DBProvider.db.insertarLectura(lectura);
+
       mySnackbar(
         title: 'Exito',
         subtitle: 'Nuevo contador en la base de datos',
         icon: Icons.dashboard_customize
         );
-
-      //!OJO hay que hacer depender el front-end de la base de datos, para mostrar datos guardados en la misma
       
       await homeCtr.updateVisualFromDB();
 
     } else{
-        Get.snackbar('No se efectuo ningun cambio', 'Se mantienen los datos anteriores');
         mySnackbar(title: 'No se efectuo ningun cambio', subtitle: 'Se mantienen los datos anteriores');
       }
   }

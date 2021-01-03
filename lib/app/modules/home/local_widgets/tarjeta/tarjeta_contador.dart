@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
 import 'package:healthCalc/app/modules/home/local_widgets/bottom_sheet_opciones.dart';
 import 'package:healthCalc/app/modules/home/local_widgets/tarjeta/tarjeta_controller.dart';
+import 'package:healthCalc/app/routes/app_routes.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 
 class TarjetaContador extends StatelessWidget {
@@ -39,8 +40,7 @@ class TarjetaContador extends StatelessWidget {
         onTap: (){
           print('tarjeta presionada');
           _.presionada(contador.id.toString()); // hace el efecto de que se presione visualmente, variando la elevacion
-          //TODO: navegar a pagina de lecturas OJO PASARLE COMO ARGUMENTO la INSTANCIA DEL CONTADOR
-          
+          Get.toNamed(AppRoutes.LECTURAS, arguments: contador);
         },
         child: Container(
           width: 150,

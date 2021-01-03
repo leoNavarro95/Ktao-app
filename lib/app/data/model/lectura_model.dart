@@ -1,7 +1,9 @@
 
 
 class LecturaModel{
-  int id, lectura, idContador;
+
+  int id, lectura;
+  int  idContador;
   String fecha; //la fecha se va a tomar junto a la lectura de EditTexts
 
   LecturaModel(
@@ -9,7 +11,7 @@ class LecturaModel{
       this.id,
       this.lectura,
       this.idContador,
-      this.fecha
+      this.fecha,
     }
   );
 

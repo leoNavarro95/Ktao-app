@@ -27,7 +27,7 @@ class DBProvider{
   }
 
   //Constanes
-  static final String databaseName = 'ktao4.db'; //nombre de la base de datos
+  static final String databaseName = 'ktao11.db'; //nombre de la base de datos
   static int version = 2;
   
   //Parametros de la tabla: contadores
@@ -47,13 +47,13 @@ class DBProvider{
   " $columnContCostoMesActual REAL DEFAULT '0.0',"
   " $columnContUltimaLectura TEXT DEFAULT 'no fecha'"
 
-  ');';
+  ')';
 
   
   ///Parametros de la tabla: lecturas
   static final String lecturasTable            = 'lecturas';
   static final String columnLecturasId         = 'id';
-  static final String columnLecturasValor      = 'valor';
+  static final String columnLecturasLect       = 'lectura';
   static final String columnLecturasFecha      = 'fecha';
   static final String columnLecturasContadorId = 'id_contador';
 
@@ -61,11 +61,11 @@ class DBProvider{
   static final String createTableLecturas = 
   'CREATE TABLE $lecturasTable ('
   ' $columnLecturasId INTEGER PRIMARY KEY,'
-  ' $columnLecturasValor INTEGER NOT NULL,'
+  ' $columnLecturasLect INTEGER NOT NULL,'
   " $columnLecturasFecha TEXT DEFAULT 'no disponible',"
   ' $columnLecturasContadorId INTERGER,'
   ' FOREIGN KEY($columnLecturasContadorId) REFERENCES $contadoresTable($columnContadoresId) ON DELETE CASCADE'
-  ');';
+  ')';
 
   initDB() async {
     // Get a location using getDatabasesPath
@@ -79,6 +79,7 @@ class DBProvider{
       // onCreate callback se ejecuta ya una vez creada la base de datos
       onCreate: _onCreate,
       onConfigure: _onConfigure,
+      onUpgrade: _onUpgrade
       );
 
 
@@ -87,17 +88,30 @@ class DBProvider{
   static Future _onCreate(Database db , int version) async {
     //se usa para crear las tablas de la base de datos,
     //si ya existe una instancia db creada no la vuelve a crear,
-    await db.execute(
-      createTableContadores + createTableLecturas
-    );
-  }
+    await db.execute( createTableContadores ); //se crea la tabla contadores
+    await db.execute( createTableLecturas );   //se crea la tabla lecturas
 
+  }
 
   static Future _onConfigure(Database db) async {
     //Permite usar las foreign keys
     await db.execute('PRAGMA foreign_keys = ON');
   }
 
+static Future _onUpgrade(Database db, int oldVersion, int newVersion) async{
+  
+  Batch batch = db.batch();
+
+  //primero se eliminan las tablas si existen en la base de datos
+  batch.execute('DROP TABLE IF EXISTS $contadoresTable ;');
+  batch.execute('DROP TABLE IF EXISTS $lecturasTable ;');
+  //luego se vuelven a crear
+  batch.execute(createTableContadores);
+  batch.execute(createTableLecturas);
+
+  List<dynamic> result = await batch.commit();
+
+}
   /// Metodo para guardar en la Base de Datos una nueva instancia de ContadorModel
   /// Se le pasa una instancia del [nuevoContador] la cual sera guardada en la base de datoss
   /// de los contadores
@@ -173,9 +187,8 @@ class DBProvider{
 
   ///Se le pasa como parametro el contador a instertar la lectura y la lectura en si, dentro se
   ///encarga de igualar el foreign key de lectura con el id del contador
-  Future<int> insertarLectura(ContadorModel contador, LecturaModel lectura) async{
+  Future<int> insertarLectura(LecturaModel lectura) async{
 
-    lectura.idContador = contador.id; //se le asigna a la lectura el id de su respectivo contador
     final db = await database;
     final resultado = await db.insert(lecturasTable, lectura.toJson());
     return resultado;
@@ -189,7 +202,7 @@ class DBProvider{
     final resultado = await db.query(lecturasTable, where: 'id_contador = ?', whereArgs: [contador.id]); //se encuesta la tabla en busqueda de un id que sea igual al id pasado como parametro
     final lecturasByContador = resultado.isNotEmpty 
                               ? resultado.map((e) => LecturaModel.fromJson(e)).toList()
-                              : [];
+                              : null;
     return lecturasByContador;
   }
 
@@ -206,6 +219,17 @@ class DBProvider{
     final resultado = await db.delete(lecturasTable, where: 'id = ?', whereArgs: [id]);
     // Get.back(); //para cerrar el bottom_sheet
     return resultado; //entero con la cantidad de registros eliminados, debe ser igual a 1
+  }
+
+  Future<List<LecturaModel>> getTodasLecturas() async {
+    
+    final db        = await database;
+    final resultado = await db.query(lecturasTable);
+
+    List<LecturaModel> list = resultado.isNotEmpty 
+                                ? resultado.map((e) => LecturaModel.fromJson(e)).toList()
+                                : []; //si esta vacia la base de datos returna una lista empty
+    return list;
   }
 
 
