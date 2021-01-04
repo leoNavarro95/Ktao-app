@@ -1,57 +1,84 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:animate_do/animate_do.dart';
+
 import 'package:healthCalc/app/data/model/lectura_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
+import 'package:healthCalc/app/modules/lectura/local_widgets/lecturas_form_widget.dart';
+import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura.dart';
+import 'package:healthCalc/app/theme/text_theme.dart';
 
 import 'lectura_controller.dart';
 
 class LecturaPage extends GetView<LecturaController> {
-
+  final lecturaCtr = Get.find<LecturaController>();
+  final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-
-    return GetBuilder<LecturaController>(
-      builder: (_){
+    return GetBuilder<LecturaController>(builder: (_) {
       return Scaffold(
-        appBar: AppBar(title: Text('Lecturas del contador')),
-        body: listaLecturasWidget(),
+        appBar: AppBar(
+          title: Text('Lecturas del contador'),
+        ),
+        body: _contenido(),
       );
     });
   }
-}
 
-Widget listaLecturasWidget() {
-  final listaCtr = Get.find<LecturaController>();
-  // final lecturas = DBProvider.db.getLecturasByContador(listaCtr.contador);
+  Widget _contenido() {
+    final ContadorModel contador = lecturaCtr.contador;
 
-  return FutureBuilder<List<LecturaModel>>(
-    // future: DBProvider.db.getLecturasByContador(listaCtr.contador),
-    future: DBProvider.db.getTodasLecturas(),
-    builder: (BuildContext context, AsyncSnapshot<List<LecturaModel>> snapshot) {
-      //si aun no hay datos de la base de datos
-      if(!snapshot.hasData){
-        return Center(child: CircularProgressIndicator());
-      }
+    return Container(
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(bottom: 5),
+            child: FadeInLeft(
+                delay: Duration(seconds: 1),
+                child: _headerContadorName(contador)),
+          ),
+          LecturaForm(
+            height: 0.2 * Get.height, //el 20% del alto de la pantalla
+            width: Get.width, //el ancho completo de la pantalla
+            formKey: formKey,
+            contador: contador,
+            controller: lecturaCtr,
+          ),
+          Expanded(
+            child: _listaLecturas(contador),
+          ),
+        ],
+      ),
+    );
+  }
 
-      final lecturas = snapshot.data;
+  Widget _headerContadorName(ContadorModel contador) {
+    return Container(
+      padding: EdgeInsets.only(top: 0),
+      width: 0.7 * Get.width,
+      child: Card(
+        elevation: 3,
+        margin: EdgeInsets.all(0),
+        color: Colors.blue[300],
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(10))),
+        child: Text('${contador.nombre}',
+            textAlign: TextAlign.center, style: TemaTexto().tituloTarjeta),
+      ),
+    );
+  }
 
-      if ( lecturas.isEmpty ){
-        return Center(child: Text('No hay lecturas'));
-      }
-
-      return ListView.builder(
-        itemCount: lecturas.length,
-        itemBuilder: (cont, index ){
-          return ListTile(
-            leading: Icon(Icons.table_view),
-            title: Text('${lecturas[index].id} - ${lecturas[index].lectura}'),
-            subtitle: Text('${lecturas[index].idContador} - ${lecturas[index].fecha}'),
-          );
-        }
+  Widget _listaLecturas(ContadorModel contador) {
+    return Obx(() {
+      if(lecturaCtr.tarjetasLect.isNotEmpty){
+        return ListView(
+          children: lecturaCtr.tarjetasLect,
         );
-    },
-  );
+      }
+      return TarjetaLectura(); //sin parametro ya devuelve que no tiene nada
+    });
+  }
+
 
 }

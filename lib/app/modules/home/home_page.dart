@@ -36,7 +36,11 @@ class HomePage extends StatelessWidget {
           }
           return TarjetaContador();
         }),
-          );
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: _agregarContador,
+        ),
+      );
     });
   }
 
@@ -44,7 +48,7 @@ class HomePage extends StatelessWidget {
     List<TableRow> _lista = [];
     List<Widget> _fila = [];
     int cantidadFilas = 0;
-    const int cantidad_columnas = 2;
+    const int cantidad_columnas = 2; //! TODO: Hacer que cambie a 3 cuando el movil este en portrait
 
     //calculando el numero de filas necesario
     if(contadores.length % 2 == 0){ //si es par
@@ -97,9 +101,6 @@ class HomePage extends StatelessWidget {
       final contador = ContadorModel( nombre: nombre, consumo: 0, costoMesActual: 0.0, ultimaLectura: 'Hoy');
       
       int id = await DBProvider.db.nuevoContador(contador);
-      //! TODO: se agrega para establecer la primera relacion entre ambas tablas
-      final lectura = LecturaModel(lectura: 38, idContador: id);
-      await DBProvider.db.insertarLectura(lectura);
 
       mySnackbar(
         title: 'Exito',

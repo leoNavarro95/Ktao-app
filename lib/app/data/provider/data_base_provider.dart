@@ -206,7 +206,6 @@ static Future _onUpgrade(Database db, int oldVersion, int newVersion) async{
     return lecturasByContador;
   }
 
-  //! TODO: hacer pruebas luego de eliminar un contador con lecturas de si mantiene sus lecturas o las borra
   Future<LecturaModel> getLecturasById(int id) async{
     final db        = await database;
     final resultado = await db.query(lecturasTable, where: 'id = ?', whereArgs: [id]);
