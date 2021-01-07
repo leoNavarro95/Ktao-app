@@ -23,6 +23,16 @@ class TemaTexto {
   TextStyle get tituloTarjeta => this._tituloTarjeta;
   //______________________________________________
 
+  final TextStyle _tituloTarjetaDark = TextStyle(
+    fontSize: 20,
+    color: Colors.black38, 
+    fontFamily: 'Montserrat-Light',
+    fontStyle: FontStyle.normal
+    // fontWeight: FontWeight.w400
+    );
+  TextStyle get tituloTarjetaDark => this._tituloTarjetaDark;
+  //______________________________________________
+
    final TextStyle _cuerpoTarjeta = TextStyle(
     fontSize: 15,
     color: Colors.blue,

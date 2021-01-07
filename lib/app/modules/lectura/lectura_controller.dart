@@ -2,9 +2,8 @@
 
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
-import 'package:healthCalc/app/data/model/lectura_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura.dart';
+import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 
 class LecturaController extends GetxController {
 
@@ -13,12 +12,13 @@ class LecturaController extends GetxController {
 
   ///lista que contiene las tarjetas de las lecturas
   RxList<TarjetaLectura> tarjetasLect = List<TarjetaLectura>().obs;
-
+  int lecturaFromTextInput = 0;
+  
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
     this._contador = Get.arguments as ContadorModel; //se obtiene el argumento pasado desde la pagina anterior
-    updateVisualFromDB();
+    await updateVisualFromDB();
   }
 
   void adicionarTarjetaLectura( TarjetaLectura tarjeta){
@@ -31,8 +31,10 @@ class LecturaController extends GetxController {
     
     final lecturas = await DBProvider.db.getLecturasByContador( contador );
 
-    for(int i = 0; i < lecturas.length ; i++){
+    if(lecturas != null){
+      for(int i = 0; i < lecturas.length ; i++){
       this.adicionarTarjetaLectura(TarjetaLectura(lectura: lecturas[i],));
+    }
     }
 
   }
