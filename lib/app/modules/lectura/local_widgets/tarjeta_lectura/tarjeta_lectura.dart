@@ -122,7 +122,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
             Text('Lectura No. ${this.lectura.id}',
                 style: TemaTexto().infoTarjeta),
             Divider(),
-            Text('Fecha: 21 de diciembre del 2020',
+            Text('Fecha: ${this.lectura.fecha}',
                 style: TemaTexto().infoTarjeta),
             Divider(),
             Text('Hace 2 dias', style: TemaTexto().infoTarjeta),

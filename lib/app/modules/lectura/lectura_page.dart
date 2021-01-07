@@ -38,7 +38,7 @@ class LecturaPage extends GetView<LecturaController> {
                 child: _headerContadorName(contador)),
           ),
           LecturaForm(
-            height: 0.3 * Get.height, //el 20% del alto de la pantalla
+            // height: 0.3 * Get.height, //el 20% del alto de la pantalla
             width: Get.width, //el ancho completo de la pantalla
             formKey: formKey,
             contador: contador,

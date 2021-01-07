@@ -12,7 +12,6 @@ class LecturaController extends GetxController {
 
   ///lista que contiene las tarjetas de las lecturas
   RxList<TarjetaLectura> tarjetasLect = List<TarjetaLectura>().obs;
-  int lecturaFromTextInput = 0;
   
   @override
   void onInit() async {
