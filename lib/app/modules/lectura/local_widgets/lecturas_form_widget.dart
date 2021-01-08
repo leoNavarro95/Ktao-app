@@ -6,6 +6,7 @@ import 'package:healthCalc/app/data/provider/data_base_provider.dart';
 import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 
+
 class LecturaForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final ContadorModel contador;
@@ -36,31 +37,26 @@ class LecturaForm extends StatelessWidget {
               _crearFecha(inputDateCtr),
             ],
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _lamp(),
-              _botonAgregarLect(textCtr, inputDateCtr),
-            ],
-          )
+          _botonAgregarLect(textCtr, inputDateCtr)
         ],
       ),
     );
   }
 
+  //* no funciona el flash del movil
   Widget _lamp() {
+    final _apagadaColor = Colors.yellow[300].withAlpha(100);
+    final _encendidaColor = Colors.yellow[300].withAlpha(200);
     return Container(
       width: 0.2 * Get.width,
       height: 50,
       margin: EdgeInsets.only(top: 10, right: 10),
       child: FlatButton(
         shape: StadiumBorder(),
-        color: Colors.yellow[300].withAlpha(
-            100), //* OJO cambiarle el alpha en dependencia del estado del flash
+        color: (lectCtr.estadoLampara) ? _encendidaColor : _apagadaColor,
         child: Icon(Icons.lightbulb_outline, color: Colors.white),
         onPressed: () {
-          //! TODO: Encender el flash del movil
-          print(DateTime.now().toString()); //.replaceRange(10, 26, ''));
+          // lectCtr.switchLamp();
         },
       ),
     );
@@ -87,7 +83,8 @@ class LecturaForm extends StatelessWidget {
       TextEditingController textCtr, TextEditingController dateCtr) async {
     //validate() devuelve true si el formulario es valido
     if (formKey.currentState.validate()) {
-      int lecturaEntrada = int.parse(textCtr.text);
+      final int lecturaEntrada = int.parse(textCtr.text);
+      // final String fecha = date
       if (lecturaEntrada != null) {
         final lect = LecturaModel(
             lectura: lecturaEntrada,
@@ -129,7 +126,7 @@ class LecturaForm extends StatelessWidget {
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp('[ .,-]')),
           ],
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
+          keyboardType: TextInputType.numberWithOptions(),
           decoration: InputDecoration(
               labelText: 'Lectura',
               labelStyle: TemaTexto().infoTarjeta,
@@ -142,6 +139,10 @@ class LecturaForm extends StatelessWidget {
   }
 
   Widget _crearFecha(TextEditingController dateCtr) {
+    String fecha = DateTime.now().toString().replaceRange(10, 26, '');
+    fecha = torcerFecha(fecha);
+    dateCtr.text = fecha;
+
     return Container(
       width: 0.4 * Get.width,
       height: 60,
@@ -151,11 +152,11 @@ class LecturaForm extends StatelessWidget {
         readOnly: true,
         controller: dateCtr,
         decoration: InputDecoration(
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          labelText: 'Fecha',
-          hintText: DateTime.now().toString().replaceRange(10, 26, ''),
-          labelStyle: TemaTexto().infoTarjeta,
-          border: OutlineInputBorder()),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            labelText: 'Fecha',
+            // hintText: fecha,
+            labelStyle: TemaTexto().infoTarjeta,
+            border: OutlineInputBorder()),
         onTap: () {
           // FocusScope.of(Get.context).requestFocus(new FocusNode());
           _selectDate(dateCtr);
@@ -169,16 +170,33 @@ class LecturaForm extends StatelessWidget {
 
     DateTime fechaSeleccionada = await showDatePicker(
       context: Get.context,
-      initialDate: new DateTime.now(),
-      firstDate: new DateTime(2019),
-      lastDate: new DateTime(2025),
-      // locale: Locale('es', 'ES'),
+      initialDate: new DateTime.now(), //donde va a poner el selector
+      firstDate: new DateTime(2020), //desde que fecha se puede elegir
+      lastDate: new DateTime
+          .now(), //ultima fecha que se puede elegir, NO SE PERMITE SELECCIONAR FUTURO
+      locale: Locale('es', 'ES'),
     );
 
     if (fechaSeleccionada != null) {
       _fecha = fechaSeleccionada.toString();
       _fecha = _fecha.replaceRange(10, 23, '');
-      dateCtr.text = _fecha; //el controlador es el que inyecta el texto
+
+      String fecha = torcerFecha(_fecha);
+      print(fecha);
+      dateCtr.text = fecha; //el controlador es el que inyecta el texto
     }
+  }
+
+  String torcerFecha(String fecha) {
+    //si fecha es: 2021-01-02 retorna ['2021','01','02']
+    List<String> compFecha = fecha.split('-');
+    String fechaTorcida = '';
+    for (int i = compFecha.length; i > 0; i--) {
+      if (i == 1) {
+        fechaTorcida += compFecha[i - 1];
+      } else
+        fechaTorcida += compFecha[i - 1] + '/';
+    }
+    return fechaTorcida;
   }
 }

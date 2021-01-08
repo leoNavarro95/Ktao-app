@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:healthCalc/app/data/model/lectura_model.dart';
+import 'package:healthCalc/app/data/provider/data_base_provider.dart';
+import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura_controller.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 
@@ -16,6 +18,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
   @override
   Widget build(BuildContext context) {
     final _borderR = 10.0;
+    final lectCtr = Get.find<LecturaController>();
 
     if (lectura == null) {
       return _cardNoLectura();
@@ -27,28 +30,44 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
           false, //! OJO para permitir multiples instancias de controladores por cada widget
       id: lectura.id.toString(),
       builder: (_) {
-        return Card(
-          margin: EdgeInsets.all(10),
-          shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(_borderR)),
-          child: InkWell(
-            splashColor: Colors.blue.withAlpha(50),
-            onLongPress: () async {},
-            onTap: () {},
-            child: Container(
-                width: Get.width,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    _header(
-                      '${this.lectura.lectura} kWh',
-                      _borderR,
-                      titlebkg: Colors.yellow[300].withAlpha(120),
-                      controller: _,
-                    ),
-                    _body(_),
-                  ],
-                )),
+        return Dismissible(
+          key: UniqueKey(), //Key(lectura.id.toString()),
+          background: _crearDismissibleBkg(),
+          onDismissed: (direction) async {
+            //primero se obtiene la lista de lecturas presentes antes de borrar en el contador
+            final lecturas =
+                await DBProvider.db.getLecturasByContador(lectCtr.contador);
+            // se borra la lectura por su id de la DataBase
+            await DBProvider.db.deleteLectura(lectura.id);
+
+            //si el tamano de la lista de lecturas antes de borrar era igual a 1, hay que refrescar el visual para mostrar que ahora no existen lecturas
+            if (lecturas.length == 1) {
+              await lectCtr.updateVisualFromDB();
+            }
+          },
+          child: Card(
+            margin: EdgeInsets.all(10),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(_borderR)),
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(50),
+              onLongPress: () async {},
+              onTap: () {},
+              child: Container(
+                  width: Get.width,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _header(
+                        '${this.lectura.lectura}',
+                        _borderR,
+                        titlebkg: Colors.yellow[300].withAlpha(120),
+                        controller: _,
+                      ),
+                      _body(_),
+                    ],
+                  )),
+            ),
           ),
         );
       },
@@ -178,6 +197,35 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _crearDismissibleBkg() {
+    return Container(
+      color: Colors.red,
+      child: Center(
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Icon(
+            Icons.delete,
+            size: 48.0,
+            color: Colors.white54,
+          ),
+          Text(
+            'Borrar',
+            style: TextStyle(
+                color: Colors.yellow,
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold),
+          ),
+          Icon(
+            Icons.delete,
+            size: 48.0,
+            color: Colors.white54,
+          ),
+        ],
+      )),
     );
   }
 }

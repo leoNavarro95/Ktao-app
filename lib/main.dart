@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'package:healthCalc/app/modules/splash/splash_binding.dart';
 import 'package:healthCalc/app/modules/splash/splash_page.dart';
 import 'package:healthCalc/app/routes/app_pages.dart';
@@ -17,8 +19,18 @@ class MyApp extends StatelessWidget {
     
     return GetMaterialApp(
       
-      debugShowCheckedModeBanner: false,
       title: 'Ktao',
+      debugShowCheckedModeBanner: false,
+      
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate
+      ],
+      supportedLocales: [
+        const Locale('en', 'US'), //english
+        const Locale('es', 'ES'), //spanish
+      ],
+      
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
