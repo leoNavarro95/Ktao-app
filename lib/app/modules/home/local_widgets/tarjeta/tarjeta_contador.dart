@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:healthCalc/app/modules/home/local_widgets/bottom_sheet_opciones.dart';
 import 'package:healthCalc/app/modules/home/local_widgets/tarjeta/tarjeta_controller.dart';
+import 'package:healthCalc/app/routes/app_routes.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 
 class TarjetaContador extends StatelessWidget {
 
-  final String titulo;
-  final String consumo;
+  final ContadorModel contador;
 
   const TarjetaContador({
     Key key,
-    @required this.titulo, 
-    this.consumo,
+    this.contador,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final _borderR = 10.0;
-    
+
+    if(contador == null){
+      return _cardNoContador();
+    }
     return GetBuilder<TarjetaController>(
       init: TarjetaController(),
-      id: titulo,
+      id: contador.id.toString(),
       builder: (_){
         return Card(
       
@@ -29,14 +33,14 @@ class TarjetaContador extends StatelessWidget {
       elevation: _.elevacion,
       child: InkWell(
         splashColor: Colors.blue.withAlpha(50),
-        onLongPress: (){
-          //TODO: ante longPress mostrar cuadro de opciones, borrar, editar, etc
-          print('tarjeta presionada con duracion');
+        
+        onLongPress: () async{
+          await bottomSheetOpciones( contador );
         },
         onTap: (){
           print('tarjeta presionada');
-          _.presionada(titulo); // hace el efecto de que se presione visualmente, variando la elevvacion
-          
+          _.presionada(contador.id.toString()); // hace el efecto de que se presione visualmente, variando la elevacion
+          Get.toNamed(AppRoutes.LECTURAS, arguments: contador);
         },
         child: Container(
           width: 150,
@@ -44,7 +48,7 @@ class TarjetaContador extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _header(this.titulo, _borderR),
+              _header(this.contador.nombre, _borderR),
               _body(),
             ],
           )
@@ -55,7 +59,12 @@ class TarjetaContador extends StatelessWidget {
       });
   }
 
-  ClipRRect _header( String titulo, double _borderR) {
+  ClipRRect _header( String titulo, double _borderR, {Color titlebkg}) {
+    
+    if(titlebkg == null){
+      titlebkg = Colors.blue[300];
+    }
+
     return ClipRRect(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(_borderR),
@@ -64,7 +73,7 @@ class TarjetaContador extends StatelessWidget {
               child: Container(
                 width: double.infinity,
                 padding: EdgeInsets.all(10),
-                color: Colors.blue[300],
+                color: titlebkg,
                 child: Text(titulo, textAlign: TextAlign.center, style: TemaTexto().tituloTarjeta,)
                 ),
             );
@@ -79,13 +88,13 @@ class TarjetaContador extends StatelessWidget {
         InputChip(
           onPressed: (){},
           padding: EdgeInsets.all(10),
-          label: Text('545kWh',style: TemaTexto().cuerpoTarjeta),
+          label: Text('${contador.id}kWh',style: TemaTexto().cuerpoTarjeta),
           avatar: CircleAvatar(child: Icon(Icons.flash_on))
           ),
           InputChip(
             onPressed: (){},
             padding: EdgeInsets.all(10),
-            label: Text('10,000', style: TemaTexto().cuerpoTarjeta),
+            label: Text('${contador.costoMesActual} CUP', style: TemaTexto().cuerpoTarjeta),
             avatar: CircleAvatar(
               child: Icon(Icons.attach_money),
               )
@@ -94,5 +103,52 @@ class TarjetaContador extends StatelessWidget {
     );
   }
 
+  Widget _cardNoContador() {
+    final _borderR = 10.0;
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Card(
+            margin: EdgeInsets.all(10),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_borderR)),
+            child: InkWell(
+              splashColor: Colors.blue.withAlpha(50),
+              
+              onTap: (){
+                //TODO: agregar nuevo contador 
+                print('tarjeta presionada');
+                
+              },
+              child: Container(
+                width: 300,
+                height: 300,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _header('No hay contador', _borderR, titlebkg: Colors.grey[400]),
+                    
+                    SizedBox(height: 50),
+                    
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Icon(
+                        Icons.add_box_rounded,
+                        size: 100,
+                        color: Colors.grey[400],
+                        ),
+                    ),
+
+                    Text('Agregar uno nuevo', style: TemaTexto().bottomSheetBody,)
+
+                  ],
+                )
+                ),
+            ),
+      ),
+        ],
+        ),
+    );
+  } 
   
 }

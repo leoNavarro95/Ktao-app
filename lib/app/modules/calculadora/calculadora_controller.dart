@@ -11,8 +11,13 @@ class CalculadoraController extends GetxController{
   RxList<double> listPrecio = List<double>().obs;
 
   @override
-  void onReady() {
-    super.onReady();
+  void onInit() {
+    super.onInit();
+    lectura1.value = 0;
+    lectura2.value = 0;
+    consumo.value = 0;
+    costo.value = 0.0;
+
     listConsumo.add(0);
     listPrecio.add(0.0);
     
@@ -24,16 +29,12 @@ class CalculadoraController extends GetxController{
     listPrecio.clear();
     listConsumo.clear();
     Map<String, dynamic> resultado = calcCosto(consumo.value);
-    print('${resultado["listaConsumo"]}//${resultado["listaPrecio"]}');
     
     costo.value = resultado["costo"]; // es de tipo RxDouble
     List<int> lc = resultado["listaConsumo"];
     lc.forEach((e) { listConsumo.add(e);});
     List<double> lp = resultado["listaPrecio"];
     lp.forEach((e) { listPrecio.add(e);});
-
-    print("___________");
-    print('$listConsumo // $listPrecio');
     
 
   }

@@ -32,8 +32,12 @@ class CampoTextoCalculadora extends StatelessWidget {
             labelText: titulo,
             ),
           onChanged: (val) {
-            
-            int valor = int.parse(val).toInt();
+            int valor = 0;
+            if(val.length == 0){
+              valor = 0;
+            } else{
+              valor = int.parse(val).toInt();
+            }
 
             if( titulo == "Lectura 1"){
               //TODO: Implementar uso de user_preferences para guardar Lecturas

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:healthCalc/app/data/model/lectura_model.dart';
+import 'package:healthCalc/app/data/provider/data_base_provider.dart';
+import 'package:healthCalc/app/global_widgets/widgets.dart';
 import 'package:healthCalc/app/global_widgets/menu_lateral.dart';
 
 import 'package:healthCalc/app/modules/home/home_controller.dart';
@@ -10,6 +14,7 @@ class HomePage extends StatelessWidget {
 
   //? Para hacer validacion del campo de texto
   final _formKey = GlobalKey<FormState>();
+  final homeCtr = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -17,22 +22,25 @@ class HomePage extends StatelessWidget {
 
     return GetBuilder<HomeController>(
       
-      init: HomeController(), //TODO: No se porque no me deja usar los datos observables del controller si no pongo esto, no se entiende que con el binding se resueelva esto
-
       builder: (_){
       return Scaffold(
         drawer: MenuLateral(),
-        appBar: buildAppBar(_),
-        body: ListView(
-          children: <Widget>[
-            Column(
-              children: [
-                Obx(()=>buildTableContadores(contadores: _.tarjetas),),
-                // Obx(()=>Text('Texto: ${_.resultado.value}')),
-            ],
-          ),
-          ]),
-          );
+        appBar: buildAppBar(),
+        body: Obx((){
+          if(_.tarjetas.isNotEmpty){
+            return ListView(
+              children: <Widget>[
+                buildTableContadores(contadores: _.tarjetas),
+              ],
+            );
+          }
+          return TarjetaContador();
+        }),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: _agregarContador,
+        ),
+      );
     });
   }
 
@@ -40,7 +48,7 @@ class HomePage extends StatelessWidget {
     List<TableRow> _lista = [];
     List<Widget> _fila = [];
     int cantidadFilas = 0;
-    int cantidadColumnas = 2;
+    const int cantidad_columnas = 2; //! TODO: Hacer que cambie a 3 cuando el movil este en portrait
 
     //calculando el numero de filas necesario
     if(contadores.length % 2 == 0){ //si es par
@@ -52,42 +60,22 @@ class HomePage extends StatelessWidget {
     int index = 0;
 
     for (int i = 0; i < cantidadFilas ; i++){
-      for(int j = 0; j < cantidadColumnas; j++){
+      for(int j = 0; j < cantidad_columnas; j++){
         if(index >= contadores.length){
           _fila.add(Container());  
         } else {
           _fila.add(contadores[index]);
         }
         index++;
-        
       }
       _lista.add(TableRow(children: _fila.toList()));
       _fila.clear();
     }
 
-
     return Table(children: _lista);
-      
-      
-    // return Table(
-    //           children: [
-    //             TableRow(
-    //               children: [
-    //                 TarjetaContador(titulo: 'Titulo1',),
-    //                 TarjetaContador(titulo: 'Titulo4',)
-    //               ]
-    //             ),
-    //             TableRow(
-    //               children: [
-    //                 TarjetaContador(titulo: 'Titulo3',),
-    //                 TarjetaContador(titulo: 'Titulo2',)
-    //               ]
-    //             ),
-    //           ],
-    //         );
   }
 
-  AppBar buildAppBar(HomeController _) {
+  AppBar buildAppBar() {
     return AppBar(
         title: Text('Inicio'),
         centerTitle: true,
@@ -95,74 +83,70 @@ class HomePage extends StatelessWidget {
         actions: [
           IconButton(
             icon: Icon(Icons.add), 
-            onPressed: ()async{
-              String nombre = await _adicionarContador();
-              if(nombre != null){
-                _.adicionarTarjeta(TarjetaContador(titulo: nombre,));
-              }
-            }
-            )
+            onPressed: _agregarContador,
+            ),
+
+            IconButton(
+              icon: Icon(Icons.delete), 
+              onPressed:_eliminarContadores,
+              )
           ],
     );
   }
 
-  Future<String> _adicionarContador() async{
-    String _valorInput = '';
+  Future<void> _agregarContador() async {
+    String nombre = await addContadorDialog( _formKey );
+    if(nombre != null){
+      
+      final contador = ContadorModel( nombre: nombre, consumo: 0, costoMesActual: 0.0, ultimaLectura: 'Hoy');
+      
+      int id = await DBProvider.db.nuevoContador(contador);
 
-    return await Get.dialog(
-      AlertDialog(
-        
-          backgroundColor: Colors.lightBlue[50],
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Adicionar contador'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      
-                      decoration: InputDecoration(
-                        labelText: 'Nombre contador',
-                        icon: Icon(Icons.add_box),
-                      ),
+      mySnackbar(
+        title: 'Exito',
+        subtitle: 'Nuevo contador en la base de datos',
+        icon: Icons.dashboard_customize
+        );
+      
+      await homeCtr.updateVisualFromDB();
 
-                      validator: (value){
-                        if(value.isEmpty){
-                          return 'Introduzca un nombre';
-                        }
-                        _valorInput = value;
-                        return null;
-                      },
-                    ),
-                  ],
-                  ),
-                ),
-              
-            ],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('OK'),
-              onPressed: () {
-                //validate() devuelve true si el formulario es valido
-                if(_formKey.currentState.validate()){
-                 Get.back( result: _valorInput); 
-                }
-              },
-              ),
-              FlatButton(
-              child: Text('CANCEL'),
-              onPressed: () => Get.back(), //! va a retornar null, manejarlo del otro lado
-              ),
-          ],
-        ),
-      barrierDismissible: false,
-    );
-    
+    } else{
+        mySnackbar(title: 'No se efectuo ningun cambio', subtitle: 'Se mantienen los datos anteriores');
+      }
   }
 
+  Future<void> _eliminarContadores() async {
+    bool aceptas = await borraTodoDialog();
+    if( aceptas ){
+      
+      final cantidad = await DBProvider.db.deleteallContadores();
+      String _mensaje;
+      switch(cantidad){
+        case 0:
+          _mensaje = 'Ningun contador eliminado';
+        break;
+        case 1:
+          _mensaje = '1 contador eliminado';
+        break;
+        default:
+          _mensaje = '$cantidad contadores eliminados';
+          break;
+      }
+        mySnackbar(
+          title: 'Accion de eliminar contador',
+          subtitle: '$_mensaje',
+          icon: Icons.delete,
+        );
+        await homeCtr.updateVisualFromDB();
+    } else {
+        mySnackbar(
+          title:'Ningun contador eliminado',
+          subtitle:'Se mantienen los datos',
+          );
+      }
+  }
+
+  
+  
 }
 
