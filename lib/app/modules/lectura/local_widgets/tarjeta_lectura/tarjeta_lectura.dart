@@ -51,8 +51,9 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
                 borderRadius: BorderRadius.circular(_borderR)),
             child: InkWell(
               splashColor: Colors.blue.withAlpha(50),
-              onLongPress: () async {},
-              onTap: () {},
+              onTap: () {
+                _.expand(lectura.id.toString());
+              },
               child: Container(
                   width: Get.width,
                   child: Column(

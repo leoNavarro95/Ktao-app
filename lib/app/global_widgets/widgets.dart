@@ -56,7 +56,11 @@ Future<bool> borraTodoDialog() async{
   }
 
 
-  Future<String> addContadorDialog( GlobalKey<FormState> formKey ) async{
+  Future<String> textEditOptionDialog( GlobalKey<FormState> formKey, {
+    String title = "Title",
+    String labelHelp = "Help label",
+    String errorLabel = "Error",
+  } ) async{
     String _valorInput = '';
 
     return await Get.dialog(
@@ -64,7 +68,7 @@ Future<bool> borraTodoDialog() async{
         
           backgroundColor: Colors.lightBlue[50],
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Adicionar contador'),
+          title: Text(title),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -75,13 +79,13 @@ Future<bool> borraTodoDialog() async{
                     TextFormField(
                       
                       decoration: InputDecoration(
-                        labelText: 'Nombre contador',
+                        labelText: labelHelp,
                         icon: Icon(Icons.add_box),
                       ),
 
                       validator: (value){
                         if(value.isEmpty){
-                          return 'Introduzca un nombre';
+                          return errorLabel;
                         }
                         _valorInput = value;
                         return null;
@@ -104,7 +108,7 @@ Future<bool> borraTodoDialog() async{
               },
               ),
               FlatButton(
-              child: Text('CANCEL'),
+              child: Text('CANCELAR'),
               onPressed: () => Get.back(), //! va a retornar null, manejarlo del otro lado
               ),
           ],

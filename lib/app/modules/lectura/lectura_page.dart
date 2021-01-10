@@ -8,6 +8,7 @@ import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tar
 import 'package:healthCalc/app/theme/text_theme.dart';
 
 import 'lectura_controller.dart';
+import 'local_widgets/tarjeta_mes.dart';
 
 class LecturaPage extends GetView<LecturaController> {
   final lecturaCtr = Get.find<LecturaController>();
@@ -44,6 +45,7 @@ class LecturaPage extends GetView<LecturaController> {
             contador: contador,
             lectCtr: lecturaCtr,
           ),
+          // TarjLectXMes(month: DateTime.now().month, year: DateTime.now().year,),
           Expanded(
             child: _listaLecturas(contador),
           ),
