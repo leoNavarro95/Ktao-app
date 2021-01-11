@@ -3,6 +3,7 @@
 import 'package:get/get.dart';
 import 'package:healthCalc/app/modules/calculadora/calculadora_controller.dart';
 import 'package:healthCalc/app/modules/home/home_controller.dart';
+import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura_controller.dart';
 import 'package:healthCalc/app/modules/splash/splash_controller.dart';
 
 //* Los bindigs son usados para la inyeccion de dependencias
@@ -14,6 +15,7 @@ class SplashBinding extends Bindings{
     Get.lazyPut(() => SplashController());
     Get.lazyPut<HomeController>(() => HomeController(), fenix: true);
     Get.lazyPut<CalculadoraController>(() => CalculadoraController(), fenix: true);
+    Get.lazyPut<TarjetaLectController>(() => TarjetaLectController());
     
   }
 

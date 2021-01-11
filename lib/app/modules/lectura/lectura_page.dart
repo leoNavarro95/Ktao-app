@@ -5,6 +5,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/agregar_lectura_dialog.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
+import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura_controller.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 
 import 'lectura_controller.dart';
@@ -27,9 +28,6 @@ class LecturaPage extends GetView<LecturaController> {
         child: Scaffold(
           appBar: AppBar(
             title: Text('Lecturas'),
-            actions: [
-              _agregarLectura(),
-            ],
             bottom: TabBar(
               tabs: tabs.map((e) => Text(e)).toList(),
             ),
@@ -111,18 +109,5 @@ class LecturaPage extends GetView<LecturaController> {
       }
       return TarjetaLectura(); //sin parametro ya devuelve que no tiene nada
     });
-  }
-
-  Widget _agregarLectura() {
-    return IconButton(
-      icon: Icon(Icons.add),
-      onPressed: () async {
-        await agregarLecturaDialog(
-          formKey,
-          lecturaCtr,
-          title: "Nueva lectura",
-        );
-      },
-    );
   }
 }

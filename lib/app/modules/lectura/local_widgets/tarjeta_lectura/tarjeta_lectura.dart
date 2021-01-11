@@ -1,3 +1,4 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,21 +31,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
           false, //! OJO para permitir multiples instancias de controladores por cada widget
       id: lectura.id.toString(),
       builder: (_) {
-        return Dismissible(
-          key: UniqueKey(), //Key(lectura.id.toString()),
-          background: _crearDismissibleBkg(),
-          onDismissed: (direction) async {
-            //primero se obtiene la lista de lecturas presentes antes de borrar en el contador
-            final lecturas =
-                await DBProvider.db.getLecturasByContador(lectCtr.contador);
-            // se borra la lectura por su id de la DataBase
-            await DBProvider.db.deleteLectura(lectura.id);
-
-            //si el tamano de la lista de lecturas antes de borrar era igual a 1, hay que refrescar el visual para mostrar que ahora no existen lecturas
-            if (lecturas.length == 1) {
-              await lectCtr.updateVisualFromDB();
-            }
-          },
+        return FadeInLeft(
           child: Card(
             margin: EdgeInsets.all(10),
             shape: RoundedRectangleBorder(
@@ -63,7 +50,8 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
                         '${this.lectura.lectura}',
                         _borderR,
                         titlebkg: Colors.yellow[300].withAlpha(120),
-                        controller: _,
+                        tarjLectCtr: _,
+                        lectCtr: lectCtr,
                       ),
                       _body(_),
                     ],
@@ -75,14 +63,38 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     );
   }
 
+  Future<void> _eliminarLectura(LecturaController lectCtr) async {
+    //primero se obtiene la lista de lecturas presentes antes de borrar en el contador
+    final lecturas =
+        await DBProvider.db.getLecturasByContador(lectCtr.contador);
+    // se borra la lectura por su id de la DataBase
+    await DBProvider.db.deleteLectura(lectura.id);
+    await lectCtr.updateVisualFromDB();
+  }
+
+  Widget _botonEliminarLect(LecturaController lectCtr) {
+    return IconButton(
+        splashColor: Colors.blue[100],
+        iconSize: 30,
+        icon: Icon(
+          Icons.delete_outline_outlined,
+          color: Colors.black38,
+        ),
+        onPressed: () async {
+          await _eliminarLectura(lectCtr);
+        });
+  }
+
   ClipRRect _header(String titulo, double _borderR,
-      {Color titlebkg, TarjetaLectController controller}) {
+      {Color titlebkg,
+      TarjetaLectController tarjLectCtr,
+      @required LecturaController lectCtr}) {
     Widget iconoExpand;
 
     IconData myIcon;
     BorderRadius myBorder;
 
-    if (controller.expanded) {
+    if (tarjLectCtr.expanded) {
       myIcon = Icons.keyboard_arrow_up;
       myBorder = BorderRadius.only(
         topLeft: Radius.circular(_borderR),
@@ -97,7 +109,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       titlebkg = Colors.blue[300];
     }
 
-    if (controller != null) {
+    if (tarjLectCtr != null) {
       iconoExpand = IconButton(
           splashColor: Colors.blue[100],
           iconSize: 40,
@@ -106,7 +118,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
             color: Colors.black38,
           ),
           onPressed: () {
-            controller.expand(lectura.id.toString());
+            tarjLectCtr.expand(lectura.id.toString());
           });
     } else {
       iconoExpand = Container(); // no se muestra nada
@@ -127,6 +139,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
                 style: TemaTexto().tituloTarjetaDark,
               ),
               Expanded(child: Container()),
+              _botonEliminarLect(lectCtr),
               iconoExpand,
             ],
           )),
@@ -156,47 +169,50 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
 
   Widget _cardNoLectura() {
     final _borderR = 10.0;
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Card(
-            margin: EdgeInsets.all(10),
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(_borderR)),
-            child: InkWell(
-              splashColor: Colors.blue.withAlpha(50),
-              child: Container(
-                  width: 300,
-                  height: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 25),
-                        child: Text(
-                          'No existen lecturas registradas',
-                          textAlign: TextAlign.center,
-                          style: TemaTexto().tituloTarjetaDark,
+    return FlipInX(
+      
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Card(
+              margin: EdgeInsets.all(10),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(_borderR)),
+              child: InkWell(
+                splashColor: Colors.blue.withAlpha(50),
+                child: Container(
+                    width: 300,
+                    height: 300,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 25),
+                          child: Text(
+                            'No existen lecturas registradas',
+                            textAlign: TextAlign.center,
+                            style: TemaTexto().tituloTarjetaDark,
+                          ),
                         ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Icon(
-                          Icons.featured_play_list_outlined,
-                          size: 100,
-                          color: Colors.grey[400],
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          child: Icon(
+                            Icons.featured_play_list_outlined,
+                            size: 100,
+                            color: Colors.grey[400],
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Agrege nuevas lecturas',
-                        style: TemaTexto().bottomSheetBody,
-                      )
-                    ],
-                  )),
+                        Text(
+                          'Agrege nuevas lecturas',
+                          style: TemaTexto().bottomSheetBody,
+                        )
+                      ],
+                    )),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
