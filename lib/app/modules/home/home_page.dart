@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
-import 'package:healthCalc/app/data/model/lectura_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
 import 'package:healthCalc/app/global_widgets/widgets.dart';
 import 'package:healthCalc/app/global_widgets/menu_lateral.dart';
 
 import 'package:healthCalc/app/modules/home/home_controller.dart';
 
-import 'local_widgets/tarjeta/tarjeta_contador.dart';
+import 'local_widgets/tarjeta_contador.dart';
 
 class HomePage extends StatelessWidget {
   //? Para hacer validacion del campo de texto
@@ -121,7 +120,10 @@ class HomePage extends StatelessWidget {
   }
 
   Future<void> _eliminarContadores() async {
-    bool aceptas = await borraTodoDialog();
+    bool aceptas = await myboolDialog(
+      titulo: 'Desea eliminar todos los contadores?',
+      subtitulo: "Se perderan los registros de la base de datos",
+    );
     if (aceptas) {
       final cantidad = await DBProvider.db.deleteallContadores();
       String _mensaje;

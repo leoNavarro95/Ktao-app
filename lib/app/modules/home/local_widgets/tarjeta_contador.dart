@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
 import 'package:healthCalc/app/modules/home/local_widgets/bottom_sheet_opciones.dart';
-import 'package:healthCalc/app/modules/home/local_widgets/tarjeta/tarjeta_controller.dart';
 import 'package:healthCalc/app/routes/app_routes.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 
@@ -22,24 +21,17 @@ class TarjetaContador extends StatelessWidget {
     if(contador == null){
       return _cardNoContador();
     }
-    return GetBuilder<TarjetaController>(
-      init: TarjetaController(),
-      id: contador.id.toString(),
-      builder: (_){
         return Card(
-      
       margin: EdgeInsets.all(10),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_borderR)),
-      elevation: _.elevacion,
+      elevation: 5,
       child: InkWell(
         splashColor: Colors.blue.withAlpha(50),
         
         onLongPress: () async{
           await bottomSheetOpciones( contador );
         },
-        onTap: (){
-          print('tarjeta presionada');
-          _.presionada(contador.id.toString()); // hace el efecto de que se presione visualmente, variando la elevacion
+        onTap: () async{
           Get.toNamed(AppRoutes.LECTURAS, arguments: contador);
         },
         child: Container(
@@ -56,7 +48,6 @@ class TarjetaContador extends StatelessWidget {
       ),
     );
 
-      });
   }
 
   ClipRRect _header( String titulo, double _borderR, {Color titlebkg}) {

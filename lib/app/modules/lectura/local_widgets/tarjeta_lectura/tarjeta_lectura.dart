@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import 'package:healthCalc/app/data/model/lectura_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
+import 'package:healthCalc/app/global_widgets/widgets.dart';
 import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura_controller.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
@@ -63,10 +64,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     );
   }
 
-  Future<void> _eliminarLectura(LecturaController lectCtr) async {
-    //primero se obtiene la lista de lecturas presentes antes de borrar en el contador
-    final lecturas =
-        await DBProvider.db.getLecturasByContador(lectCtr.contador);
+  Future<void> _eliminarLectura(LecturaController lectCtr) async {  
     // se borra la lectura por su id de la DataBase
     await DBProvider.db.deleteLectura(lectura.id);
     await lectCtr.updateVisualFromDB();
@@ -81,7 +79,12 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
           color: Colors.black38,
         ),
         onPressed: () async {
-          await _eliminarLectura(lectCtr);
+          bool opcion = await myboolDialog(
+            titulo: '¿Desea eliminar esta lectura?',
+            subtitulo: 'Si elimina la lectura no podrá recuperarla'
+          );
+          if(opcion)
+            await _eliminarLectura(lectCtr);
         });
   }
 
@@ -217,32 +220,5 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     );
   }
 
-  Widget _crearDismissibleBkg() {
-    return Container(
-      color: Colors.red,
-      child: Center(
-          child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
-          Icon(
-            Icons.delete,
-            size: 48.0,
-            color: Colors.white54,
-          ),
-          Text(
-            'Borrar',
-            style: TextStyle(
-                color: Colors.yellow,
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold),
-          ),
-          Icon(
-            Icons.delete,
-            size: 48.0,
-            color: Colors.white54,
-          ),
-        ],
-      )),
-    );
-  }
+  
 }

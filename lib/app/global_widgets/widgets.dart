@@ -3,15 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
 
-
-Future<bool> borraTodoDialog() async{
+///Dialogo que si se acepta devuelve true y si se cancela devuelve false
+Future<bool> myboolDialog({
+  String titulo = "Title",
+  String subtitulo = "Subtitle"
+}) async{
 
     return await Get.dialog(
       AlertDialog(
           backgroundColor: Colors.lightBlue[50],
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Desea eliminar todos los contadores?'),
-          content: Text("Se perderan los registros de la base de datos"),
+          title: Text(titulo),
+          content: Text(subtitulo),
           actions: <Widget>[
             FlatButton(
               child: Text('OK'),

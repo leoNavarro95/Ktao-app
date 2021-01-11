@@ -98,7 +98,7 @@ class DBProvider {
     batch.execute(createTableContadores);
     batch.execute(createTableLecturas);
 
-    List<dynamic> result = await batch.commit();
+    await batch.commit();
   }
 
   /// Metodo para guardar en la Base de Datos una nueva instancia de ContadorModel
