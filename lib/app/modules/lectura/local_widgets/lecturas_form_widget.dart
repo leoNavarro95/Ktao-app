@@ -9,77 +9,31 @@ import 'package:healthCalc/app/theme/text_theme.dart';
 
 class LecturaForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
-  final ContadorModel contador;
-  final double height;
-  final double width;
   final LecturaController lectCtr;
+  final TextEditingController textCtr;
+  final TextEditingController inputDateCtr;
 
   LecturaForm(
-      {this.formKey, this.height, this.contador, this.width, this.lectCtr});
+      {this.formKey, this.lectCtr, this.textCtr, this.inputDateCtr});
 
   @override
   Widget build(BuildContext context) {
-    final textCtr = TextEditingController();
-    final inputDateCtr = TextEditingController();
 
     return Container(
-      width: width,
-      height: height,
-      padding: EdgeInsets.all(5),
-      color: Colors.blue[100],
+      height: 0.22*Get.height,
+      padding: EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: <Widget>[
           _texto(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _inputTextLectura(textCtr),
-              _crearFecha(inputDateCtr),
-            ],
-          ),
-          _botonAgregarLect(textCtr, inputDateCtr)
+          _inputTextLectura(textCtr),
+          _crearFecha(inputDateCtr),
+          //_botonAgregarLect(textCtr, inputDateCtr)
         ],
       ),
     );
   }
 
-  //* no funciona el flash del movil
-  Widget _lamp() {
-    final _apagadaColor = Colors.yellow[300].withAlpha(100);
-    final _encendidaColor = Colors.yellow[300].withAlpha(200);
-    return Container(
-      width: 0.2 * Get.width,
-      height: 50,
-      margin: EdgeInsets.only(top: 10, right: 10),
-      child: FlatButton(
-        shape: StadiumBorder(),
-        color: (lectCtr.estadoLampara) ? _encendidaColor : _apagadaColor,
-        child: Icon(Icons.lightbulb_outline, color: Colors.white),
-        onPressed: () {
-          // lectCtr.switchLamp();
-        },
-      ),
-    );
-  }
-
-  Widget _botonAgregarLect(
-      TextEditingController textCtr, TextEditingController dateCtr) {
-    return Container(
-      width: 0.4 * Get.width,
-      height: 50,
-      margin: EdgeInsets.only(top: 10),
-      child: FlatButton(
-        shape: StadiumBorder(),
-        color: Colors.lightBlue,
-        child: Icon(Icons.add, color: Colors.white),
-        onPressed: () async {
-          await _guardaLectura(textCtr, dateCtr);
-        },
-      ),
-    );
-  }
-
-  Future<void> _guardaLectura(
+  Future<bool> guardaLectura(
       TextEditingController textCtr, TextEditingController dateCtr) async {
     //validate() devuelve true si el formulario es valido
     if (formKey.currentState.validate()) {
@@ -88,20 +42,22 @@ class LecturaForm extends StatelessWidget {
       if (lecturaEntrada != null) {
         final lect = LecturaModel(
             lectura: lecturaEntrada,
-            idContador: contador.id,
+            idContador: lectCtr.contador.id,
             fecha: dateCtr.text);
         await DBProvider.db.insertarLectura(lect);
         await lectCtr.updateVisualFromDB();
         textCtr.clear();
+        return true;
       } else {
         throw Error();
       }
     }
+    return false; // no se guardó nada por error de entrada
   }
 
   Container _texto() {
     return Container(
-        margin: EdgeInsets.all(8),
+        margin: EdgeInsets.only(bottom:8),
         child: Text(
           'Introduzca una nueva lectura',
           style: TemaTexto().bottomSheetBody,
@@ -119,7 +75,7 @@ class LecturaForm extends StatelessWidget {
     return Container(
       width: 0.4 * Get.width,
       height: 60,
-      margin: EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.only(bottom: 20),
       child: Form(
         key: formKey,
         child: TextFormField(
@@ -146,7 +102,7 @@ class LecturaForm extends StatelessWidget {
     return Container(
       width: 0.4 * Get.width,
       height: 60,
-      margin: EdgeInsets.symmetric(horizontal: 10),
+      margin: EdgeInsets.all(0),
       child: TextField(
         enableInteractiveSelection: false,
         readOnly: true,

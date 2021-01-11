@@ -23,26 +23,13 @@ class LecturaController extends GetxController {
   void onInit() async {
     super.onInit();
     this._contador = Get.arguments as ContadorModel; //se obtiene el argumento pasado desde la pagina anterior
+    
     final testLecturas = await DBProvider.db.getLecturasByFechaPattern(contador,'/01/2021');
     testLecturas.map((e){print('fecha: ${e.fecha} lectura: ${e.lectura}');}).toList();
     await updateVisualFromDB();
   }
 
-  // void switchLamp() async{
-  //   estadoLampara = !estadoLampara;
-  //   print(estadoLampara);
-  //   bool lampara = await Lantern.hasLamp;
-  //   String version = await Lantern.platformVersion;
-  //   print('tiene lampara: $lampara  v-- $version');
-    
-  //   if(estadoLampara)
-  //     Lantern.turnOn();
-  //   else
-  //     Lantern.turnOff();
-
-
-  // }
-
+  
   void adicionarTarjetaLectura( TarjetaLectura tarjeta){
     tarjetasLect.add(tarjeta);
   }

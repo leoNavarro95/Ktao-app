@@ -3,12 +3,11 @@ import 'package:get/get.dart';
 import 'package:animate_do/animate_do.dart';
 
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/modules/lectura/local_widgets/lecturas_form_widget.dart';
+import 'package:healthCalc/app/modules/lectura/local_widgets/agregar_lectura_dialog.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 
 import 'lectura_controller.dart';
-import 'local_widgets/tarjeta_mes.dart';
 
 class LecturaPage extends GetView<LecturaController> {
   final lecturaCtr = Get.find<LecturaController>();
@@ -16,12 +15,39 @@ class LecturaPage extends GetView<LecturaController> {
 
   @override
   Widget build(BuildContext context) {
+    final tabs = ['Gestión', 'Detalles', 'Gráficos'];
+    final List<Widget> paginas = [_contenido()];
+    for (int i = 1; i < tabs.length; i++) {
+      paginas.add(Center(child: Text(tabs[i])));
+    }
+
     return GetBuilder<LecturaController>(builder: (_) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Lecturas del contador'),
+      return DefaultTabController(
+        length: tabs.length,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Lecturas'),
+            actions: [
+              _agregarLectura(),
+            ],
+            bottom: TabBar(
+              tabs: tabs.map((e) => Text(e)).toList(),
+            ),
+          ),
+          body: TabBarView(
+            children: paginas,
+          ),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () async {
+              await agregarLecturaDialog(
+                formKey,
+                lecturaCtr,
+                title: "Nueva lectura",
+              );
+            },
+          ),
         ),
-        body: _contenido(),
       );
     });
   }
@@ -30,24 +56,19 @@ class LecturaPage extends GetView<LecturaController> {
     final ContadorModel contador = lecturaCtr.contador;
 
     return Container(
-      child: Column(
+      child: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(bottom: 5),
-            child: FadeInLeft(
-                delay: Duration(milliseconds: 500),
-                child: _headerContadorName(contador)),
-          ),
-          LecturaForm(
-            // height: 0.3 * Get.height, //el 20% del alto de la pantalla
-            width: Get.width, //el ancho completo de la pantalla
-            formKey: formKey,
-            contador: contador,
-            lectCtr: lecturaCtr,
-          ),
-          // TarjLectXMes(month: DateTime.now().month, year: DateTime.now().year,),
-          Expanded(
             child: _listaLecturas(contador),
+          ),
+
+          // TarjLectXMes(month: DateTime.now().month, year: DateTime.now().year,),
+          Container(
+            alignment: Alignment.topCenter,
+            child: BounceInDown(
+                delay: Duration(milliseconds: 500),
+                from: 120,
+                child: _headerContadorName(contador)),
           ),
         ],
       ),
@@ -73,11 +94,35 @@ class LecturaPage extends GetView<LecturaController> {
   Widget _listaLecturas(ContadorModel contador) {
     return Obx(() {
       if (lecturaCtr.tarjetasLect.isNotEmpty) {
-        return ListView(
-          children: lecturaCtr.tarjetasLect,
+        return ListView.builder(
+          itemCount: lecturaCtr.tarjetasLect.length,
+          itemBuilder: (_, index) {
+            if (index == 0) {
+              return Column(
+                children: [
+                  SizedBox(height: 50),
+                  lecturaCtr.tarjetasLect[index],
+                ],
+              );
+            }
+            return lecturaCtr.tarjetasLect[index];
+          },
         );
       }
       return TarjetaLectura(); //sin parametro ya devuelve que no tiene nada
     });
+  }
+
+  Widget _agregarLectura() {
+    return IconButton(
+      icon: Icon(Icons.add),
+      onPressed: () async {
+        await agregarLecturaDialog(
+          formKey,
+          lecturaCtr,
+          title: "Nueva lectura",
+        );
+      },
+    );
   }
 }
