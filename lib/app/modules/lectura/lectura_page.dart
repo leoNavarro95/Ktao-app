@@ -6,6 +6,7 @@ import 'package:healthCalc/app/data/provider/data_base_provider.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/agregar_lectura_dialog.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
+import 'package:healthCalc/app/modules/historial/historial_page.dart';
 
 import 'lectura_controller.dart';
 
@@ -15,9 +16,11 @@ class LecturaPage extends GetView<LecturaController> {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = ['Gestión', 'Detalles', 'Gráficos'];
-    final List<Widget> paginas = [_contenido()];
-    for (int i = 1; i < tabs.length; i++) {
+    final tabs = ['Gestión', 'Historial', 'Gráficos'];
+    final historial = HistorialPage();
+    final List<Widget> paginas = [_contenido(), historial];
+
+    for (int i = 2; i < tabs.length; i++) {
       paginas.add(Center(child: Text(tabs[i])));
     }
 
