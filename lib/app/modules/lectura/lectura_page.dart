@@ -17,7 +17,7 @@ class LecturaPage extends GetView<LecturaController> {
   @override
   Widget build(BuildContext context) {
     final tabs = ['Gestión', 'Historial', 'Gráficos'];
-    final historial = HistorialPage();
+    final historial = HistorialPage(contador: lecturaCtr.contador,);
     final List<Widget> paginas = [_contenido(), historial];
 
     for (int i = 2; i < tabs.length; i++) {

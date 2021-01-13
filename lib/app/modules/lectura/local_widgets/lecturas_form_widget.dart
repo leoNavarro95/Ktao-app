@@ -19,16 +19,17 @@ class LecturaForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      height: 0.22*Get.height,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: Column(
-        children: <Widget>[
-          _texto(),
-          _inputTextLectura(textCtr),
-          _crearFecha(inputDateCtr),
-          //_botonAgregarLect(textCtr, inputDateCtr)
-        ],
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: <Widget>[
+            _texto(),
+            _inputTextLectura(textCtr),
+            _crearFecha(inputDateCtr),
+            //_botonAgregarLect(textCtr, inputDateCtr)
+          ],
+        ),
       ),
     );
   }

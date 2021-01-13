@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:healthCalc/app/theme/text_theme.dart';
 
 ///Dialogo que si se acepta devuelve true y si se cancela devuelve false
 Future<bool> myboolDialog({
@@ -11,10 +12,12 @@ Future<bool> myboolDialog({
 
     return await Get.dialog(
       AlertDialog(
+        actionsPadding: EdgeInsets.all(0),
+        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
           backgroundColor: Colors.lightBlue[50],
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text(titulo),
-          content: Text(subtitulo),
+          title: Text(titulo, style: TemaTexto().bottomSheetTitulo,),
+          content: Text(subtitulo, style: TemaTexto().bottomSheetBody,),
           actions: <Widget>[
             FlatButton(
               child: Text('OK'),
@@ -39,7 +42,7 @@ Future<bool> myboolDialog({
       AlertDialog(
           backgroundColor: Colors.lightBlue[50],
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Desea eliminar el contador?'),
+          title: Text('¿Desea eliminar el contador?'),
           content: Text("El contador ${contador.nombre} sera eliminado completamente de la base de datos"),
           actions: <Widget>[
             FlatButton(

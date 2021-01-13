@@ -105,12 +105,6 @@ class TarjetaContador extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_borderR)),
             child: InkWell(
               splashColor: Colors.blue.withAlpha(50),
-              
-              onTap: (){
-                //TODO: agregar nuevo contador 
-                print('tarjeta presionada');
-                
-              },
               child: Container(
                 width: 300,
                 height: 300,

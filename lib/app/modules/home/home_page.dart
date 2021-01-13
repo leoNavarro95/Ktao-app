@@ -121,8 +121,8 @@ class HomePage extends StatelessWidget {
 
   Future<void> _eliminarContadores() async {
     bool aceptas = await myboolDialog(
-      titulo: 'Desea eliminar todos los contadores?',
-      subtitulo: "Se perderan los registros de la base de datos",
+      titulo: '¿Desea eliminar todos los contadores?',
+      subtitulo: "Se perderán los registros de la base de datos",
     );
     if (aceptas) {
       final cantidad = await DBProvider.db.deleteallContadores();

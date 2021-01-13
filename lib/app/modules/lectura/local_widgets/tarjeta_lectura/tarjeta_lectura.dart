@@ -11,14 +11,16 @@ import 'package:healthCalc/app/theme/text_theme.dart';
 
 class TarjetaLectura extends GetView<TarjetaLectController> {
   final LecturaModel lectura;
-
+  final bool isDeletable;
   const TarjetaLectura({
-    Key key,
     this.lectura,
-  }) : super(key: key);
+    this.isDeletable = true,
+  });
+
 
   @override
   Widget build(BuildContext context) {
+
     final _borderR = 10.0;
     final lectCtr = Get.find<LecturaController>();
 
@@ -64,28 +66,29 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     );
   }
 
-  Future<void> _eliminarLectura(LecturaController lectCtr) async {  
+  Future<void> _eliminarLectura(LecturaController lectCtr) async {
     // se borra la lectura por su id de la DataBase
     await DBProvider.db.deleteLectura(lectura.id);
     await lectCtr.updateVisualFromDB();
   }
 
   Widget _botonEliminarLect(LecturaController lectCtr) {
-    return IconButton(
-        splashColor: Colors.blue[100],
-        iconSize: 30,
-        icon: Icon(
-          Icons.delete_outline_outlined,
-          color: Colors.black38,
-        ),
-        onPressed: () async {
-          bool opcion = await myboolDialog(
-            titulo: '¿Desea eliminar esta lectura?',
-            subtitulo: 'Si elimina la lectura no podrá recuperarla'
-          );
-          if(opcion)
-            await _eliminarLectura(lectCtr);
-        });
+    if (this.isDeletable) {
+      return IconButton(
+          splashColor: Colors.blue[100],
+          iconSize: 30,
+          icon: Icon(
+            Icons.delete_outline_outlined,
+            color: Colors.black38,
+          ),
+          onPressed: () async {
+            bool opcion = await myboolDialog(
+                titulo: '¿Desea eliminar esta lectura?',
+                subtitulo: 'Si elimina la lectura no podrá recuperarla');
+            if (opcion) await _eliminarLectura(lectCtr);
+          });
+    }
+    return Container();
   }
 
   ClipRRect _header(String titulo, double _borderR,
@@ -173,7 +176,6 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
   Widget _cardNoLectura() {
     final _borderR = 10.0;
     return FlipInX(
-      
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -219,6 +221,4 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       ),
     );
   }
-
-  
 }
