@@ -16,37 +16,53 @@ class LecturaPage extends GetView<LecturaController> {
 
   @override
   Widget build(BuildContext context) {
-    final tabs = ['Gestión', 'Historial', 'Gráficos'];
-    final historial = HistorialPage(contador: lecturaCtr.contador,);
-    final List<Widget> paginas = [_contenido(), historial];
+    // final tabs = ['Gestión', 'Historial', 'Gráficos'];
+    final historial = HistorialPage(
+      contador: lecturaCtr.contador,
+    );
 
-    for (int i = 2; i < tabs.length; i++) {
-      paginas.add(Center(child: Text(tabs[i])));
-    }
+    //las paginas que se van a encontrar en el tabBarView
+    final List<Widget> paginas = [_contenido(), historial];
+    paginas.add(Center(child: Text(lecturaCtr.myTabs[2].text)));
 
     return GetBuilder<LecturaController>(builder: (_) {
-      return DefaultTabController(
-        length: tabs.length,
-        child: Scaffold(
+      return Scaffold(
           appBar: AppBar(
             title: Text('Lecturas'),
             bottom: TabBar(
-              tabs: tabs.map((e) => Text(e)).toList(),
+              controller: _.tabController,
+              tabs: _.myTabs,
             ),
           ),
           body: TabBarView(
+            controller: _.tabController,
             children: paginas,
           ),
-          floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.add),
-            onPressed: () async {
-              await agregarLecturaDialog(
-                formKey,
-                lecturaCtr,
-                title: "Nueva lectura",
-              );
-            },
-          ),
+          floatingActionButton: _myFloatingActionButton());
+    });
+  }
+
+  ///solo se va a permitir
+  Widget _myFloatingActionButton() {
+    return Obx((){
+      if (lecturaCtr.indice.value == 0) {
+      return Roulette(
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () async {
+            await agregarLecturaDialog(
+              formKey,
+              lecturaCtr,
+              title: "Nueva lectura",
+            );
+          },
+        ),
+      );
+    }
+    return ZoomOut(
+        child: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: null,
         ),
       );
     });

@@ -25,7 +25,10 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     final lectCtr = Get.find<LecturaController>();
 
     if (lectura == null) {
-      return _cardNoLectura();
+      return ListView(children: [
+        SizedBox(height: 50),
+        _cardNoLectura(),
+      ],);
     }
 
     return GetBuilder<TarjetaLectController>(
