@@ -36,14 +36,17 @@ class CalculadoraPage extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TemaTexto().titulo,
         ),
-        // Divider(),
+        Divider(),
         _creaFormulario(calcCtr),
-        // Divider(),
-        Obx(
-          () => Text("consumo: ${calcCtr.consumo.value} kWh"),
-        ),
-        Obx(
-          () => Text("costo: ${calcCtr.costo.value.toStringAsFixed(2)} Pesos"),
+        Container(
+          color: Color.fromRGBO(10, 100, 180, 0.4),
+          child: Obx(
+            () => Text(
+              "${calcCtr.consumo.value} kWh \n${calcCtr.costo.value.toStringAsFixed(2)} CUP",
+              style: TemaTexto().tituloTarjeta,
+              textAlign: TextAlign.center,
+            ),
+          ),
         ),
         Obx(() {
           if (calcCtr.lectura1.value != null) {
@@ -97,7 +100,7 @@ class CalculadoraPage extends StatelessWidget {
         color: Colors.blue[100],
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment:  MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Column(
               children: campoTexto,
@@ -119,9 +122,8 @@ class CalculadoraPage extends StatelessWidget {
       }
 
       return Column(
-        
         children: [
-          SizedBox(height: 15),  
+          SizedBox(height: 15),
           IconButton(
             icon: Icon(
               myIcon,
