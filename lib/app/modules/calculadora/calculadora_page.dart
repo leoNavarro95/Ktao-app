@@ -9,8 +9,6 @@ import 'package:healthCalc/app/theme/text_theme.dart';
 import 'package:healthCalc/app/utils/math_util.dart';
 
 class CalculadoraPage extends StatelessWidget {
-  final _textCtrLectura1 = new TextEditingController();
-  final _textCtrLectura2 = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -75,23 +73,23 @@ class CalculadoraPage extends StatelessWidget {
       if (calcCtr.expanded.value) {
         campoTexto = [
           CampoTextoCalculadora(
-              textController: _textCtrLectura1,
+              textController: calcCtr.textCtrLectura1,
               titulo: "Lectura 1",
               calcCtr: calcCtr),
           SizedBox(height: 10),
           CampoTextoCalculadora(
-              textController: _textCtrLectura2,
+              textController: calcCtr.textCtrLectura2,
               titulo: "Lectura 2",
               calcCtr: calcCtr),
-          SizedBox(height: 10),
+          
         ];
       } else {
         campoTexto = [
           CampoTextoCalculadora(
-              textController: _textCtrLectura1,
+              textController: calcCtr.textCtrLectura1,
               titulo: "Lectura",
               calcCtr: calcCtr),
-          SizedBox(height: 10),
+          
         ];
       }
 

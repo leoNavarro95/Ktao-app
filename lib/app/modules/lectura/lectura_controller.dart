@@ -15,6 +15,10 @@ class LecturaController extends GetxController with SingleGetTickerProviderMixin
   ///lista que contiene las tarjetas de las lecturas
   RxList<TarjetaLectura> tarjetasLect = List<TarjetaLectura>().obs;
 
+  // Controladores de texto para dialogo adicionar lecturas
+  final textCtr = TextEditingController();
+  final inputDateCtr = TextEditingController();
+
   // ######### Control de los Tabs en el TabBarView #############
   final List<Tab> myTabs = <Tab>[
     Tab(text: 'Gestión',),
@@ -42,6 +46,8 @@ class LecturaController extends GetxController with SingleGetTickerProviderMixin
   @override
   void onClose() {
     tabController.dispose();
+    textCtr.dispose();
+    inputDateCtr.dispose();
     super.onClose();
   }
 

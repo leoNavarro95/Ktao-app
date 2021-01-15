@@ -12,8 +12,8 @@ Future<void> agregarLecturaDialog(
   String labelHelp = "Help label",
   String errorLabel = "Error",
 }) async {
-  final textCtr = TextEditingController();
-  final inputDateCtr = TextEditingController();
+  final textCtr = lectCtr.textCtr;
+  final inputDateCtr = lectCtr.inputDateCtr;
 
   final formulario = LecturaForm(
     formKey: formKey,
@@ -48,6 +48,11 @@ Future<void> agregarLecturaDialog(
                   title: 'Nueva lectura guardada',
                   subtitle: ' ',
                 );
+              } else{
+                mySnackbar(
+                    title: 'Error en base de datos',
+                    subtitle: 'No se guardó la lectura',
+                  );
               }
             },
           ),
