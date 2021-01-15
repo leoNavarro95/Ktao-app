@@ -102,7 +102,7 @@ class HomePage extends StatelessWidget {
           costoMesActual: 0.0,
           ultimaLectura: 'Hoy');
 
-      int id = await DBProvider.db.nuevoContador(contador);
+      await DBProvider.db.nuevoContador(contador);
 
       mySnackbar(
         title: 'Exito',
