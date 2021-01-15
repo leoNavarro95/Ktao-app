@@ -10,6 +10,8 @@ class CalculadoraController extends GetxController{
   RxList<int> listConsumo = List<int>().obs;
   RxList<double> listPrecio = List<double>().obs;
 
+  RxBool expanded = false.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -21,6 +23,10 @@ class CalculadoraController extends GetxController{
     listConsumo.add(0);
     listPrecio.add(0.0);
     
+  }
+
+  void expand(){
+    expanded.value = !expanded.value;
   }
 
   

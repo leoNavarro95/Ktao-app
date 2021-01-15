@@ -20,7 +20,8 @@ class CampoTextoCalculadora extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         // color: Colors.blue[100],
-        padding: EdgeInsets.symmetric(horizontal: 30.0),
+        // padding: EdgeInsets.symmetric(horizontal: 30.0),
+        width: 150,
         
         child: TextField(
           
@@ -39,7 +40,7 @@ class CampoTextoCalculadora extends StatelessWidget {
               valor = int.parse(val).toInt();
             }
 
-            if( titulo == "Lectura 1"){
+            if( (titulo == "Lectura 1") || (titulo == "Lectura")){
               //TODO: Implementar uso de user_preferences para guardar Lecturas
               calcCtr.lectura1.value = valor;
               calcCtr.calcular();

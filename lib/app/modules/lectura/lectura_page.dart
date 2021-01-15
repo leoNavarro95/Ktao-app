@@ -42,11 +42,13 @@ class LecturaPage extends GetView<LecturaController> {
     });
   }
 
-  ///solo se va a permitir
+  ///solo se va a permitir en la p
   Widget _myFloatingActionButton() {
     return Obx((){
       if (lecturaCtr.indice.value == 0) {
       return Roulette(
+        spins: 2,
+        delay: Duration(milliseconds: 1000),
         child: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () async {
