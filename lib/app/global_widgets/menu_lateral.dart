@@ -31,9 +31,9 @@ class MenuLateral extends StatelessWidget {
               trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
               onTap: () {
                 // Navigator.pushReplacementNamed(context, HomePage.routeName);
-                // Get.offNamed(AppRoutes.HOME);
-                Get.back();
-                Get.toNamed(AppRoutes.HOME);
+                Get.offNamed(AppRoutes.HOME);
+                // Get.back();
+                // Get.toNamed(AppRoutes.HOME);
               },
             ),
 
@@ -44,9 +44,9 @@ class MenuLateral extends StatelessWidget {
               trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
               onTap: () {
                 // Navigator.pushReplacementNamed(context, CalculadorasMainPage.routeName);
-                // Get.offNamed(AppRoutes.DETAIL);
-                Get.back();
-                Get.toNamed(AppRoutes.DETAIL);
+                Get.offNamed(AppRoutes.DETAIL);
+                // Get.back();
+                // Get.toNamed(AppRoutes.DETAIL);
               },
             ),
 
@@ -56,9 +56,9 @@ class MenuLateral extends StatelessWidget {
               trailing: Icon(Icons.arrow_forward_ios, color: Colors.blue,),
               onTap: () {
                 // Navigator.pushReplacementNamed(context, HomePage.routeName);
-                // Get.offNamed(AppRoutes.CALCULADORA);
-                Get.back();
-                Get.toNamed(AppRoutes.CALCULADORA);
+                Get.offNamed(AppRoutes.CALCULADORA);
+                // Get.back();
+                // Get.toNamed(AppRoutes.CALCULADORA);
               },
             ),
 

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/utils/math_util.dart';
 
@@ -5,10 +6,16 @@ class CalculadoraController extends GetxController{
 
   RxInt lectura1 = 0.obs;
   RxInt lectura2 = 0.obs;  
+
+  final textCtrLectura1 = TextEditingController();
+  final textCtrLectura2 = TextEditingController();
+
   RxInt consumo  = 0.obs;
   RxDouble costo = 0.0.obs;
   RxList<int> listConsumo = List<int>().obs;
   RxList<double> listPrecio = List<double>().obs;
+
+  RxBool expanded = false.obs;
 
   @override
   void onInit() {
@@ -21,6 +28,17 @@ class CalculadoraController extends GetxController{
     listConsumo.add(0);
     listPrecio.add(0.0);
     
+  }
+  @override
+  void onClose() {
+    this.textCtrLectura1.dispose();
+    this.textCtrLectura2.dispose();
+    print('cerrado');
+    super.onClose();
+  }
+
+  void expand(){
+    expanded.value = !expanded.value;
   }
 
   

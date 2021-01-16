@@ -2,7 +2,7 @@
 
 import 'package:get/state_manager.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/modules/home/local_widgets/tarjeta/tarjeta_contador.dart';
+import 'package:healthCalc/app/modules/home/local_widgets/tarjeta_contador.dart';
 
 class HomeController extends GetxController{
   

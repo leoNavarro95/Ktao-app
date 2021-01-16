@@ -2,16 +2,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:healthCalc/app/theme/text_theme.dart';
 
-
-Future<bool> borraTodoDialog() async{
+///Dialogo que si se acepta devuelve true y si se cancela devuelve false
+Future<bool> myboolDialog({
+  String titulo = "Title",
+  String subtitulo = "Subtitle"
+}) async{
 
     return await Get.dialog(
       AlertDialog(
+        actionsPadding: EdgeInsets.all(0),
+        contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
           backgroundColor: Colors.lightBlue[50],
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Desea eliminar todos los contadores?'),
-          content: Text("Se perderan los registros de la base de datos"),
+          title: Text(titulo, style: TemaTexto().bottomSheetTitulo,),
+          content: Text(subtitulo, style: TemaTexto().bottomSheetBody,),
           actions: <Widget>[
             FlatButton(
               child: Text('OK'),
@@ -36,7 +42,7 @@ Future<bool> borraTodoDialog() async{
       AlertDialog(
           backgroundColor: Colors.lightBlue[50],
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Desea eliminar el contador?'),
+          title: Text('¿Desea eliminar el contador?'),
           content: Text("El contador ${contador.nombre} sera eliminado completamente de la base de datos"),
           actions: <Widget>[
             FlatButton(
@@ -56,7 +62,11 @@ Future<bool> borraTodoDialog() async{
   }
 
 
-  Future<String> addContadorDialog( GlobalKey<FormState> formKey ) async{
+  Future<String> textEditOptionDialog( GlobalKey<FormState> formKey, {
+    String title = "Title",
+    String labelHelp = "Help label",
+    String errorLabel = "Error",
+  } ) async{
     String _valorInput = '';
 
     return await Get.dialog(
@@ -64,7 +74,7 @@ Future<bool> borraTodoDialog() async{
         
           backgroundColor: Colors.lightBlue[50],
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          title: Text('Adicionar contador'),
+          title: Text(title),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -75,13 +85,13 @@ Future<bool> borraTodoDialog() async{
                     TextFormField(
                       
                       decoration: InputDecoration(
-                        labelText: 'Nombre contador',
+                        labelText: labelHelp,
                         icon: Icon(Icons.add_box),
                       ),
 
                       validator: (value){
                         if(value.isEmpty){
-                          return 'Introduzca un nombre';
+                          return errorLabel;
                         }
                         _valorInput = value;
                         return null;
@@ -104,7 +114,7 @@ Future<bool> borraTodoDialog() async{
               },
               ),
               FlatButton(
-              child: Text('CANCEL'),
+              child: Text('CANCELAR'),
               onPressed: () => Get.back(), //! va a retornar null, manejarlo del otro lado
               ),
           ],
