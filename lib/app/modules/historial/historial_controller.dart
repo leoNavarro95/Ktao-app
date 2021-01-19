@@ -11,19 +11,20 @@ class HistorialController extends GetxController {
   HistorialController({@required this.contador}) : assert(contador != null);
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    updateVisualFromDB();
+    await updateVisualFromDB();
   }
 
   ///lista que contiene las tarjetas de los meses
-  RxList<TarjetaMes> tarjetasMes = List<TarjetaMes>().obs;
+  RxList<TarjetaMes> _tarjetasMes = List<TarjetaMes>().obs;
+  RxList<TarjetaMes> get tarjetasMes => _tarjetasMes ;
+  // List<TarjetaMes> tarjetasMes = [];
 
   ///lista que contiene las tarjetas de las lecturas
-  List<TarjetaLectura> tarjetasLect = [];
+  List<TarjetaLectura> _tarjetasLect = [];
 
   Future<void> updateVisualFromDB() async {
-    tarjetasMes.clear();
     List<String> fechasAcotadas = await _getMonthYears();
     for (int i = 0; i < fechasAcotadas.length; i++) {
       List<LecturaModel> listaLecturas = await DBProvider.db
@@ -31,34 +32,36 @@ class HistorialController extends GetxController {
 
       _llenarTarjetasLect(listaLecturas);
       _llenarTarjetasMes(fechasAcotadas[i]);
-    }
+    }    
   }
 
   void _llenarTarjetasLect(List<LecturaModel> listaLecturas) {
-    tarjetasLect.clear();
-    for (int i = 0; i < listaLecturas.length; i++) {
-      tarjetasLect.add(TarjetaLectura(
-        lectura: listaLecturas[i],
+    if (_tarjetasLect.isNotEmpty) _tarjetasLect.clear();
+
+    for(LecturaModel lectura in listaLecturas){
+      _tarjetasLect.add(TarjetaLectura(
+        lectura: lectura,
         isDeletable: false,
       ));
     }
   }
 
   void _llenarTarjetasMes(String fecha) {
-    final tarjetaMes = TarjetaMes(
-      fecha: fechaLiteral(fecha),
-      lecturasMes: tarjetasLect,
-    );
-    tarjetasMes.add(tarjetaMes);
-  }
 
+    _tarjetasMes.add(
+      TarjetaMes(
+        fecha: fechaLiteral(fecha),
+        lecturasMes: _tarjetasLect.toList(), //* toList() crea una nueva lista y evita pasar directamente la referencia de _tarjetasLect. Si se pasa directamente la referencia luego cuando se limpie se borra tambien de aqui
+      ),
+    );
+  }
 
   /// obtiene la lista de monthYears (organizado) sin repetir de las lecturas para el contador dado.
   /// monthYear es en el formato /mes/año (/MM/YY)
   Future<List<String>> _getMonthYears() async {
     final List<LecturaModel> lecturas =
         await DBProvider.db.getLecturasByContador(contador);
-    if(lecturas == null){
+    if (lecturas == null) {
       return [];
     }
     final List<String> monthYears =
