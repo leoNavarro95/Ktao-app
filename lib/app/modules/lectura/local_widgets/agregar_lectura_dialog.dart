@@ -50,7 +50,7 @@ Future<void> agregarLecturaDialog(
                 );
               } else{
                 mySnackbar(
-                    title: 'Error en base de datos',
+                    title: 'Error',
                     subtitle: 'No se guardó la lectura',
                   );
               }
@@ -59,7 +59,10 @@ Future<void> agregarLecturaDialog(
         ),
         FlatButton(
           child: Text('CANCELAR'),
-          onPressed: () => Get.back(),
+          onPressed: () {
+            textCtr.clear();
+            Get.back();
+          } 
         ),
       ],
     ),

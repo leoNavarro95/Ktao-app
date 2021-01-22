@@ -1,8 +1,8 @@
 
 
 class LecturaModel{
-
-  int id, lectura;
+  double lectura;
+  int id;
   int  idContador;
   String fecha; //la fecha se va a tomar junto a la lectura de EditTexts
 

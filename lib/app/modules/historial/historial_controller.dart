@@ -13,18 +13,20 @@ class HistorialController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await updateVisualFromDB();
+    // await updateVisualFromDB();
   }
 
   ///lista que contiene las tarjetas de los meses
-  RxList<TarjetaMes> _tarjetasMes = List<TarjetaMes>().obs;
-  RxList<TarjetaMes> get tarjetasMes => _tarjetasMes ;
-  // List<TarjetaMes> tarjetasMes = [];
+  // RxList<TarjetaMes> _tarjetasMes = List<TarjetaMes>().obs;
+  // RxList<TarjetaMes> get tarjetasMes => _tarjetasMes ;
+  List<TarjetaMes> _tarjetasMes = [];
+  List<TarjetaMes> get tarjetasMes => _tarjetasMes ;
 
   ///lista que contiene las tarjetas de las lecturas
   List<TarjetaLectura> _tarjetasLect = [];
 
-  Future<void> updateVisualFromDB() async {
+  Future<List<TarjetaMes>> updateVisualFromDB() async {
+    _tarjetasMes.clear();
     List<String> fechasAcotadas = await _getMonthYears();
     for (int i = 0; i < fechasAcotadas.length; i++) {
       List<LecturaModel> listaLecturas = await DBProvider.db
@@ -32,7 +34,8 @@ class HistorialController extends GetxController {
 
       _llenarTarjetasLect(listaLecturas);
       _llenarTarjetasMes(fechasAcotadas[i]);
-    }    
+    }
+    return _tarjetasMes;    
   }
 
   void _llenarTarjetasLect(List<LecturaModel> listaLecturas) {
@@ -42,6 +45,7 @@ class HistorialController extends GetxController {
       _tarjetasLect.add(TarjetaLectura(
         lectura: lectura,
         isDeletable: false,
+        isElevated: false,
       ));
     }
   }

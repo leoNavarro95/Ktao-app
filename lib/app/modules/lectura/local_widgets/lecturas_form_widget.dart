@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
 import 'package:healthCalc/app/data/model/lectura_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
 import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
-
 
 class LecturaForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -13,12 +14,10 @@ class LecturaForm extends StatelessWidget {
   final TextEditingController textCtr;
   final TextEditingController inputDateCtr;
 
-  LecturaForm(
-      {this.formKey, this.lectCtr, this.textCtr, this.inputDateCtr});
+  LecturaForm({this.formKey, this.lectCtr, this.textCtr, this.inputDateCtr});
 
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -38,7 +37,7 @@ class LecturaForm extends StatelessWidget {
       TextEditingController textCtr, TextEditingController dateCtr) async {
     //validate() devuelve true si el formulario es valido
     if (formKey.currentState.validate()) {
-      final int lecturaEntrada = int.parse(textCtr.text);
+      final double lecturaEntrada = double.parse(textCtr.text);
       // final String fecha = date
       if (lecturaEntrada != null) {
         final lect = LecturaModel(
@@ -58,7 +57,7 @@ class LecturaForm extends StatelessWidget {
 
   Container _texto() {
     return Container(
-        margin: EdgeInsets.only(bottom:8),
+        margin: EdgeInsets.only(bottom: 8),
         child: Text(
           'Introduzca una nueva lectura',
           style: TemaTexto().bottomSheetBody,
@@ -68,6 +67,9 @@ class LecturaForm extends StatelessWidget {
   String _validacion(String value) {
     if (value.isEmpty) {
       return 'Campo vacio';
+    }
+    if ((value.length < 5) | (value.length > 7)) {
+      return 'Lectura inválida';
     }
     return null;
   }
@@ -81,7 +83,8 @@ class LecturaForm extends StatelessWidget {
         key: formKey,
         child: TextFormField(
           inputFormatters: [
-            FilteringTextInputFormatter.deny(RegExp('[ .,-]')),
+            // FilteringTextInputFormatter.deny(RegExp('[ ,-]')),
+            MaskTextInputFormatter(mask:'#####.#',filter: {"#": RegExp(r'[0-9]')}),
           ],
           keyboardType: TextInputType.numberWithOptions(),
           decoration: InputDecoration(

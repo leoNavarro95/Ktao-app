@@ -12,9 +12,11 @@ import 'package:healthCalc/app/theme/text_theme.dart';
 class TarjetaLectura extends GetView<TarjetaLectController> {
   final LecturaModel lectura;
   final bool isDeletable;
+  final bool isElevated;
   const TarjetaLectura({
     this.lectura,
     this.isDeletable = true,
+    this.isElevated = true,
   });
 
 
@@ -31,6 +33,8 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       ],);
     }
 
+    
+
     return GetBuilder<TarjetaLectController>(
       init: TarjetaLectController(),
       global:
@@ -42,6 +46,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
             margin: EdgeInsets.all(10),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(_borderR)),
+            elevation: isElevated ? 2.0 : 0.0,
             child: InkWell(
               splashColor: Colors.blue.withAlpha(50),
               onTap: () {

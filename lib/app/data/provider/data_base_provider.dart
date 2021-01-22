@@ -25,7 +25,7 @@ class DBProvider {
 
   //Constanes
   static final String databaseName = 'ktao11.db'; //nombre de la base de datos
-  static int version = 2;
+  static int version = 4;
 
   //Parametros de la tabla: contadores
   static final String contadoresTable = 'contadores';
@@ -54,7 +54,7 @@ class DBProvider {
   //Sentencias SQL para crear la tabla Lecturas
   static final String createTableLecturas = 'CREATE TABLE $lecturasTable ('
       ' $columnLecturasId INTEGER PRIMARY KEY,'
-      ' $columnLecturasLect INTEGER NOT NULL,'
+      ' $columnLecturasLect REAL NOT NULL,'
       " $columnLecturasFecha TEXT DEFAULT 'no disponible',"
       ' $columnLecturasContadorId INTERGER,'
       ' FOREIGN KEY($columnLecturasContadorId) REFERENCES $contadoresTable($columnContadoresId) ON DELETE CASCADE'

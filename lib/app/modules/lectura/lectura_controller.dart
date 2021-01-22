@@ -37,7 +37,7 @@ class LecturaController extends GetxController with SingleGetTickerProviderMixin
     tabController = TabController(vsync: this,length: myTabs.length);
     tabController.addListener(() {
       indice.value = tabController.index;
-      print('Indice: ${indice.value}');
+
     });
 
     await updateVisualFromDB();
