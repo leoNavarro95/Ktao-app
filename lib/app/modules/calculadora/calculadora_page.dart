@@ -30,7 +30,7 @@ class CalculadoraPage extends StatelessWidget {
       children: <Widget>[
         SizedBox(height: 20),
         Text(
-          'Calcula el consumo en kWh',
+          'Calcula el costo en CUP',
           textAlign: TextAlign.center,
           style: TemaTexto().titulo,
         ),
@@ -87,7 +87,7 @@ class CalculadoraPage extends StatelessWidget {
         campoTexto = [
           CampoTextoCalculadora(
               textController: calcCtr.textCtrLectura1,
-              titulo: "Lectura",
+              titulo: "Consumo",
               calcCtr: calcCtr),
           
         ];
