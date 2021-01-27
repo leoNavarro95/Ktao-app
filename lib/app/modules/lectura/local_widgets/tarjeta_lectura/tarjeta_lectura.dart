@@ -54,9 +54,6 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
             elevation: isElevated ? 2.0 : 0.0,
             child: InkWell(
               splashColor: Colors.blue.withAlpha(50),
-              onTap: () {
-                _.expand(lectura.id.toString());
-              },
               child: Container(
                   width: Get.width,
                   child: Column(
@@ -145,23 +142,28 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
 
     return ClipRRect(
       borderRadius: myBorder,
-      child: Container(
-          width: double.infinity,
-          color: titlebkg,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(child: Container()),
-              Text(
-                'Lect: $titulo',
-                textAlign: TextAlign.center,
-                style: TemaTexto().tituloTarjetaDark,
-              ),
-              Expanded(child: Container()),
-              _botonEliminarLect(lectCtr),
-              iconoExpand,
-            ],
-          )),
+      child: GestureDetector(
+        onTap: (){
+          tarjLectCtr.expand(lectura.id.toString());
+        },
+        child: Container(
+            width: double.infinity,
+            color: titlebkg,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(child: Container()),
+                Text(
+                  'Lect: $titulo',
+                  textAlign: TextAlign.center,
+                  style: TemaTexto().tituloTarjetaDark,
+                ),
+                Expanded(child: Container()),
+                _botonEliminarLect(lectCtr),
+                iconoExpand,
+              ],
+            )),
+      ),
     );
   }
 
@@ -265,12 +267,19 @@ Widget _consumo(Text _deltaText, IconData icon) {
   return Container(
       child: Row(
     children: [
-      Icon(
-        icon,
-        color: (icon == Icons.arrow_downward)? Colors.green : Colors.red,
-        size: 18,
+      GestureDetector(
+        child: Icon(
+          icon,
+          color: (icon == Icons.arrow_downward)? Colors.green : Colors.red,
+          size: 18,
+        ),
+        onTap: _onTapTrending,
       ),
       _deltaText,
     ],
   ));
+}
+
+void _onTapTrending(){
+  print('tapped');
 }
