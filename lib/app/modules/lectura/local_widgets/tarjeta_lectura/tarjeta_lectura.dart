@@ -264,22 +264,44 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
 }
 
 Widget _consumo(Text _deltaText, IconData icon) {
-  return Container(
-      child: Row(
-    children: [
-      GestureDetector(
-        child: Icon(
+  return GestureDetector(
+    onTap: (){
+      _onTapConsumo(_deltaText.data);
+    },
+    child: Container(
+        child: Row(
+      children: [
+        Icon(
           icon,
           color: (icon == Icons.arrow_downward)? Colors.green : Colors.red,
           size: 18,
         ),
-        onTap: _onTapTrending,
-      ),
-      _deltaText,
-    ],
-  ));
+        _deltaText,
+      ],
+    )),
+  );
 }
 
-void _onTapTrending(){
-  print('tapped');
+void _onTapConsumo(String deltaConsumo){
+  IconData icono;
+  Color color;
+  String titulo,subtitulo;
+
+  if(deltaConsumo[0] == '-'){
+    icono = Icons.warning;
+    color = Colors.red;
+    titulo = 'Balance negativo';
+    subtitulo = 'Error de lectura, compurebe los datos';  
+  } else {
+    icono = Icons.info;
+    color = Colors.yellow;
+    titulo = 'Balance de consumo';
+    subtitulo = '$deltaConsumo más que la lectura anterior';
+  }
+  mySnackbar(
+    title: titulo,
+    subtitle: subtitulo,
+    icon: icono,
+    iconColor: color
+  );
 }
