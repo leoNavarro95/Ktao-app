@@ -51,6 +51,15 @@ class TemaTexto {
     );
   TextStyle get infoTarjeta => this._infoTarjeta;
   //______________________________________________
+  final TextStyle _infoTarjetaError = TextStyle(
+    fontSize: 15,
+    color: Colors.red,
+    fontFamily: 'Montserrat-Italic',
+    fontStyle: FontStyle.italic
+    // fontWeight: FontWeight.w600
+    );
+  TextStyle get infoTarjetaError => this._infoTarjetaError;
+  //______________________________________________
 
   final TextStyle _bottomSheet = TextStyle(
     fontSize: 15,

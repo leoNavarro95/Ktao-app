@@ -8,7 +8,8 @@ import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tar
 // import 'package:lamp/lamp.dart';
 // import 'package:flutter_lantern/flutter_lantern.dart';
 
-class LecturaController extends GetxController with SingleGetTickerProviderMixin{
+class LecturaController extends GetxController
+    with SingleGetTickerProviderMixin {
   ContadorModel _contador;
   ContadorModel get contador => _contador;
 
@@ -21,9 +22,15 @@ class LecturaController extends GetxController with SingleGetTickerProviderMixin
 
   // ######### Control de los Tabs en el TabBarView #############
   final List<Tab> myTabs = <Tab>[
-    Tab(text: 'Gestión',),
-    Tab(text: 'Historial',),
-    Tab(text: 'Gráficos lolo',),
+    Tab(
+      text: 'Gestión',
+    ),
+    Tab(
+      text: 'Historial',
+    ),
+    Tab(
+      text: 'Gráficos lolo',
+    ),
   ];
   TabController tabController;
   RxInt indice = 0.obs;
@@ -33,11 +40,10 @@ class LecturaController extends GetxController with SingleGetTickerProviderMixin
     super.onInit();
     //se obtiene el argumento pasado desde la pagina anterior
     this._contador = Get.arguments as ContadorModel;
-    
-    tabController = TabController(vsync: this,length: myTabs.length);
+
+    tabController = TabController(vsync: this, length: myTabs.length);
     tabController.addListener(() {
       indice.value = tabController.index;
-
     });
 
     await updateVisualFromDB();
@@ -61,10 +67,20 @@ class LecturaController extends GetxController with SingleGetTickerProviderMixin
     final lecturas = await DBProvider.db.getLecturasByContador(contador);
 
     if (lecturas != null) {
+      double _delta = 0.0, _deltaAnterior = 0.0;
       for (int i = 0; i < lecturas.length; i++) {
+        if (i > 0) {
+          //delta = lectura_actual - lectura_anterior
+          _delta = lecturas[i].lectura - lecturas[i-1].lectura;
+        }
         this.adicionarTarjetaLectura(TarjetaLectura(
           lectura: lecturas[i],
+          trending: {
+            "delta": _delta,
+            "deltaAnterior": _deltaAnterior,
+          },
         ));
+        _deltaAnterior = _delta;
       }
     }
   }

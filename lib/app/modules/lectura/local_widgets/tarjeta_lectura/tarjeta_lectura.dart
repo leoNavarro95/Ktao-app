@@ -13,32 +13,37 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
   final LecturaModel lectura;
   final bool isDeletable;
   final bool isElevated;
+  // delta es la diferencia entre la lectura actual y la anterior
+  /// "delta": es la diferencia entre la lectura actual y la anterior
+  /// "deltaAnterior": es esa diferencia anterior
+  final Map<String, double> trending;
+
   const TarjetaLectura({
     this.lectura,
+    this.trending = const {"delta": 0.0, "deltaAnterior": 0.0},
     this.isDeletable = true,
     this.isElevated = true,
   });
 
-
   @override
   Widget build(BuildContext context) {
-
     final _borderR = 10.0;
     final lectCtr = Get.find<LecturaController>();
 
     if (lectura == null) {
-      return ListView(children: [
-        SizedBox(height: 50),
-        _cardNoLectura(),
-      ],);
+      return ListView(
+        children: [
+          SizedBox(height: 0.2 * Get.height),
+          _cardNoLectura(),
+        ],
+      );
     }
-
-    
 
     return GetBuilder<TarjetaLectController>(
       init: TarjetaLectController(),
-      global:
-          false, //! OJO para permitir multiples instancias de controladores por cada widget
+      //! OJO para permitir multiples instancias de controladores por cada widget
+      global: false,
+
       id: lectura.id.toString(),
       builder: (_) {
         return FadeInLeft(
@@ -148,7 +153,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
             children: [
               Expanded(child: Container()),
               Text(
-                'Lectura: $titulo',
+                'Lect: $titulo',
                 textAlign: TextAlign.center,
                 style: TemaTexto().tituloTarjetaDark,
               ),
@@ -161,16 +166,41 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
   }
 
   Widget _body(TarjetaLectController controller) {
+    Text _deltaText;
+    IconData _icono;
+    if (trending["delta"] == null) {
+      _deltaText = Text('0.0 kWh', style: TemaTexto().infoTarjeta);
+      _icono = Icons.not_interested;
+    } else if (trending["delta"].isNegative) {
+      _deltaText = Text('${this.trending["delta"]} kWh',
+          style: TemaTexto().infoTarjetaError);
+      _icono = Icons.error;
+    } else {
+      _deltaText =
+          Text('${this.trending["delta"]} kWh', style: TemaTexto().infoTarjeta);
+      final double _delt = trending["delta"];
+      final double _deltAnt = trending["deltaAnterior"];
+      if (_delt > _deltAnt)
+        _icono = Icons.arrow_upward;
+      else
+        _icono = Icons.arrow_downward;
+    }
+
     if (controller.expanded) {
       return Container(
         color: Colors.yellow[50],
         child: Column(
           children: [
-            Text('Lectura No. ${this.lectura.id}',
-                style: TemaTexto().infoTarjeta),
-            Divider(),
-            Text('Fecha: ${this.lectura.fecha}',
-                style: TemaTexto().infoTarjeta),
+            Container(
+              padding: const EdgeInsets.only(top: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('${this.lectura.fecha}', style: TemaTexto().infoTarjeta),
+                  _consumo(_deltaText, _icono),
+                ],
+              ),
+            ),
             Divider(),
             Text('Hace 2 dias', style: TemaTexto().infoTarjeta),
           ],
@@ -229,4 +259,18 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       ),
     );
   }
+}
+
+Widget _consumo(Text _deltaText, IconData icon) {
+  return Container(
+      child: Row(
+    children: [
+      Icon(
+        icon,
+        color: (icon == Icons.arrow_downward)? Colors.green : Colors.red,
+        size: 18,
+      ),
+      _deltaText,
+    ],
+  ));
 }

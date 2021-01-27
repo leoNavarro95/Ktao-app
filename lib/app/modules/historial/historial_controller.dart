@@ -41,13 +41,32 @@ class HistorialController extends GetxController {
   void _llenarTarjetasLect(List<LecturaModel> listaLecturas) {
     if (_tarjetasLect.isNotEmpty) _tarjetasLect.clear();
 
-    for(LecturaModel lectura in listaLecturas){
-      _tarjetasLect.add(TarjetaLectura(
-        lectura: lectura,
-        isDeletable: false,
-        isElevated: false,
-      ));
-    }
+    double _delta = 0.0, _deltaAnterior = 0.0;
+      for (int i = 0; i < listaLecturas.length; i++) {
+        if (i > 0) {
+          //delta = lectura_actual - lectura_anterior
+          _delta = listaLecturas[i].lectura - listaLecturas[i-1].lectura;
+        }
+        _tarjetasLect.add(TarjetaLectura(
+          lectura: listaLecturas[i],
+          isDeletable: false,
+          isElevated: false,
+          trending: {
+            "delta": _delta,
+            "deltaAnterior": _deltaAnterior,
+          },
+        ));
+        
+        _deltaAnterior = _delta;
+      }
+
+    // for(LecturaModel lectura in listaLecturas){
+    //   _tarjetasLect.add(TarjetaLectura(
+    //     lectura: lectura,
+    //     isDeletable: false,
+    //     isElevated: false,
+    //   ));
+    // }
   }
 
   void _llenarTarjetasMes(String fecha) {
