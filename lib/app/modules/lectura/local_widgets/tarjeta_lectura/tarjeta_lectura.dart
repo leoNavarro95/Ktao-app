@@ -174,12 +174,12 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       _deltaText = Text('0.0 kWh', style: TemaTexto().infoTarjeta);
       _icono = Icons.not_interested;
     } else if (trending["delta"].isNegative) {
-      _deltaText = Text('${this.trending["delta"]} kWh',
+      _deltaText = Text('${this.trending["delta"].toStringAsFixed(1)} kWh',
           style: TemaTexto().infoTarjetaError);
       _icono = Icons.error;
     } else {
       _deltaText =
-          Text('${this.trending["delta"]} kWh', style: TemaTexto().infoTarjeta);
+          Text('${this.trending["delta"].toStringAsFixed(1)} kWh', style: TemaTexto().infoTarjeta);
       final double _delt = trending["delta"];
       final double _deltAnt = trending["deltaAnterior"];
       if (_delt > _deltAnt)
