@@ -143,7 +143,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     return ClipRRect(
       borderRadius: myBorder,
       child: GestureDetector(
-        onTap: (){
+        onTap: () {
           tarjLectCtr.expand(lectura.id.toString());
         },
         child: Container(
@@ -178,8 +178,8 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
           style: TemaTexto().infoTarjetaError);
       _icono = Icons.error;
     } else {
-      _deltaText =
-          Text('${this.trending["delta"].toStringAsFixed(1)} kWh', style: TemaTexto().infoTarjeta);
+      _deltaText = Text('${this.trending["delta"].toStringAsFixed(1)} kWh',
+          style: TemaTexto().infoTarjeta);
       final double _delt = trending["delta"];
       final double _deltAnt = trending["deltaAnterior"];
       if (_delt > _deltAnt)
@@ -198,13 +198,21 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text('${this.lectura.fecha}', style: TemaTexto().infoTarjeta),
                   _consumo(_deltaText, _icono),
                 ],
               ),
             ),
             Divider(),
-            Text('Hace 2 dias', style: TemaTexto().infoTarjeta),
+            Container(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('${this.lectura.fecha}', style: TemaTexto().infoTarjeta),
+                  _haceXTiempo(),
+                ],
+              ),
+            ),
           ],
         ),
       );
@@ -261,47 +269,65 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       ),
     );
   }
-}
 
-Widget _consumo(Text _deltaText, IconData icon) {
-  return GestureDetector(
-    onTap: (){
-      _onTapConsumo(_deltaText.data);
-    },
-    child: Container(
-        child: Row(
-      children: [
-        Icon(
-          icon,
-          color: (icon == Icons.arrow_downward)? Colors.green : Colors.red,
-          size: 18,
-        ),
-        _deltaText,
-      ],
-    )),
-  );
-}
+  Widget _haceXTiempo() {
+    String fecha = this.lectura.fecha;
+    List<String> fechaComponentes = fecha.split('/');
 
-void _onTapConsumo(String deltaConsumo){
-  IconData icono;
-  Color color;
-  String titulo,subtitulo;
+    int day = int.parse(fechaComponentes[0]);
+    int month = int.parse(fechaComponentes[1]);
+    int year = int.parse(fechaComponentes[2]);
 
-  if(deltaConsumo[0] == '-'){
-    icono = Icons.warning;
-    color = Colors.red;
-    titulo = 'Balance negativo';
-    subtitulo = 'Error de lectura, compurebe los datos';  
-  } else {
-    icono = Icons.info;
-    color = Colors.yellow;
-    titulo = 'Balance de consumo';
-    subtitulo = '$deltaConsumo más que la lectura anterior';
+    DateTime fechaLect = DateTime(year, month, day);
+    DateTime hoy = DateTime.now();
+    final tiempoDesde = hoy.difference(fechaLect);
+
+    String tiempoStr;
+    if (tiempoDesde.inDays == 0) {
+      tiempoStr = '(Hoy)';
+    } else {
+      tiempoStr =
+          '(Hace ${tiempoDesde.inDays} ${(tiempoDesde.inDays == 1) ? 'día' : 'días'})';
+    }
+    return Text(tiempoStr, style: TemaTexto().infoTarjeta);
   }
-  mySnackbar(
-    title: titulo,
-    subtitle: subtitulo,
-    icon: icono,
-    iconColor: color
-  );
+
+  Widget _consumo(Text _deltaText, IconData icon) {
+    return GestureDetector(
+      onTap: () {
+        _onTapConsumo(_deltaText.data);
+      },
+      child: Container(
+          child: Row(
+        children: [
+          Icon(
+            icon,
+            color: (icon == Icons.arrow_downward) ? Colors.green : Colors.red,
+            size: 18,
+          ),
+          _deltaText,
+        ],
+      )),
+    );
+  }
+
+  void _onTapConsumo(String deltaConsumo) {
+    IconData icono;
+    Color color;
+    String titulo, subtitulo;
+
+    if (deltaConsumo[0] == '-') {
+      icono = Icons.warning;
+      color = Colors.red;
+      titulo = 'Balance negativo';
+      subtitulo = 'Error de lectura, compurebe los datos';
+    } else {
+      icono = Icons.info;
+      color = Colors.yellow;
+      titulo = 'Balance de consumo';
+      subtitulo = '$deltaConsumo más que la lectura anterior';
+    }
+    mySnackbar(
+        title: titulo, subtitle: subtitulo, icon: icono, iconColor: color);
+  }
 }
