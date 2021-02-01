@@ -76,29 +76,16 @@ class TarjetaMes extends StatelessWidget {
   }
 
   Widget _lecturasMes(List<TarjetaLectura> listaLecturasMes, bool isWinter) {
-    String assetStr;
     Color bkgColor;
     if (isWinter) {
-      assetStr = "assets/nieve.svg";
       bkgColor = Color.fromRGBO(175, 241, 248, 0.5);
     } else {
-      assetStr = "assets/sol.svg";
       bkgColor = Color.fromRGBO(253, 226, 55, 0.6);
     }
 
-    return Stack(
-      children: [
-        Container(
-          width: Get.width,
-          height: (listaLecturasMes.length * 75.8),
-          color: bkgColor,
-          child: SvgPicture.asset(
-            assetStr,
-            fit: BoxFit.fitHeight,
-          ),
-        ),
-        Column(children: listaLecturasMes),
-      ],
+    return Container(
+      color: bkgColor,
+      child: Column(children: listaLecturasMes),
     );
   }
 }

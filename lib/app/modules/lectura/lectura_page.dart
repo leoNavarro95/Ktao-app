@@ -6,7 +6,7 @@ import 'package:healthCalc/app/data/provider/data_base_provider.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/agregar_lectura_dialog.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
-import 'package:healthCalc/app/modules/historial/detalles_page.dart';
+import 'package:healthCalc/app/modules/detalles/detalles_page.dart';
 
 import 'lectura_controller.dart';
 

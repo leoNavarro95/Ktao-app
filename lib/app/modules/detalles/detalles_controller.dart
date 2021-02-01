@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
 import 'package:healthCalc/app/data/model/lectura_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/modules/historial/local_widgets/tarjeta_mes.dart';
+import 'package:healthCalc/app/modules/detalles/local_widgets/tarjeta_mes.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 import 'package:healthCalc/app/utils/lecturas_utils.dart';
 import 'package:meta/meta.dart';
