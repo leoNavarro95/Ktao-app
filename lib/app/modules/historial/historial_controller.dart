@@ -4,6 +4,7 @@ import 'package:healthCalc/app/data/model/lectura_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
 import 'package:healthCalc/app/modules/historial/local_widgets/tarjeta_mes.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
+import 'package:healthCalc/app/utils/lecturas_utils.dart';
 import 'package:meta/meta.dart';
 
 class HistorialController extends GetxController {
@@ -31,8 +32,9 @@ class HistorialController extends GetxController {
     for (int i = 0; i < fechasAcotadas.length; i++) {
       List<LecturaModel> listaLecturas = await DBProvider.db
           .getLecturasByFechaPattern(contador, fechasAcotadas[i]);
+      final List<LecturaModel> lectOrdenadas = ordenarPorFecha(listaLecturas);
 
-      _llenarTarjetasLect(listaLecturas);
+      _llenarTarjetasLect(lectOrdenadas);
       _llenarTarjetasMes(fechasAcotadas[i]);
     }
     return _tarjetasMes;    
