@@ -28,7 +28,7 @@ class LecturaController extends GetxController
       text: 'Gestión',
     ),
     Tab(
-      text: 'Historial',
+      text: 'Detalles',
     ),
     Tab(
       text: 'Gráficos lolo',
@@ -86,6 +86,7 @@ class LecturaController extends GetxController
             "delta": _delta,
             "deltaAnterior": _deltaAnterior,
           },
+          mostrarConsumo: false,
         ));
         _deltaAnterior = _delta;
       }

@@ -7,9 +7,9 @@ import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tar
 import 'package:healthCalc/app/utils/lecturas_utils.dart';
 import 'package:meta/meta.dart';
 
-class HistorialController extends GetxController {
+class DetallesController extends GetxController {
   final ContadorModel contador;
-  HistorialController({@required this.contador}) : assert(contador != null);
+  DetallesController({@required this.contador}) : assert(contador != null);
 
   @override
   void onInit() async {
@@ -18,8 +18,6 @@ class HistorialController extends GetxController {
   }
 
   ///lista que contiene las tarjetas de los meses
-  // RxList<TarjetaMes> _tarjetasMes = List<TarjetaMes>().obs;
-  // RxList<TarjetaMes> get tarjetasMes => _tarjetasMes ;
   List<TarjetaMes> _tarjetasMes = [];
   List<TarjetaMes> get tarjetasMes => _tarjetasMes ;
 

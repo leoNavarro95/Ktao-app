@@ -11,6 +11,7 @@ import 'package:healthCalc/app/theme/text_theme.dart';
 
 class TarjetaLectura extends GetView<TarjetaLectController> {
   final LecturaModel lectura;
+  final bool mostrarConsumo;
   final bool isDeletable;
   final bool isElevated;
   // delta es la diferencia entre la lectura actual y la anterior
@@ -21,6 +22,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
   const TarjetaLectura({
     this.lectura,
     this.trending = const {"delta": 0.0, "deltaAnterior": 0.0},
+    this.mostrarConsumo = true,
     this.isDeletable = true,
     this.isElevated = true,
   });
@@ -188,27 +190,35 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
         _icono = Icons.arrow_downward;
     }
 
+    Widget deltaConsumo;
+    if (this.mostrarConsumo) {
+      deltaConsumo = Container(
+        padding: const EdgeInsets.only(top: 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _consumo(_deltaText, _icono),
+          ],
+        ),
+      );
+    } else {
+      deltaConsumo = Container();
+    }
+
     if (controller.expanded) {
       return Container(
         color: Colors.yellow[50],
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.only(top: 8),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _consumo(_deltaText, _icono),
-                ],
-              ),
-            ),
-            Divider(),
+            deltaConsumo,
+            this.mostrarConsumo ? Divider() : SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('${this.lectura.fecha} ', style: TemaTexto().infoTarjeta),
+                  Text('${this.lectura.fecha} ',
+                      style: TemaTexto().infoTarjeta),
                   _haceXTiempo(),
                 ],
               ),
