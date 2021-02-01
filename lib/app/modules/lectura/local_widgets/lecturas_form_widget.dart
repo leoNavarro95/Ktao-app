@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:healthCalc/app/global_widgets/widgets.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import 'package:healthCalc/app/data/model/lectura_model.dart';
@@ -32,6 +33,7 @@ class LecturaForm extends StatelessWidget {
       ),
     );
   }
+  bool yaExisteLectConEsaFecha = false;
 
   Future<bool> guardaLectura(
       TextEditingController textCtr, TextEditingController dateCtr) async {
@@ -44,10 +46,18 @@ class LecturaForm extends StatelessWidget {
             lectura: lecturaEntrada,
             idContador: lectCtr.contador.id,
             fecha: dateCtr.text);
-        await DBProvider.db.insertarLectura(lect);
-        await lectCtr.updateVisualFromDB();
-        textCtr.clear();
-        return true;
+        //* Hay que comprobar que no exista una lectura con la misma fecha
+        final List<LecturaModel> lectConMismaFecha = await DBProvider.db
+            .getLecturasByFechaPattern(lectCtr.contador, dateCtr.text);
+        if (lectConMismaFecha.length != 0) {
+          yaExisteLectConEsaFecha = true;
+
+        } else {
+          await DBProvider.db.insertarLectura(lect);
+          await lectCtr.updateVisualFromDB();
+          textCtr.clear();
+          return true;
+        }
       } else {
         throw Error();
       }
@@ -84,7 +94,8 @@ class LecturaForm extends StatelessWidget {
         child: TextFormField(
           inputFormatters: [
             // FilteringTextInputFormatter.deny(RegExp('[ ,-]')),
-            MaskTextInputFormatter(mask:'#####.#',filter: {"#": RegExp(r'[0-9]')}),
+            MaskTextInputFormatter(
+                mask: '#####.#', filter: {"#": RegExp(r'[0-9]')}),
           ],
           keyboardType: TextInputType.numberWithOptions(),
           decoration: InputDecoration(

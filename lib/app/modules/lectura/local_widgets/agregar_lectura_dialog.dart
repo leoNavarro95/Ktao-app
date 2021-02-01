@@ -48,22 +48,27 @@ Future<void> agregarLecturaDialog(
                   title: 'Nueva lectura guardada',
                   subtitle: ' ',
                 );
-              } else{
-                mySnackbar(
+              } else {
+                if (formulario.yaExisteLectConEsaFecha) {
+                  mySnackbar(
+                      title: "Error",
+                      subtitle: "Ya existe una lectura con esa fecha");
+                } else {
+                  mySnackbar(
                     title: 'Error',
                     subtitle: 'No se guardó la lectura',
                   );
+                }
               }
             },
           ),
         ),
         FlatButton(
-          child: Text('CANCELAR'),
-          onPressed: () {
-            textCtr.clear();
-            Get.back();
-          } 
-        ),
+            child: Text('CANCELAR'),
+            onPressed: () {
+              textCtr.clear();
+              Get.back();
+            }),
       ],
     ),
     barrierDismissible: false,

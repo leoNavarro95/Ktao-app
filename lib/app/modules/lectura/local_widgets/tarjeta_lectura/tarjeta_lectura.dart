@@ -208,7 +208,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('${this.lectura.fecha}', style: TemaTexto().infoTarjeta),
+                  Text('${this.lectura.fecha} ', style: TemaTexto().infoTarjeta),
                   _haceXTiempo(),
                 ],
               ),

@@ -60,13 +60,6 @@ class HistorialController extends GetxController {
         _deltaAnterior = _delta;
       }
 
-    // for(LecturaModel lectura in listaLecturas){
-    //   _tarjetasLect.add(TarjetaLectura(
-    //     lectura: lectura,
-    //     isDeletable: false,
-    //     isElevated: false,
-    //   ));
-    // }
   }
 
   void _llenarTarjetasMes(String fecha) {
