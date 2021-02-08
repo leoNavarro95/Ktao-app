@@ -8,13 +8,14 @@ import 'package:healthCalc/app/global_widgets/widgets.dart';
 import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura_controller.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
+import 'package:healthCalc/app/utils/math_util.dart';
 
 class TarjetaLectura extends GetView<TarjetaLectController> {
   final LecturaModel lectura;
   final bool mostrarConsumo;
   final bool isDeletable;
   final bool isElevated;
-  // delta es la diferencia entre la lectura actual y la anterior
+
   /// "delta": es la diferencia entre la lectura actual y la anterior
   /// "deltaAnterior": es esa diferencia anterior
   final Map<String, double> trending;
@@ -189,15 +190,32 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       else
         _icono = Icons.arrow_downward;
     }
+    Map<String,dynamic> calculos = calcCosto(trending["delta"]);
+    double costoDbl = calculos["costo"];
+
+    final Text costoTxt = Text('${costoDbl.toStringAsFixed(1)} CUP',
+          style: TemaTexto().infoTarjeta);
 
     Widget deltaConsumo;
     if (this.mostrarConsumo) {
       deltaConsumo = Container(
         padding: const EdgeInsets.only(top: 8),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _consumo(_deltaText, _icono),
+            myroundedContainer(
+              text: _deltaText,
+              icon: _icono,
+              iconColor: (_icono == Icons.arrow_downward) ? Colors.green : Colors.red,
+              onTap: () {
+                _onTapConsumo(_deltaText.data);
+              },
+            ),
+            myroundedContainer(
+              text: costoTxt,
+              icon: Icons.monetization_on_outlined,
+              iconColor: Colors.blueAccent,
+            ),
           ],
         ),
       );
@@ -302,24 +320,6 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     return Text(tiempoStr, style: TemaTexto().infoTarjeta);
   }
 
-  Widget _consumo(Text _deltaText, IconData icon) {
-    return GestureDetector(
-      onTap: () {
-        _onTapConsumo(_deltaText.data);
-      },
-      child: Container(
-          child: Row(
-        children: [
-          Icon(
-            icon,
-            color: (icon == Icons.arrow_downward) ? Colors.green : Colors.red,
-            size: 18,
-          ),
-          _deltaText,
-        ],
-      )),
-    );
-  }
 
   void _onTapConsumo(String deltaConsumo) {
     IconData icono;

@@ -90,17 +90,17 @@ List<String> rangos = [
 ///*  _________________________________________________________
 ///*
 
-Map<String, dynamic> calcCosto(int consumo) {
+Map<String, dynamic> calcCosto(double consumo) {
   //170
   double costoAcumulado = 0.0;
   List<double> precioXrango = [];
-  List<int> consumoXrango = [];
+  List<double> consumoXrango = [];
   double costoTotal = 0.0;
 
   for (int index = 0; index <  rango.length; index++) {
     if (consumo > rango[index]) {
       // 100*0.4 | (150-100)*1.3 | (170-150)*1.75
-      int consumoRango = (rango[index] - ((index == 0) ? 0 : rango[index - 1]));
+      double consumoRango = (rango[index] - ((index == 0) ? 0 : rango[index - 1])).toDouble();
       consumoXrango.add(consumoRango);
 
       costoAcumulado = consumoRango * precios[index];
@@ -109,7 +109,7 @@ Map<String, dynamic> calcCosto(int consumo) {
     } else {
       //iteracion final
 
-      int consumoRango = (consumo - ((index == 0) ? 0 : rango[index - 1]));
+      double consumoRango = (consumo - ((index == 0) ? 0 : rango[index - 1]));
       consumoXrango.add(consumoRango);
 
       costoAcumulado = consumoRango * precios[index];
@@ -120,14 +120,13 @@ Map<String, dynamic> calcCosto(int consumo) {
     }
   }
   if (consumo > 5000) {
-    int consumoResto = consumo - 5000;
+    double consumoResto = consumo - 5000;
     consumoXrango.add(consumoResto);
     costoAcumulado = consumoResto * precios[precios.length - 1];
     precioXrango.add(costoAcumulado);
     costoTotal += costoAcumulado;
   }
 
-  // print("| $consumoXrango | $precioXrango");
   return {
     "costo": costoTotal,
     "listaConsumo": consumoXrango,

@@ -135,3 +135,28 @@ void mySnackbar(
     ),
   );
 }
+
+Widget myroundedContainer({Text text, IconData icon, Color bkgColor, Color iconColor, Function onTap}) {
+  if(bkgColor == null){
+    bkgColor = Color.fromRGBO(100, 170, 180, 0.5);
+  }
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+          padding: EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            color: bkgColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                color: iconColor,
+                size: 18,
+              ),
+              text,
+            ],
+          )),
+    );
+  }

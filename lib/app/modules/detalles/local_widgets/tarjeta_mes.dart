@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
+import 'package:healthCalc/app/utils/math_util.dart';
 
 /// contiene las lecturas efectuadas por mes/anho, lo que permite ordenar las lecturas por periodos de tiempo
 class TarjetaMes extends StatelessWidget {
@@ -44,33 +45,49 @@ class TarjetaMes extends StatelessWidget {
   }
 
   Widget _encabezado(String fecha, bool isWinter) {
-    String assetStr;
+    double consumo = this.lecturasMes[lecturasMes.length-1].lectura.lectura - this.lecturasMes[0].lectura.lectura;
+
+    Map<String,dynamic> calculos = calcCosto(consumo);
+    double costo = calculos["costo"];
+
+    Color myColor;
     if (isWinter)
-      assetStr = "assets/banner_invierno.svg";
+      myColor = Color.fromRGBO(100, 150, 200, 1);
     else
-      assetStr = "assets/banner_verano.svg";
+      myColor = Colors.deepOrangeAccent;
 
     return Container(
       width: Get.width,
-      // color: Color.fromRGBO(120, 200, 220, 1),
-      child: Stack(
-        children: [
-          Container(
-            width: Get.width,
-            height: 50,
-            child: SvgPicture.asset(
-              assetStr,
-              fit: BoxFit.fitHeight,
-            ),
-          ),
-          Center(
-            child: Text(
+      color: myColor,
+      padding: EdgeInsets.symmetric(vertical:5),
+      child: Center(
+        child: Column(
+          
+          children: [
+            Text(
               fecha,
               style: TemaTexto().tituloTarjeta,
               textAlign: TextAlign.center,
             ),
-          ), //'diciembre del 2020'
-        ],
+            Divider(color: Colors.white24,height: 1,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Text(
+                  '$consumo kWh',
+                  style: TemaTexto().tituloTarjeta,
+                  textAlign: TextAlign.center,
+                ),
+                
+                Text(
+                  '${costo.toStringAsFixed(2)} CUP',
+                  style: TemaTexto().tituloTarjeta,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
