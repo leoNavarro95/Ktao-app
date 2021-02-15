@@ -155,7 +155,13 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Expanded(child: Container()),
+                (lectura.isRecibo == 1)
+                    ? Expanded(
+                        child: Icon(
+                        Icons.done_all,
+                        color: Colors.grey,
+                      ))
+                    : Expanded(child: Container()),
                 Text(
                   'Lect: $titulo',
                   textAlign: TextAlign.center,
@@ -190,11 +196,11 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       else
         _icono = Icons.arrow_downward;
     }
-    Map<String,dynamic> calculos = calcCosto(trending["delta"]);
+    Map<String, dynamic> calculos = calcCosto(trending["delta"]);
     double costoDbl = calculos["costo"];
 
     final Text costoTxt = Text('${costoDbl.toStringAsFixed(1)} CUP',
-          style: TemaTexto().infoTarjeta);
+        style: TemaTexto().infoTarjeta);
 
     Widget deltaConsumo;
     if (this.mostrarConsumo) {
@@ -206,7 +212,8 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
             myroundedContainer(
               text: _deltaText,
               icon: _icono,
-              iconColor: (_icono == Icons.arrow_downward) ? Colors.green : Colors.red,
+              iconColor:
+                  (_icono == Icons.arrow_downward) ? Colors.green : Colors.red,
               onTap: () {
                 _onTapConsumo(_deltaText.data);
               },
@@ -319,7 +326,6 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     }
     return Text(tiempoStr, style: TemaTexto().infoTarjeta);
   }
-
 
   void _onTapConsumo(String deltaConsumo) {
     IconData icono;

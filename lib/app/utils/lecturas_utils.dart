@@ -44,3 +44,8 @@ List<LecturaModel> ordenarPorFecha(List<LecturaModel> lecturas) {
   }
   return lectOrdenadas;
 }
+
+/// [date] es la fecha en formato DD/MM/YYYY, devuelve la fecha sin el dia: /MM/YYYY
+String setToMonthYear(String date){
+  return date.substring(2);
+}

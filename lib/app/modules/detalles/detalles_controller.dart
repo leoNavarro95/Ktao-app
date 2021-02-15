@@ -19,7 +19,7 @@ class DetallesController extends GetxController {
 
   ///lista que contiene las tarjetas de los meses
   List<TarjetaMes> _tarjetasMes = [];
-  List<TarjetaMes> get tarjetasMes => _tarjetasMes ;
+  List<TarjetaMes> get tarjetasMes => _tarjetasMes;
 
   ///lista que contiene las tarjetas de las lecturas
   List<TarjetaLectura> _tarjetasLect = [];
@@ -35,39 +35,41 @@ class DetallesController extends GetxController {
       _llenarTarjetasLect(lectOrdenadas);
       _llenarTarjetasMes(fechasAcotadas[i]);
     }
-    return _tarjetasMes;    
+    return _tarjetasMes;
   }
 
   void _llenarTarjetasLect(List<LecturaModel> listaLecturas) {
     if (_tarjetasLect.isNotEmpty) _tarjetasLect.clear();
 
     double _delta = 0.0, _deltaAnterior = 0.0;
-      for (int i = 0; i < listaLecturas.length; i++) {
-        if (i > 0) {
-          //delta = lectura_actual - lectura_anterior
-          _delta = listaLecturas[i].lectura - listaLecturas[i-1].lectura;
-        }
-        _tarjetasLect.add(TarjetaLectura(
-          lectura: listaLecturas[i],
-          isDeletable: false,
-          isElevated: false,
-          trending: {
-            "delta": _delta,
-            "deltaAnterior": _deltaAnterior,
-          },
-        ));
-        
-        _deltaAnterior = _delta;
+    for (int i = 0; i < listaLecturas.length; i++) {
+      if (i > 0) {
+        //delta = lectura_actual - lectura_anterior
+        _delta = listaLecturas[i].lectura - listaLecturas[i - 1].lectura;
       }
+      _tarjetasLect.add(TarjetaLectura(
+        lectura: listaLecturas[i],
+        isDeletable: false,
+        isElevated: false,
+        trending: {
+          "delta": _delta,
+          "deltaAnterior": _deltaAnterior,
+        },
+      ));
 
+      _deltaAnterior = _delta;
+    }
   }
 
-  void _llenarTarjetasMes(String fecha) {
-
+  void _llenarTarjetasMes(String fecha) async {
+    final bool _isClosed =
+        await DBProvider.db.isMonthClosedDB(this.contador, fecha);
     _tarjetasMes.add(
       TarjetaMes(
+        isClosed: _isClosed,
         fecha: fechaLiteral(fecha),
-        lecturasMes: _tarjetasLect.toList(), //* toList() crea una nueva lista y evita pasar directamente la referencia de _tarjetasLect. Si se pasa directamente la referencia luego cuando se limpie se borra tambien de aqui
+        lecturasMes: _tarjetasLect
+            .toList(), //* toList() crea una nueva lista y evita pasar directamente la referencia de _tarjetasLect. Si se pasa directamente la referencia luego cuando se limpie se borra tambien de aqui
       ),
     );
   }

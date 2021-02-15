@@ -40,26 +40,15 @@ Future<void> agregarLecturaDialog(
           child: FlatButton(
             child: Text('OK'),
             onPressed: () async {
-              final bool isSaved = await formulario.guardaLectura(textCtr,
+              final String dbStatus = await formulario.guardaLectura(textCtr,
                   inputDateCtr); //si es true se logro guardar sino hubo error
-              if (isSaved) {
+              if (dbStatus.substring(0, 5) != "Error") {
                 Get.back();
-                mySnackbar(
-                  title: 'Nueva lectura guardada',
-                  subtitle: ' ',
-                );
-              } else {
-                if (formulario.yaExisteLectConEsaFecha) {
-                  mySnackbar(
-                      title: "Error",
-                      subtitle: "Ya existe una lectura con esa fecha");
-                } else {
-                  mySnackbar(
-                    title: 'Error',
-                    subtitle: 'No se guardó la lectura',
-                  );
-                }
               }
+              mySnackbar(
+                title: dbStatus,
+                subtitle: ' ',
+              );
             },
           ),
         ),

@@ -122,41 +122,95 @@ Future<String> textEditOptionDialog(
 }
 
 void mySnackbar(
-    {String title, String subtitle, IconData icon = Icons.warning, Color iconColor = Colors.red}) {
-  return Get.snackbar(
-    title,
-    subtitle,
-    borderWidth: 2,
-    borderColor: Colors.black12,
-    colorText: Colors.black,
-    icon: Icon(
-      icon,
-      color: iconColor,
-    ),
+    {String title,
+    String subtitle,
+    IconData icon = Icons.warning,
+    Color iconColor = Colors.red,
+    int showMillisecs = 2500}) {
+  return Get.snackbar(title, subtitle,
+      borderWidth: 2,
+      borderColor: Colors.black12,
+      colorText: Colors.black,
+      icon: Icon(
+        icon,
+        color: iconColor,
+      ),
+      duration: Duration(milliseconds: showMillisecs));
+}
+
+Widget myroundedContainer(
+    {Text text,
+    IconData icon,
+    Color bkgColor,
+    Color iconColor,
+    Function onTap}) {
+  if (bkgColor == null) {
+    bkgColor = Color.fromRGBO(100, 170, 180, 0.5);
+  }
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+        padding: EdgeInsets.all(2),
+        decoration: BoxDecoration(
+          color: bkgColor,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          children: [
+            Icon(
+              icon,
+              color: iconColor,
+              size: 18,
+            ),
+            text,
+          ],
+        )),
   );
 }
 
-Widget myroundedContainer({Text text, IconData icon, Color bkgColor, Color iconColor, Function onTap}) {
-  if(bkgColor == null){
-    bkgColor = Color.fromRGBO(100, 170, 180, 0.5);
+class MyCheckBoxController extends GetxController {
+  bool checkValue = false;
+  void changed(bool value) {
+    checkValue = value;
+    if (value) {
+      mySnackbar(
+        title: "Lectura de recibo",
+        subtitle:
+            "Al seleccionar esta opción, se cerrarán las operaciones para el mes",
+        showMillisecs: 4000,
+      );
+    }
+    update();
   }
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-          padding: EdgeInsets.all(2),
-          decoration: BoxDecoration(
-            color: bkgColor,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                color: iconColor,
-                size: 18,
-              ),
-              text,
-            ],
-          )),
+}
+
+class MyCheckBox extends GetView<MyCheckBoxController> {
+  final String text;
+
+  const MyCheckBox(this.text);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: GetBuilder<MyCheckBoxController>(
+          init: MyCheckBoxController(),
+          builder: (_) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Checkbox(
+                  value: _.checkValue,
+                  onChanged: (value) {
+                    _.changed(value);
+                  },
+                ),
+                Text(
+                  this.text,
+                  style: TemaTexto().bottomSheetBody,
+                )
+              ],
+            );
+          }),
     );
   }
+}

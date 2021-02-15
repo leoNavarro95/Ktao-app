@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:healthCalc/app/data/provider/data_base_provider.dart';
+import 'package:healthCalc/app/modules/detalles/detalles_controller.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
 import 'package:healthCalc/app/utils/math_util.dart';
 
 /// contiene las lecturas efectuadas por mes/anho, lo que permite ordenar las lecturas por periodos de tiempo
 class TarjetaMes extends StatelessWidget {
-  final String fecha;
+  final String fecha; // en formato /MM/YYYY
   final List<TarjetaLectura> lecturasMes;
+
+  ///define que este mes ya esta cerrado por una lectura de recibo
+  final bool isClosed;
 
   const TarjetaMes({
     @required this.fecha,
     @required this.lecturasMes,
+    this.isClosed = false,
   })  : assert(fecha != null),
         assert(lecturasMes != null);
-
   @override
   Widget build(BuildContext context) {
-    bool isWinter = false;
+    bool isWinter = true;
 
-    final String initFecha =
-        fecha.substring(0, 3); //toma los tres primeros caracteres de la fecha
-    if ((initFecha == 'nov') | (initFecha == 'dic') | (initFecha == 'ene')) {
-      isWinter = true;
-    } else {
-      isWinter = false;
-    }
+    // final String initFecha =
+    //     fecha.substring(0, 3); //toma los tres primeros caracteres de la fecha
+    // if ((initFecha == 'nov') | (initFecha == 'dic') | (initFecha == 'ene')| (initFecha == 'feb')) {
+    //   isWinter = true;
+    // } else {
+    //   isWinter = false;
+    // }
 
     return Container(
       child: contenedorMes(this.fecha, isWinter),
@@ -45,10 +49,13 @@ class TarjetaMes extends StatelessWidget {
   }
 
   Widget _encabezado(String fecha, bool isWinter) {
-    double consumo = this.lecturasMes[lecturasMes.length-1].lectura.lectura - this.lecturasMes[0].lectura.lectura;
+    double consumo = this.lecturasMes[lecturasMes.length - 1].lectura.lectura -
+        this.lecturasMes[0].lectura.lectura;
 
-    Map<String,dynamic> calculos = calcCosto(consumo);
+    Map<String, dynamic> calculos = calcCosto(consumo);
     double costo = calculos["costo"];
+
+    final String reciboStr = this.isClosed ? "Mes cerrado" : "Mes sin cerrar";
 
     Color myColor;
     if (isWinter)
@@ -59,32 +66,57 @@ class TarjetaMes extends StatelessWidget {
     return Container(
       width: Get.width,
       color: myColor,
-      padding: EdgeInsets.symmetric(vertical:5),
+      padding: EdgeInsets.symmetric(vertical: 5),
       child: Center(
         child: Column(
-          
           children: [
-            Text(
-              fecha,
-              style: TemaTexto().tituloTarjeta,
-              textAlign: TextAlign.center,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Spacer(flex: 1),
+                (this.isClosed)
+                    ? Icon(Icons.done_all, color: Colors.grey[100])
+                    : Container(),
+                Spacer(flex: 5),
+                Text(
+                  fecha,
+                  style: TemaTexto().tituloTarjeta,
+                  textAlign: TextAlign.center,
+                ),
+                Spacer(flex: 5)
+              ],
             ),
-            Divider(color: Colors.white24,height: 1,),
+            Divider(
+              color: Colors.white24,
+              height: 1,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  '$consumo kWh',
-                  style: TemaTexto().tituloTarjeta,
+                  '${consumo.toStringAsFixed(2)} kWh',
+                  style:
+                      TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
                   textAlign: TextAlign.center,
                 ),
-                
                 Text(
                   '${costo.toStringAsFixed(2)} CUP',
-                  style: TemaTexto().tituloTarjeta,
+                  style:
+                      TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
                   textAlign: TextAlign.center,
                 ),
               ],
+            ),
+            Divider(
+              color: Colors.white24,
+              height: 1,
+            ),
+            Text(
+              reciboStr,
+              textAlign: TextAlign.center,
+              style: TemaTexto()
+                  .cuerpoTarjeta
+                  .merge(TextStyle(color: Colors.grey[100], fontSize: 10)),
             ),
           ],
         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:healthCalc/app/global_widgets/widgets.dart';
+import 'package:healthCalc/app/utils/lecturas_utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import 'package:healthCalc/app/data/model/lectura_model.dart';
@@ -26,42 +28,54 @@ class LecturaForm extends StatelessWidget {
             _texto(),
             _inputTextLectura(textCtr),
             _crearFecha(inputDateCtr),
-            //_botonAgregarLect(textCtr, inputDateCtr)
+            // myCheckBoxSelector(text: "Lectura de recibo",output: checkboxValue),
+            MyCheckBox("Lectura de recibo"),
           ],
         ),
       ),
     );
   }
-  bool yaExisteLectConEsaFecha = false;
 
-  Future<bool> guardaLectura(
+
+  Future<String> guardaLectura(
       TextEditingController textCtr, TextEditingController dateCtr) async {
+    MyCheckBoxController checkBoxLectReciboCtr = Get
+        .find(); //este es el checkbox para indicar que es una lectura de recibo de fin de mes
+
     //validate() devuelve true si el formulario es valido
     if (formKey.currentState.validate()) {
       final double lecturaEntrada = double.parse(textCtr.text);
       // final String fecha = date
       if (lecturaEntrada != null) {
         final lect = LecturaModel(
-            lectura: lecturaEntrada,
-            idContador: lectCtr.contador.id,
-            fecha: dateCtr.text);
+          lectura: lecturaEntrada,
+          idContador: lectCtr.contador.id,
+          fecha: dateCtr.text,
+          isRecibo: checkBoxLectReciboCtr.checkValue ? 1 : 0,
+        );
+        //* Comprobar que el mes no esté cerrado por una lectura de recibo
+        final bool isClosed = await DBProvider.db
+            .isMonthClosedDB(lectCtr.contador, setToMonthYear((dateCtr.text)));
+
+        if (isClosed) return "Error, no se pueden agregar lecturas a meses cerrados";
+
         //* Hay que comprobar que no exista una lectura con la misma fecha
         final List<LecturaModel> lectConMismaFecha = await DBProvider.db
             .getLecturasByFechaPattern(lectCtr.contador, dateCtr.text);
-        if (lectConMismaFecha.length != 0) {
-          yaExisteLectConEsaFecha = true;
 
+        if (lectConMismaFecha.length != 0) {
+          return "Error, Ya existe una lectura para esa fecha";
         } else {
           await DBProvider.db.insertarLectura(lect);
           await lectCtr.updateVisualFromDB();
           textCtr.clear();
-          return true;
+          return "Lectura guardada con éxito";
         }
       } else {
         throw Error();
       }
     }
-    return false; // no se guardó nada por error de entrada
+    return "Error, no se guardó la lectura"; // no se guardó nada por error de entrada
   }
 
   Container _texto() {
@@ -70,6 +84,7 @@ class LecturaForm extends StatelessWidget {
         child: Text(
           'Introduzca una nueva lectura',
           style: TemaTexto().bottomSheetBody,
+          textAlign: TextAlign.center,
         ));
   }
 
