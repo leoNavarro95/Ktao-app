@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
 import 'package:healthCalc/app/data/model/lectura_model.dart';
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
+import 'package:healthCalc/app/modules/home/home_controller.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 import 'package:healthCalc/app/utils/lecturas_utils.dart';
 
@@ -53,9 +54,13 @@ class LecturaController extends GetxController
 
   @override
   void onClose() {
+    final homeCtr = Get.find<HomeController>();
+    homeCtr.updateVisualFromDB();
+    
     tabController.dispose();
     textCtr.dispose();
     inputDateCtr.dispose();
+
     super.onClose();
   }
 

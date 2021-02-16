@@ -145,7 +145,7 @@ Widget myroundedContainer(
     Color iconColor,
     Function onTap}) {
   if (bkgColor == null) {
-    bkgColor = Color.fromRGBO(100, 170, 180, 0.5);
+    bkgColor = Color.fromRGBO(76, 99, 134, 0.5);
   }
   return GestureDetector(
     onTap: onTap,

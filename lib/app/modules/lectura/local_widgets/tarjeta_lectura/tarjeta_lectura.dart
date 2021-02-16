@@ -36,7 +36,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     if (lectura == null) {
       return ListView(
         children: [
-          SizedBox(height: 0.2 * Get.height),
+          SizedBox(height: 0.15 * Get.height),
           _cardNoLectura(),
         ],
       );
@@ -156,18 +156,14 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 (lectura.isRecibo == 1)
-                    ? Expanded(
-                        child: Icon(
-                        Icons.done_all,
-                        color: Colors.grey,
-                      ))
-                    : Expanded(child: Container()),
+                    ? Expanded(child: Container(margin: EdgeInsets.symmetric(horizontal: 2),child: Icon(Icons.done_all, color: Colors.grey)))
+                    : Spacer(flex: 1,),
                 Text(
                   'Lect: $titulo',
                   textAlign: TextAlign.center,
                   style: TemaTexto().tituloTarjetaDark,
                 ),
-                Expanded(child: Container()),
+                Spacer(flex: 1,),
                 _botonEliminarLect(lectCtr),
                 iconoExpand,
               ],
@@ -276,7 +272,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 25),
+                          padding: const EdgeInsets.symmetric(vertical: 20),
                           child: Text(
                             'No existen lecturas registradas',
                             textAlign: TextAlign.center,
@@ -336,7 +332,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       icono = Icons.warning;
       color = Colors.red;
       titulo = 'Balance negativo';
-      subtitulo = 'Error de lectura, compurebe los datos';
+      subtitulo = 'Error de lectura, compruebe los datos';
     } else {
       icono = Icons.info;
       color = Colors.yellow;

@@ -96,13 +96,17 @@ class TarjetaMes extends StatelessWidget {
                 Text(
                   '${consumo.toStringAsFixed(2)} kWh',
                   style:
-                      TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
+                      (consumo.isNegative)
+                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Colors.red))
+                      : TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
                   textAlign: TextAlign.center,
                 ),
                 Text(
                   '${costo.toStringAsFixed(2)} CUP',
                   style:
-                      TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
+                      (costo.isNegative)
+                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Colors.red))
+                      : TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
                   textAlign: TextAlign.center,
                 ),
               ],

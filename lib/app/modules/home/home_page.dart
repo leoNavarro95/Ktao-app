@@ -16,7 +16,8 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(builder: (_) {
+    return GetBuilder<HomeController>(
+      builder: (_) {
       return Scaffold(
         drawer: MenuLateral(),
         appBar: buildAppBar(),
@@ -24,7 +25,7 @@ class HomePage extends StatelessWidget {
           if (_.tarjetas.isNotEmpty) {
             return ListView(
               children: <Widget>[
-                buildTableContadores(contadores: _.tarjetas),
+                _buildTableContadores(contadores: _.tarjetas),
               ],
             );
           }
@@ -38,7 +39,7 @@ class HomePage extends StatelessWidget {
     });
   }
 
-  Table buildTableContadores({List<TarjetaContador> contadores}) {
+  Table _buildTableContadores({List<TarjetaContador> contadores}) {
     List<TableRow> _lista = [];
     List<Widget> _fila = [];
     int cantidadFilas = 0;

@@ -33,7 +33,7 @@ class DetallesController extends GetxController {
       final List<LecturaModel> lectOrdenadas = ordenarPorFecha(listaLecturas);
 
       _llenarTarjetasLect(lectOrdenadas);
-      _llenarTarjetasMes(fechasAcotadas[i]);
+      await _llenarTarjetasMes(fechasAcotadas[i]);
     }
     return _tarjetasMes;
   }
@@ -61,7 +61,7 @@ class DetallesController extends GetxController {
     }
   }
 
-  void _llenarTarjetasMes(String fecha) async {
+  Future<void> _llenarTarjetasMes(String fecha) async {
     final bool _isClosed =
         await DBProvider.db.isMonthClosedDB(this.contador, fecha);
     _tarjetasMes.add(
