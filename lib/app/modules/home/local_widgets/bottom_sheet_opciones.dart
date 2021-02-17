@@ -32,7 +32,7 @@ Future<void> bottomSheetOpciones(ContadorModel contador) {
               children: <Widget>[
                 ListTile(
                   title: Text(
-                    'Configuracion',
+                    'Configuración',
                     style: TemaTexto().bottomSheetTitulo,
                   ),
                   subtitle: Text('${contador.nombre}',

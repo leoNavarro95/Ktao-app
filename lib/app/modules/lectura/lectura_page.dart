@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:animate_do/animate_do.dart';
 
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
+import 'package:healthCalc/app/modules/grafico/grafico_page.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/agregar_lectura_dialog.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
@@ -20,10 +21,11 @@ class LecturaPage extends GetView<LecturaController> {
     final detalles = DetallesPage(
       contador: lecturaCtr.contador,
     );
+    final graficos = GraficoPage();
 
     //las paginas que se van a encontrar en el tabBarView
-    final List<Widget> paginas = [_contenido(), detalles];
-    paginas.add(Center(child: Text(lecturaCtr.myTabs[2].text)));
+    final List<Widget> paginas = [_contenido(), detalles, graficos];
+    // paginas.add(Center(child: Text(lecturaCtr.myTabs[2].text)));
 
     return GetBuilder<LecturaController>(builder: (_) {
       return Scaffold(
