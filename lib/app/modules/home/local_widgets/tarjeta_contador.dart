@@ -69,7 +69,7 @@ class TarjetaContador extends StatelessWidget {
           child: Text(
             titulo,
             textAlign: TextAlign.center,
-            style: TemaTexto().tituloTarjeta,
+            style: TemaTexto().bottomSheetTitulo.merge(TextStyle(color: Colors.white, fontSize: 16)),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           )),

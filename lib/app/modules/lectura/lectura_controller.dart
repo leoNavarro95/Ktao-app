@@ -32,7 +32,7 @@ class LecturaController extends GetxController
       text: 'Detalles',
     ),
     Tab(
-      text: 'Gráficos lolo',
+      text: 'Gráficos',
     ),
   ];
   TabController tabController;
