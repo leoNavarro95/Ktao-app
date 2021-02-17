@@ -144,9 +144,6 @@ Widget myroundedContainer(
     Color bkgColor,
     Color iconColor,
     Function onTap}) {
-  if (bkgColor == null) {
-    bkgColor = Color.fromRGBO(76, 99, 134, 0.5);
-  }
   return GestureDetector(
     onTap: onTap,
     child: Container(
@@ -156,12 +153,10 @@ Widget myroundedContainer(
           borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              icon,
-              color: iconColor,
-              size: 18,
-            ),
+            Icon(icon, color: iconColor, size: 18),
+            SizedBox(width: 5,),
             text,
           ],
         )),

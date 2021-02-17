@@ -16,8 +16,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HomeController>(
-      builder: (_) {
+    return GetBuilder<HomeController>(builder: (_) {
       return Scaffold(
         drawer: MenuLateral(),
         appBar: buildAppBar(),
@@ -25,7 +24,11 @@ class HomePage extends StatelessWidget {
           if (_.tarjetas.isNotEmpty) {
             return ListView(
               children: <Widget>[
-                _buildTableContadores(contadores: _.tarjetas),
+                // _buildTableContadores(contadores: _.tarjetas),
+                Column(
+                  
+                  children: _.tarjetas,
+                ),
               ],
             );
           }
@@ -39,12 +42,12 @@ class HomePage extends StatelessWidget {
     });
   }
 
-  Table _buildTableContadores({List<TarjetaContador> contadores}) {
+  Widget _buildTableContadores({List<TarjetaContador> contadores}) {
     List<TableRow> _lista = [];
     List<Widget> _fila = [];
     int cantidadFilas = 0;
-    const int cantidad_columnas =
-        2; //! TODO: Hacer que cambie a 3 cuando el movil este en portrait
+    //! TODO: Hacer que cambie a 3 cuando el movil este en portrait
+    const int cantidad_columnas = 2;
 
     //calculando el numero de filas necesario
     if (contadores.length % 2 == 0) {
@@ -68,7 +71,7 @@ class HomePage extends StatelessWidget {
       _lista.add(TableRow(children: _fila.toList()));
       _fila.clear();
     }
-
+    // return Column(children: contadores,);
     return Table(children: _lista);
   }
 
@@ -78,16 +81,13 @@ class HomePage extends StatelessWidget {
       centerTitle: true,
       actions: [
         IconButton(
-          icon: Icon(Icons.add),
-          onPressed: _agregarContador,
-        ),
-        IconButton(
           icon: Icon(Icons.delete),
           onPressed: _eliminarContadores,
         )
       ],
     );
   }
+        
 
   Future<void> _agregarContador() async {
     String nombre = await textEditOptionDialog(

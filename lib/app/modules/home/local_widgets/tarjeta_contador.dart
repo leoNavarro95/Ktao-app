@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
-import 'package:healthCalc/app/modules/home/home_controller.dart';
+import 'package:healthCalc/app/global_widgets/widgets.dart';
 import 'package:healthCalc/app/modules/home/local_widgets/bottom_sheet_opciones.dart';
 import 'package:healthCalc/app/routes/app_routes.dart';
 import 'package:healthCalc/app/theme/text_theme.dart';
+import 'package:healthCalc/app/utils/lecturas_utils.dart';
 
 class TarjetaContador extends StatelessWidget {
   final ContadorModel contador;
   final int cantLecturas;
+  final double consumoTotal;
+  final double costoTotal;
   const TarjetaContador({
     Key key,
     this.contador,
     this.cantLecturas = 0,
+    this.consumoTotal = 0.0,
+    this.costoTotal = 0.0,
   }) : super(key: key);
 
   @override
@@ -23,7 +28,7 @@ class TarjetaContador extends StatelessWidget {
       return _cardNoContador();
     }
     return Card(
-      margin: EdgeInsets.all(10),
+      margin: EdgeInsets.all(20),
       shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(_borderR)),
       elevation: 5,
@@ -36,15 +41,13 @@ class TarjetaContador extends StatelessWidget {
           Get.toNamed(AppRoutes.LECTURAS, arguments: contador);
         },
         child: Container(
-            width: 150,
-            height: 250,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                _header(this.contador.nombre, _borderR),
-                _body(),
-              ],
-            )),
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _header(this.contador.nombre, _borderR),
+            _body(),
+          ],
+        )),
       ),
     );
   }
@@ -61,14 +64,14 @@ class TarjetaContador extends StatelessWidget {
       ),
       child: Container(
           width: double.infinity,
-          padding: EdgeInsets.all(10),
+          padding: EdgeInsets.all(5),
           color: titlebkg,
           child: Text(
             titulo,
             textAlign: TextAlign.center,
             style: TemaTexto().tituloTarjeta,
-            // overflow: TextOverflow.clip, // TODO: ver como resolver el problema del overflow
-            // maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
           )),
     );
   }
@@ -76,23 +79,58 @@ class TarjetaContador extends StatelessWidget {
   Widget _body() {
     return Column(
       children: [
-        SizedBox(height: 25),
-        Text('$cantLecturas lecturas', style: TemaTexto().infoTarjeta),
-        Divider(),
-        InputChip(
-            onPressed: () {},
-            padding: EdgeInsets.all(10),
-            label: Text('${contador.id}kWh', style: TemaTexto().cuerpoTarjeta),
-            avatar: CircleAvatar(child: Icon(Icons.flash_on))),
-        InputChip(
-            onPressed: () {},
-            padding: EdgeInsets.all(10),
-            label: Text('${contador.costoMesActual} CUP',
-                style: TemaTexto().cuerpoTarjeta),
-            avatar: CircleAvatar(
-              child: Icon(Icons.attach_money),
-            )),
+        _info(),
+        Divider(
+          height: 1,
+        ),
+        _graphic()
       ],
+    );
+  }
+
+  Widget _graphic() {
+    return Column(
+      children: [
+        Icon(Icons.bar_chart_sharp, color: Colors.blue, size: 50),
+        myroundedContainer(
+          bkgColor: Colors.blue.withAlpha(20),
+          icon: Icons.check_box,
+          iconColor: Colors.blue,
+          text: Text(
+            'Gráfico aquí',
+            style: TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14)),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _info() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          myroundedContainer(
+            icon: Icons.featured_play_list_outlined,
+            iconColor: Colors.blue,
+            text: Text('$cantLecturas',
+                style: TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14))),
+          ),
+          myroundedContainer(
+            icon: Icons.monetization_on_outlined,
+            iconColor: Colors.blue,
+            text: Text('${utilFormatNum(costoTotal.toStringAsFixed(0))} CUP',
+                style: TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14))),
+          ),
+          myroundedContainer(
+            icon: Icons.flash_on,
+            iconColor: Colors.blue,
+            text: Text('${utilFormatNum(consumoTotal.toStringAsFixed(0))} KWh',
+                style: TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14))),
+          ),
+        ],
+      ),
     );
   }
 

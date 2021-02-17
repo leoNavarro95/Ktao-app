@@ -49,3 +49,35 @@ List<LecturaModel> ordenarPorFecha(List<LecturaModel> lecturas) {
 String setToMonthYear(String date){
   return date.substring(2);
 }
+
+double getConsumoTotal(List<LecturaModel> lecturas){
+    if(lecturas == null) return 0;
+    final lecturasOrdenadas = ordenarPorFecha(lecturas).toList();
+    final double consumoTotal = lecturasOrdenadas[lecturasOrdenadas.length - 1].lectura - lecturasOrdenadas[0].lectura;
+    
+    return consumoTotal;
+  }
+
+  /// para formatear numeros con espacios para cada millar ejm: para la cadena '12345' se retorna '12 345'
+  String utilFormatNum(String numStr){
+    String result = '';
+    int d = 0;
+    //se recorre la cadena del numero de atras para alante
+    for(int i = numStr.length - 1; i >= 0; i--){
+      d++;
+      result += numStr[i];
+      if( ((d.remainder(3)) == 0) && (d != numStr.length) ){
+        result += ' ';
+      } 
+    }
+    
+    return utilsInvertirStr(result);
+  }
+
+  String utilsInvertirStr(String str){
+    String result = '';
+    for(int i = str.length - 1; i >= 0 ; i--){
+      result += str[i];
+    }
+    return result;
+  }
