@@ -1,4 +1,5 @@
 import 'package:healthCalc/app/data/model/lectura_model.dart';
+import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 
 List<int> getVectOrdenadoFecha(List<LecturaModel> lecturas) {
   List<String> fechas = [];
@@ -46,38 +47,70 @@ List<LecturaModel> ordenarPorFecha(List<LecturaModel> lecturas) {
 }
 
 /// [date] es la fecha en formato DD/MM/YYYY, devuelve la fecha sin el dia: /MM/YYYY
-String setToMonthYear(String date){
+String setToMonthYear(String date) {
   return date.substring(2);
 }
 
-double getConsumoTotal(List<LecturaModel> lecturas){
-    if(lecturas == null) return 0;
-    final lecturasOrdenadas = ordenarPorFecha(lecturas).toList();
-    final double consumoTotal = lecturasOrdenadas[lecturasOrdenadas.length - 1].lectura - lecturasOrdenadas[0].lectura;
-    
-    return consumoTotal;
+double getConsumoTotal(List<LecturaModel> lecturas) {
+  if (lecturas == null) return 0;
+  final lecturasOrdenadas = ordenarPorFecha(lecturas).toList();
+  final double consumoTotal =
+      lecturasOrdenadas[lecturasOrdenadas.length - 1].lectura -
+          lecturasOrdenadas[0].lectura;
+
+  return consumoTotal;
+}
+
+/// para formatear numeros con espacios para cada millar ejm: para la cadena '12345' se retorna '12 345'
+String utilFormatNum(String numStr) {
+  String result = '';
+  int d = 0;
+  //se recorre la cadena del numero de atras para alante
+  for (int i = numStr.length - 1; i >= 0; i--) {
+    d++;
+    result += numStr[i];
+    if (((d.remainder(3)) == 0) && (d != numStr.length)) {
+      result += ' ';
+    }
   }
 
-  /// para formatear numeros con espacios para cada millar ejm: para la cadena '12345' se retorna '12 345'
-  String utilFormatNum(String numStr){
-    String result = '';
-    int d = 0;
-    //se recorre la cadena del numero de atras para alante
-    for(int i = numStr.length - 1; i >= 0; i--){
-      d++;
-      result += numStr[i];
-      if( ((d.remainder(3)) == 0) && (d != numStr.length) ){
-        result += ' ';
-      } 
-    }
-    
-    return utilsInvertirStr(result);
-  }
+  return utilsInvertirStr(result);
+}
 
-  String utilsInvertirStr(String str){
-    String result = '';
-    for(int i = str.length - 1; i >= 0 ; i--){
-      result += str[i];
-    }
-    return result;
+String utilsInvertirStr(String str) {
+  String result = '';
+  for (int i = str.length - 1; i >= 0; i--) {
+    result += str[i];
   }
+  return result;
+}
+
+/// hay que pasarle una lista de lectura model con todas las lecturas, ademas una referencia de las tarjetas, retorna las tarjetas pasadas como referencias, pero llanas con la lista de lecturasmodel y sus deltas
+List<TarjetaLectura> utilFillCardDelta(
+  List<LecturaModel> listaLecturas,
+  List<TarjetaLectura> tarjetasLect, {
+  cardIsDeletable = false,
+  cardIsElevated = false,
+}) {
+  if (tarjetasLect.isNotEmpty) tarjetasLect.clear();
+
+  double _delta = 0.0, _deltaAnterior = 0.0;
+  for (int i = 0; i < listaLecturas.length; i++) {
+    if (i > 0) {
+      //delta = lectura_actual - lectura_anterior
+      _delta = listaLecturas[i].lectura - listaLecturas[i - 1].lectura;
+    }
+    tarjetasLect.add(TarjetaLectura(
+      lectura: listaLecturas[i],
+      isDeletable: cardIsDeletable,
+      isElevated: cardIsElevated,
+      trending: {
+        "delta": _delta,
+        "deltaAnterior": _deltaAnterior,
+      },
+    ));
+
+    _deltaAnterior = _delta;
+  }
+  return tarjetasLect.toList(); // tolist para retornar otra instancia
+}

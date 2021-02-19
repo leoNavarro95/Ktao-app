@@ -11,7 +11,6 @@ import 'detalles_controller.dart';
 class DetallesPage extends GetView<DetallesController> {
   final ContadorModel contador;
   DetallesPage({@required this.contador}) : assert(contador != null);
-
   @override
   Widget build(BuildContext context) {
     return Container(

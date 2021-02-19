@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:animate_do/animate_do.dart';
 
 import 'package:healthCalc/app/data/provider/data_base_provider.dart';
+import 'package:healthCalc/app/modules/detalles/detalles_controller.dart';
 import 'package:healthCalc/app/modules/grafico/grafico_page.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/agregar_lectura_dialog.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
@@ -17,53 +18,54 @@ class LecturaPage extends GetView<LecturaController> {
 
   @override
   Widget build(BuildContext context) {
-    
-    final detalles = DetallesPage(
-      contador: lecturaCtr.contador,
-    );
-    final graficos = GraficoPage();
+    final detalles = DetallesPage(contador: lecturaCtr.contador);
+    Get.put(DetallesController(contador: lecturaCtr.contador));
+
+    final graficos = GraficoPage(lectXmes: detalles.controller.lecturasXmes);
 
     //las paginas que se van a encontrar en el tabBarView
     final List<Widget> paginas = [_contenido(), detalles, graficos];
     // paginas.add(Center(child: Text(lecturaCtr.myTabs[2].text)));
 
-    return GetBuilder<LecturaController>(builder: (_) {
-      return Scaffold(
-          appBar: AppBar(
-            title: Text('Lecturas'),
-            bottom: TabBar(
-              controller: _.tabController,
-              tabs: _.myTabs,
+    return GetBuilder<LecturaController>(
+      builder: (_) {
+        return Scaffold(
+            appBar: AppBar(
+              title: Text('Lecturas'),
+              bottom: TabBar(
+                controller: _.tabController,
+                tabs: _.myTabs,
+              ),
             ),
-          ),
-          body: TabBarView(
-            controller: _.tabController,
-            children: paginas,
-          ),
-          floatingActionButton: _myFloatingActionButton());
-    });
+            body: TabBarView(
+              controller: _.tabController,
+              children: paginas,
+            ),
+            floatingActionButton: _myFloatingActionButton());
+      },
+    );
   }
 
   ///solo se va a permitir en la p
   Widget _myFloatingActionButton() {
-    return Obx((){
+    return Obx(() {
       if (lecturaCtr.indice.value == 0) {
-      return Roulette(
-        spins: 2,
-        delay: Duration(milliseconds: 1000),
-        child: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () async {
-            await agregarLecturaDialog(
-              formKey,
-              lecturaCtr,
-              title: "Nueva lectura",
-            );
-          },
-        ),
-      );
-    }
-    return ZoomOut(
+        return Roulette(
+          spins: 2,
+          delay: Duration(milliseconds: 1000),
+          child: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: () async {
+              await agregarLecturaDialog(
+                formKey,
+                lecturaCtr,
+                title: "Nueva lectura",
+              );
+            },
+          ),
+        );
+      }
+      return ZoomOut(
         child: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: null,

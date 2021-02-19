@@ -56,7 +56,7 @@ class LecturaController extends GetxController
   void onClose() {
     final homeCtr = Get.find<HomeController>();
     homeCtr.updateVisualFromDB();
-    
+
     tabController.dispose();
     textCtr.dispose();
     inputDateCtr.dispose();
@@ -68,7 +68,6 @@ class LecturaController extends GetxController
     tarjetasLect.add(tarjeta);
   }
 
-
   Future<void> updateVisualFromDB() async {
     this.tarjetasLect.clear();
 
@@ -76,27 +75,15 @@ class LecturaController extends GetxController
         await DBProvider.db.getLecturasByContador(contador);
 
     if (lecturas != null) {
-      double _delta = 0.0, _deltaAnterior = 0.0;
-
       final List<LecturaModel> lectOrdenadas = ordenarPorFecha(lecturas);
 
-      for (int i = 0; i < lectOrdenadas.length; i++) {
-        if (i > 0) {
-          //delta = lectura_actual - lectura_anterior
-          _delta = lectOrdenadas[i].lectura - lectOrdenadas[i - 1].lectura;
-        }
-        this.adicionarTarjetaLectura(TarjetaLectura(
-          lectura: lectOrdenadas[i],
-          trending: {
-            "delta": _delta,
-            "deltaAnterior": _deltaAnterior,
-          },
-          mostrarConsumo: false,
-        ));
-        _deltaAnterior = _delta;
-      }
+      tarjetasLect.addAll(utilFillCardDelta(
+        lectOrdenadas,
+        tarjetasLect.toList(),
+        cardIsDeletable: true,
+        cardIsElevated: true,
+      ));
+      
     }
   }
-
-  
 }

@@ -24,6 +24,9 @@ class DetallesController extends GetxController {
   ///lista que contiene las tarjetas de las lecturas
   List<TarjetaLectura> _tarjetasLect = [];
 
+  ///para ser usada en la grafica, va a tener un string por cada mes de lecturas y una lista de las lectuars para el mismo
+  Map<String, List<double>> lecturasXmes = {};
+
   Future<List<TarjetaMes>> updateVisualFromDB() async {
     _tarjetasMes.clear();
     List<String> fechasAcotadas = await _getMonthYears();
@@ -32,35 +35,12 @@ class DetallesController extends GetxController {
           .getLecturasByFechaPattern(contador, fechasAcotadas[i]);
       final List<LecturaModel> lectOrdenadas = ordenarPorFecha(listaLecturas);
 
-      _llenarTarjetasLect(lectOrdenadas);
+      _tarjetasLect = utilFillCardDelta(lectOrdenadas, _tarjetasLect);
       await _llenarTarjetasMes(fechasAcotadas[i]);
     }
     return _tarjetasMes;
   }
-
-  void _llenarTarjetasLect(List<LecturaModel> listaLecturas) {
-    if (_tarjetasLect.isNotEmpty) _tarjetasLect.clear();
-
-    double _delta = 0.0, _deltaAnterior = 0.0;
-    for (int i = 0; i < listaLecturas.length; i++) {
-      if (i > 0) {
-        //delta = lectura_actual - lectura_anterior
-        _delta = listaLecturas[i].lectura - listaLecturas[i - 1].lectura;
-      }
-      _tarjetasLect.add(TarjetaLectura(
-        lectura: listaLecturas[i],
-        isDeletable: false,
-        isElevated: false,
-        trending: {
-          "delta": _delta,
-          "deltaAnterior": _deltaAnterior,
-        },
-      ));
-
-      _deltaAnterior = _delta;
-    }
-  }
-
+ 
   Future<void> _llenarTarjetasMes(String fecha) async {
     final bool _isClosed =
         await DBProvider.db.isMonthClosedDB(this.contador, fecha);
@@ -72,6 +52,12 @@ class DetallesController extends GetxController {
             .toList(), //* toList() crea una nueva lista y evita pasar directamente la referencia de _tarjetasLect. Si se pasa directamente la referencia luego cuando se limpie se borra tambien de aqui
       ),
     );
+
+    final List<double> lecturas = [];
+    for (TarjetaLectura lect in _tarjetasLect) {
+      lecturas.add(lect.lectura.lectura);
+    }
+    lecturasXmes.addAll({fechaLiteral(fecha): lecturas});
   }
 
   /// obtiene la lista de monthYears (organizado) sin repetir de las lecturas para el contador dado.

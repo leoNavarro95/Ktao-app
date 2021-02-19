@@ -258,8 +258,6 @@ class DBProvider {
 
     bool mesCerrado = false; //indica que ya el mes tiene lectura de recibo
     if (list.isNotEmpty) {
-      print(
-          'existen ${list.length} lecturas de recibo para la fecha $fechaPattern');
       mesCerrado = true;
     }
     return mesCerrado;
