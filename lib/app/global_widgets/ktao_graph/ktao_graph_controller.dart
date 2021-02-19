@@ -110,16 +110,7 @@ class KtaoGraphController extends GetxController {
   }
 
   String bottomRenderTitles(double axisValues) {
-    // Hay que tomar todos los valores de las lecturas de lectXmes y poner el minimo como case 1
-    // switch (axisValues.toInt()) {
-    //   case 1:
-    //     return 'MAR';
-    //   case 5:
-    //     return 'JUN';
-    //   case 8:
-    //     return 'SEP';
-    // }
-    // return '';
+    
     int axisInt = axisValues.toInt();
     if (vectorXaxis.contains(axisInt)) {
       return mesesShort[vectorXaxis.indexOf(axisInt)];
