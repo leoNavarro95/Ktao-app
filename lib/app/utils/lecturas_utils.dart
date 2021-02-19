@@ -86,7 +86,7 @@ String utilsInvertirStr(String str) {
 }
 
 /// hay que pasarle una lista de lectura model con todas las lecturas, ademas una referencia de las tarjetas, retorna las tarjetas pasadas como referencias, pero llanas con la lista de lecturasmodel y sus deltas
-List<TarjetaLectura> utilFillCardDelta(
+List<TarjetaLectura> utilFillCardLectura(
   List<LecturaModel> listaLecturas,
   List<TarjetaLectura> tarjetasLect, {
   cardIsDeletable = false,

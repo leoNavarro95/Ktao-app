@@ -35,7 +35,7 @@ class DetallesController extends GetxController {
           .getLecturasByFechaPattern(contador, fechasAcotadas[i]);
       final List<LecturaModel> lectOrdenadas = ordenarPorFecha(listaLecturas);
 
-      _tarjetasLect = utilFillCardDelta(lectOrdenadas, _tarjetasLect);
+      _tarjetasLect = utilFillCardLectura(lectOrdenadas, _tarjetasLect);
       await _llenarTarjetasMes(fechasAcotadas[i]);
     }
     return _tarjetasMes;

@@ -77,7 +77,7 @@ class LecturaController extends GetxController
     if (lecturas != null) {
       final List<LecturaModel> lectOrdenadas = ordenarPorFecha(lecturas);
 
-      tarjetasLect.addAll(utilFillCardDelta(
+      tarjetasLect.addAll(utilFillCardLectura(
         lectOrdenadas,
         tarjetasLect.toList(),
         cardIsDeletable: true,
