@@ -91,6 +91,7 @@ List<TarjetaLectura> utilFillCardDelta(
   List<TarjetaLectura> tarjetasLect, {
   cardIsDeletable = false,
   cardIsElevated = false,
+  cardMostrarConsumo = true,
 }) {
   if (tarjetasLect.isNotEmpty) tarjetasLect.clear();
 
@@ -104,6 +105,7 @@ List<TarjetaLectura> utilFillCardDelta(
       lectura: listaLecturas[i],
       isDeletable: cardIsDeletable,
       isElevated: cardIsElevated,
+      mostrarConsumo: cardMostrarConsumo,
       trending: {
         "delta": _delta,
         "deltaAnterior": _deltaAnterior,

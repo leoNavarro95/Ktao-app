@@ -82,6 +82,7 @@ class LecturaController extends GetxController
         tarjetasLect.toList(),
         cardIsDeletable: true,
         cardIsElevated: true,
+        cardMostrarConsumo: false
       ));
       
     }
