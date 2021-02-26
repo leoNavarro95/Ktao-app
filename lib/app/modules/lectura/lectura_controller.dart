@@ -16,6 +16,9 @@ class LecturaController extends GetxController
   ContadorModel _contador;
   ContadorModel get contador => _contador;
 
+  List<LecturaModel> _lectOrdenadas;
+  List<LecturaModel> get lectOrdenadas => _lectOrdenadas;
+
   ///lista que contiene las tarjetas de las lecturas
   RxList<TarjetaLectura> tarjetasLect = List<TarjetaLectura>().obs;
 
@@ -25,15 +28,9 @@ class LecturaController extends GetxController
 
   // ######### Control de los Tabs en el TabBarView #############
   final List<Tab> myTabs = <Tab>[
-    Tab(
-      text: 'Gestión',
-    ),
-    Tab(
-      text: 'Detalles',
-    ),
-    Tab(
-      text: 'Gráficos',
-    ),
+    Tab(text: 'Gestión'),
+    Tab(text: 'Detalles'),
+    Tab(text: 'Gráficos'),
   ];
   TabController tabController;
   RxInt indice = 0.obs;
@@ -42,18 +39,19 @@ class LecturaController extends GetxController
   void onInit() async {
     super.onInit();
     //se obtiene el argumento pasado desde la pagina anterior
-    this._contador = Get.arguments as ContadorModel;
+    final Map<String, dynamic> datos = Get.arguments;
+    this._contador = datos["contador"];
+    this._lectOrdenadas = datos["lectOrdenadas"];
 
     tabController = TabController(vsync: this, length: myTabs.length);
     tabController.addListener(() {
       indice.value = tabController.index;
     });
-
-    await updateVisualFromDB();
+    updateVisualFromDB();
   }
 
   @override
-  void onClose() {
+  void onClose() async{
     final homeCtr = Get.find<HomeController>();
     homeCtr.updateVisualFromDB();
 
@@ -64,27 +62,18 @@ class LecturaController extends GetxController
     super.onClose();
   }
 
-  void adicionarTarjetaLectura(TarjetaLectura tarjeta) {
-    tarjetasLect.add(tarjeta);
-  }
-
   Future<void> updateVisualFromDB() async {
     this.tarjetasLect.clear();
 
-    final List<LecturaModel> lecturas =
-        await DBProvider.db.getLecturasByContador(contador);
+    final List<LecturaModel> lecturasOrd = await getLecturasOrdenadas(contador);
+    this._lectOrdenadas = lecturasOrd.toList();
 
-    if (lecturas != null) {
-      final List<LecturaModel> lectOrdenadas = ordenarPorFecha(lecturas);
-
+    if (lecturasOrd.isNotEmpty) {
       tarjetasLect.addAll(utilFillCardLectura(
-        lectOrdenadas,
-        tarjetasLect.toList(),
-        cardIsDeletable: true,
-        cardIsElevated: true,
-        cardMostrarConsumo: false
-      ));
-      
+          lecturasOrd, tarjetasLect.toList(),
+          cardIsDeletable: true,
+          cardIsElevated: true,
+          cardMostrarConsumo: false));
     }
   }
 }

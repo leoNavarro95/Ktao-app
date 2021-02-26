@@ -1,4 +1,5 @@
 import 'package:healthCalc/app/data/model/lectura_model.dart';
+import 'package:healthCalc/app/data/provider/data_base_provider.dart';
 import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 
 List<int> getVectOrdenadoFecha(List<LecturaModel> lecturas) {
@@ -40,8 +41,8 @@ List<LecturaModel> ordenarPorFecha(List<LecturaModel> lecturas) {
   List<LecturaModel> lectOrdenadas = [];
 
   for (int i in vectorOrdenado) {
-    lectOrdenadas.add(lecturas[
-        i]); //se llena la lista ordenada de Lecturas segun los valores del vector obtenido
+    //se llena la lista ordenada de Lecturas segun los valores del vector obtenido
+    lectOrdenadas.add(lecturas[i]);
   }
   return lectOrdenadas;
 }
@@ -115,4 +116,57 @@ List<TarjetaLectura> utilFillCardLectura(
     _deltaAnterior = _delta;
   }
   return tarjetasLect.toList(); // tolist para retornar otra instancia
+}
+
+/// retorna una lista con las tasas de consumo en unidades de (delta-kWh)/dia
+List<double> utilGetTasasConsumo(List<LecturaModel> lecturasOrdenadas) {
+  // tasaConsumo = (deltaConsumo)/(#_de_dias_entre_lecturas)
+  //             = (lectura_actual - lectura_anterior)/(dif de dias entre ambas lecturas)
+  List<double> tasasConsumo = [0.0];
+
+  for (int i = 1; i < lecturasOrdenadas.length; i++) {
+    //se calcula la diferencia de consumo entre dos lecturas consecutivas: deltaConsumo
+    final double deltaConsumo =
+        lecturasOrdenadas[i].lectura - lecturasOrdenadas[i - 1].lectura;
+
+    // se obtienen los DateTime para cada fecha
+    final DateTime fechaLectActual =
+        utilgetDateTimeFromStr(lecturasOrdenadas[i].fecha);
+    final DateTime fechaLectAnterior =
+        utilgetDateTimeFromStr(lecturasOrdenadas[i - 1].fecha);
+
+    //se obtiene la diferencia de dias entre las lecturas
+    final Duration _difference = fechaLectActual.difference(fechaLectAnterior);
+    // se obtiene cantDias con la diferencia en dias
+    final int cantDias = _difference.inDays;
+
+    // se calcula la tasa de consumo electrico
+    final double tasaConsumo = deltaConsumo / cantDias;
+    // se agrega al vector tasasConsumo;
+    tasasConsumo.add(tasaConsumo);
+  }
+
+  return tasasConsumo;
+}
+
+/// [fecha] tiene que estar en el formato DD/MM/YYYY, retorna una instancia de DateTime para tal fecha
+DateTime utilgetDateTimeFromStr(String fecha) {
+  // ejm: fecha = "21/2/2021"
+  List<String> componentesFecha =
+      fecha.split('/'); // componentesFecha = ['21','2','2021']
+  final String fechaFormat = componentesFecha[2] +
+      '-' +
+      componentesFecha[1] +
+      '-' +
+      componentesFecha[0];
+  final DateTime dateTime = DateTime.parse(fechaFormat); //"2021-02-21"
+
+  return dateTime;
+}
+
+Future<List<LecturaModel>> getLecturasOrdenadas(ContadorModel contador) async {
+  final List<LecturaModel> lecturas =
+      await DBProvider.db.getLecturasByContador(contador);
+
+  return (lecturas == null) ? [] : ordenarPorFecha(lecturas).toList();
 }

@@ -1,44 +1,29 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
 
 class KtaoGraphController extends GetxController {
   /// mapa con llave fecha y valores lecturas para esa fecha
   final Map<String, List<double>> lectXmes;
 
-  KtaoGraphController({this.lectXmes}) : assert(lectXmes != null);
+  KtaoGraphController({
+    this.lectXmes,
+  }) : assert(lectXmes != null);
   List<String> mesesShort;
   List<int> vectorXaxis;
 
   @override
   void onInit() {
     super.onInit();
-
-    print('  datos      :  ${this.lectXmes}');
-    print('  lecturas   :  ${this.extractLectRaw(this.lectXmes)}');
-    print('  meses      :  ${this.extractMesesRaw(this.lectXmes)}');
-    print(
-        '  mesesShort :  ${this._getMesesShort(this.extractMesesRaw(this.lectXmes))}');
-    print(' vectorAxis  : ${this.getvectorXaxis(this.lectXmes)}');
-
+    // final lectCtr = Get.find<LecturaController>();
+    // print(lectCtr.lectOrdenadas);
     mesesShort =
         this._getMesesShort(this.extractMesesRaw(this.lectXmes)).toList();
     vectorXaxis = this.getvectorXaxis(this.lectXmes);
-    this.maxXvalue = this.extractLectRaw(this.lectXmes).length.toDouble() + 1;
   }
 
   //* ###########Tratamiento de los datos para graficarlos#################
-
-  /// retorna una lista con todas las lecturas en bruto, como vienen desde detalles page, ojo ya vienen ordenadas segun fecha
-  List<double> extractLectRaw(Map<String, List<double>> _lectXmes) {
-    List<double> lectRaw = [];
-    _lectXmes.values.map((lectParaMes) {
-      for (double lect in lectParaMes) {
-        lectRaw.add(lect);
-      }
-    }).toList();
-
-    return lectRaw;
-  }
 
   /// retorna una lista con todas los meses en raw (como vienen desde detalles page)
   List<String> extractMesesRaw(Map<String, List<double>> _lectXmes) {
@@ -88,33 +73,57 @@ class KtaoGraphController extends GetxController {
   ];
 
   bool showAvg = false;
+  int divisionesYaxis = 4; //cantidad de divisiones a mostrar en la escala de Y
+  num _minY = 0;
+  num _maxY = 0;
+  int stepYaxis = 0; 
+  List<int> vectorYaxis = [0];
 
-  /// valores maximos de los ejes coordenados
-  double maxXvalue = 5;
-  double maxYvalue = 10;
+  void setYTitlesExtremes(num minY, num maxY) {
+    _minY = minY;
+    _maxY = maxY;
+    // distancia entre cada division
+    stepYaxis = ((_maxY - _minY) / divisionesYaxis).round();
+    fillVectorYaxis( stepYaxis, divisionesYaxis );
+  }
+
+  void fillVectorYaxis(int stepYaxis, int divisionesYaxis) {
+    // if (vectorYaxis.isNotEmpty) vectorYaxis.clear();
+
+    int currentValue = 0;
+    for (int i = 0; i < divisionesYaxis; i++) {
+      currentValue += stepYaxis;
+      vectorYaxis.add(currentValue);
+    }
+  }
 
   String leftRenderTitles(double axisValues) {
-    // Hay que tomar todos los valores de las lecturas de lectXmes y poner el minimo como case 1 y
-    switch (axisValues.toInt()) {
-      case 1:
-        return '10k';
-
-      case 3:
-        return '30k';
-      case 5:
-        return '50k';
-      case 10:
-        return '100k';
-    }
-    return '';
+    
+    return axisValues.toStringAsFixed(0);
+    
+    // int axisInt = axisValues.toInt();
+    // if (vectorYaxis.contains(axisInt)) {
+    //   return axisInt.toString();
+    // }
+    // return '';
   }
 
   String bottomRenderTitles(double axisValues) {
-    
     int axisInt = axisValues.toInt();
     if (vectorXaxis.contains(axisInt)) {
       return mesesShort[vectorXaxis.indexOf(axisInt)];
     }
     return '';
+  }
+
+  List<FlSpot> getGraphSpots(List<double> tasasConsumo) {
+    List<FlSpot> spots = [];
+    int index = 0;
+    for (double tasas in tasasConsumo) {
+      final spot = FlSpot(index.toDouble(), tasas);
+      spots.add(spot);
+      index++;
+    }
+    return spots;
   }
 }

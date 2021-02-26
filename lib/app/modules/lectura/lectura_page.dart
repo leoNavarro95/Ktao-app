@@ -21,7 +21,10 @@ class LecturaPage extends GetView<LecturaController> {
     final detalles = DetallesPage(contador: lecturaCtr.contador);
     Get.put(DetallesController(contador: lecturaCtr.contador));
 
-    final graficos = GraficoPage(lectXmes: detalles.controller.lecturasXmes);
+    final graficos = GraficoPage(
+      lectXmes: detalles.controller.lecturasXmes,
+      // tasaConsumo: utilGetTasasConsumo(lecturaCtr.lectOrdenadas),
+    );
 
     //las paginas que se van a encontrar en el tabBarView
     final List<Widget> paginas = [_contenido(), detalles, graficos];

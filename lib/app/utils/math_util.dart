@@ -97,10 +97,11 @@ Map<String, dynamic> calcCosto(double consumo) {
   List<double> consumoXrango = [];
   double costoTotal = 0.0;
 
-  for (int index = 0; index <  rango.length; index++) {
+  for (int index = 0; index < rango.length; index++) {
     if (consumo > rango[index]) {
       // 100*0.4 | (150-100)*1.3 | (170-150)*1.75
-      double consumoRango = (rango[index] - ((index == 0) ? 0 : rango[index - 1])).toDouble();
+      double consumoRango =
+          (rango[index] - ((index == 0) ? 0 : rango[index - 1])).toDouble();
       consumoXrango.add(consumoRango);
 
       costoAcumulado = consumoRango * precios[index];
@@ -131,5 +132,21 @@ Map<String, dynamic> calcCosto(double consumo) {
     "costo": costoTotal,
     "listaConsumo": consumoXrango,
     "listaPrecio": precioXrango,
+  };
+}
+
+/// retorna un map con los valores extremos de la lista. 
+/// si list = [50, -25, 100], 
+/// retorna {"minValue": -25,"maxValue": 100, }
+Map<String, num> utilgetExtremeValues(List<num> list) {
+  //list = [50, -25, 100]
+  final List<num> sortList = list.toList();
+  sortList.sort(); // list = [-25, 50, 100]
+  final minValue = sortList[0];
+  final maxValue = sortList[sortList.length - 1];
+
+  return {
+    "minValue": minValue,
+    "maxValue": maxValue,
   };
 }

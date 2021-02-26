@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:healthCalc/app/data/model/lectura_model.dart';
 import 'package:healthCalc/app/global_widgets/widgets.dart';
 import 'package:healthCalc/app/modules/home/local_widgets/bottom_sheet_opciones.dart';
 import 'package:healthCalc/app/routes/app_routes.dart';
@@ -38,7 +39,12 @@ class TarjetaContador extends StatelessWidget {
           await bottomSheetOpciones(contador);
         },
         onTap: () async {
-          Get.toNamed(AppRoutes.LECTURAS, arguments: contador);
+          final List<LecturaModel> lectOrdenadas = await getLecturasOrdenadas(this.contador);
+          
+          Get.toNamed(AppRoutes.LECTURAS, arguments: {
+            "contador": this.contador,
+            "lectOrdenadas": lectOrdenadas,
+          });
         },
         child: Container(
             child: Column(
@@ -69,7 +75,9 @@ class TarjetaContador extends StatelessWidget {
           child: Text(
             titulo,
             textAlign: TextAlign.center,
-            style: TemaTexto().bottomSheetTitulo.merge(TextStyle(color: Colors.white, fontSize: 16)),
+            style: TemaTexto()
+                .bottomSheetTitulo
+                .merge(TextStyle(color: Colors.white, fontSize: 16)),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           )),

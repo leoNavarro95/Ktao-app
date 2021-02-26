@@ -2,19 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 import 'package:healthCalc/app/global_widgets/ktao_graph/ktao_graph_controller.dart';
+import 'package:healthCalc/app/utils/math_util.dart';
 
 class KTaoGraph extends StatelessWidget {
   final Map<String, List<double>> lectXmes;
+  final List<double> tasasConsumo;
   KTaoGraph({
     Key key,
     this.lectXmes,
+    this.tasasConsumo,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: GetBuilder<KtaoGraphController>(
-          init: KtaoGraphController(lectXmes: lectXmes),
+          init: KtaoGraphController(lectXmes: this.lectXmes),
           builder: (_) {
             return Stack(
               children: <Widget>[
@@ -32,7 +35,7 @@ class KTaoGraph extends StatelessWidget {
                       padding: const EdgeInsets.only(
                           right: 18.0, left: 12.0, top: 24, bottom: 12),
                       child: LineChart(
-                        _.showAvg ? avgData() : mainData( _ ),
+                        _.showAvg ? avgData() : mainData(_),
                       ),
                     ),
                   ),
@@ -61,11 +64,17 @@ class KTaoGraph extends StatelessWidget {
     );
   }
 
-  LineChartData mainData( KtaoGraphController ctr) {
-    final graphCtr = Get.find<KtaoGraphController>();
+  LineChartData mainData(KtaoGraphController ctr) {
+    Map<String, num> extremeYaxis = utilgetExtremeValues(this.tasasConsumo);
+    final minYaxis = extremeYaxis["minValue"];
+    final maxYaxis = extremeYaxis["maxValue"];
+    final centerYaxis = (maxYaxis - minYaxis)/2;
+    
+    ctr.setYTitlesExtremes(minYaxis, maxYaxis);
+
     return LineChartData(
       gridData: FlGridData(
-        show: false,                                // !OJO para mostrar los grids
+        show: false, // !OJO para mostrar los grids
         drawVerticalLine: true,
         getDrawingHorizontalLine: (value) {
           return FlLine(
@@ -109,24 +118,16 @@ class KTaoGraph extends StatelessWidget {
           show: true,
           border: Border.all(color: const Color(0xff37434d), width: 1)),
       minX: 0,
-      maxX: ctr.maxXvalue,//! OJO para variar el eje X,hacerlos depender de los maximos que tienen las lect
-      minY: 0,
-      maxY: ctr.maxYvalue,    //! OJO para variar el eje Y
+      //! OJO para variar el eje X,hacerlos depender de los maximos que tienen las lect
+      maxX: this.tasasConsumo.length.toDouble(),
+      minY: minYaxis,
+      maxY: maxYaxis + (centerYaxis/4),
       lineBarsData: [
         LineChartBarData(
-          spots: [
-            FlSpot(0, 5), //! LOS DATOS PARA GRAFICAR
-            FlSpot(2.6, 4.5),
-            FlSpot(4.9, 5),
-            FlSpot(6.8, 3.1),
-            FlSpot(8, 4),
-            FlSpot(9.5, 3),
-            FlSpot(11, 4),
-            FlSpot(12, 4),
-            FlSpot(13, 4),
-          ],
+          spots: ctr
+              .getGraphSpots(this.tasasConsumo), //! LOS DATOS PARA GRAFICAR
           isCurved: true,
-          colors: graphCtr.gradientColors,
+          colors: ctr.gradientColors,
           barWidth: 5,
           isStrokeCapRound: true,
           dotData: FlDotData(
@@ -134,7 +135,7 @@ class KTaoGraph extends StatelessWidget {
           ),
           belowBarData: BarAreaData(
             show: true,
-            colors: graphCtr.gradientColors
+            colors: ctr.gradientColors
                 .map((color) => color.withOpacity(0.3))
                 .toList(),
           ),
@@ -142,8 +143,6 @@ class KTaoGraph extends StatelessWidget {
       ],
     );
   }
-
-  
 
   LineChartData avgData() {
     final graphCtr = Get.find<KtaoGraphController>();
