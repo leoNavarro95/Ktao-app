@@ -75,7 +75,7 @@ class KtaoGraphController extends GetxController {
   int divisionesYaxis = 4; //cantidad de divisiones a mostrar en la escala de Y
   num _minY = 0;
   num _maxY = 0;
-  int stepYaxis = 0; 
+  int stepYaxis = 0;
   List<int> vectorYaxis = [0];
 
   void setYTitlesExtremes(num minY, num maxY) {
@@ -83,7 +83,7 @@ class KtaoGraphController extends GetxController {
     _maxY = maxY;
     // distancia entre cada division
     stepYaxis = ((_maxY - _minY) / divisionesYaxis).round();
-    fillVectorYaxis( stepYaxis, divisionesYaxis );
+    fillVectorYaxis(stepYaxis, divisionesYaxis);
   }
 
   void fillVectorYaxis(int stepYaxis, int divisionesYaxis) {
@@ -97,9 +97,9 @@ class KtaoGraphController extends GetxController {
   }
 
   String leftRenderTitles(double axisValues) {
-    
-    return axisValues.toStringAsFixed(0);
-    
+    return ''; // ! TODO implementar alguna forma que muestre correctamente el eje y; de momento no se muestra
+    // return axisValues.toStringAsFixed(0);
+
     // int axisInt = axisValues.toInt();
     // if (vectorYaxis.contains(axisInt)) {
     //   return axisInt.toString();
@@ -124,5 +124,12 @@ class KtaoGraphController extends GetxController {
       index++;
     }
     return spots;
+  }
+
+  List<LineTooltipItem> getTooltipItems(List<LineBarSpot> data) {
+    final myitem = LineTooltipItem(
+        "${data[0].y} KWh/día",
+        TextStyle(fontSize: 12, color: Colors.blue));
+    return [myitem];
   }
 }

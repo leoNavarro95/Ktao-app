@@ -15,12 +15,19 @@ class GraficoPage extends GetView<GraficoController> {
           init: GraficoController(),
           builder: (_) {
             return Container(
-              margin: EdgeInsets.only(top: 50),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: KTaoGraph(
-                  lectXmes: lectXmes,
-                  tasasConsumo: utilGetTasasConsumo(_.lectOrd),  //! cambiar aqui tasaConsumo por la instancia de lecturaController.tasaConsumo
+              margin: EdgeInsets.only(top: 15),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text('Tasa de consumo', textAlign: TextAlign.center,),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: KTaoGraph(
+                        lectXmes: lectXmes,
+                        tasasConsumo: utilGetTasasConsumo(_.lectOrd),  //! cambiar aqui tasaConsumo por la instancia de lecturaController.tasaConsumo
+                      ),
+                    ),
+                  ],
                 ),
               ),
             );

@@ -41,17 +41,18 @@ class KTaoGraph extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: 60,
-                  height: 34,
+                  width: 70,
+                  height: 30,
                   child: TextButton(
                     onPressed: () {
-                      _.showAvg = !_.showAvg;
-                      _.update();
+                      //! TODO: en proximos release agregar funcionalidad de mostrar otro grafico cuando se presione el TextButton
+                      // _.showAvg = !_.showAvg;
+                      // _.update();
                     },
                     child: Text(
-                      'avg',
+                      'KWh/día',
                       style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 10,
                           color: _.showAvg
                               ? Colors.white.withOpacity(0.5)
                               : Colors.white),
@@ -123,16 +124,13 @@ class KTaoGraph extends StatelessWidget {
       minY: minYaxis,
       maxY: maxYaxis + (centerYaxis / 4),
       lineTouchData: LineTouchData(
-          enabled: true,
-          touchTooltipData: LineTouchTooltipData(
-              showOnTopOfTheChartBoxArea: true,
-              // fitInsideVertically: true,
-              getTooltipItems: (data) {
-                final myitem = LineTooltipItem(
-                    "x: ${data[0].x.toStringAsFixed(0)} y: ${data[0].y}",
-                    TextStyle(fontSize: 8, color: Colors.blue));
-                return [myitem];
-              })),
+        enabled: true,
+        touchTooltipData: LineTouchTooltipData(
+          showOnTopOfTheChartBoxArea: true,
+          // fitInsideVertically: true,
+          getTooltipItems: ctr.getTooltipItems,
+        ),
+      ),
       lineBarsData: [
         LineChartBarData(
           spots:
