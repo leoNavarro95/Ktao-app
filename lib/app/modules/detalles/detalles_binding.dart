@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:ktao/app/data/model/contador_model.dart';
 
 import 'detalles_controller.dart';
 

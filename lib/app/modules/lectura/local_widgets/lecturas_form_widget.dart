@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/global_widgets/widgets.dart';
-import 'package:healthCalc/app/utils/lecturas_utils.dart';
+import 'package:ktao/app/global_widgets/widgets.dart';
+import 'package:ktao/app/utils/lecturas_utils.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-import 'package:healthCalc/app/data/model/lectura_model.dart';
-import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
-import 'package:healthCalc/app/theme/text_theme.dart';
+import 'package:ktao/app/data/model/lectura_model.dart';
+import 'package:ktao/app/data/provider/data_base_provider.dart';
+import 'package:ktao/app/modules/lectura/lectura_controller.dart';
+import 'package:ktao/app/theme/text_theme.dart';
 
 class LecturaForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;

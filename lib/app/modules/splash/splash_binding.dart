@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 
-import 'package:healthCalc/app/modules/calculadora/calculadora_controller.dart';
-import 'package:healthCalc/app/modules/home/home_controller.dart';
-import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura_controller.dart';
-import 'package:healthCalc/app/modules/splash/splash_controller.dart';
+import 'package:ktao/app/modules/calculadora/calculadora_controller.dart';
+import 'package:ktao/app/modules/home/home_controller.dart';
+import 'package:ktao/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura_controller.dart';
+import 'package:ktao/app/modules/splash/splash_controller.dart';
 
 //* Los bindigs son usados para la inyeccion de dependencias
 class SplashBinding extends Bindings {

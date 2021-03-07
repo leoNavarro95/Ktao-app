@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/data/model/contador_model.dart';
-import 'package:healthCalc/app/data/model/lectura_model.dart';
-import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/modules/home/home_controller.dart';
-import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
-import 'package:healthCalc/app/utils/lecturas_utils.dart';
+import 'package:ktao/app/data/model/contador_model.dart';
+import 'package:ktao/app/data/model/lectura_model.dart';
+import 'package:ktao/app/data/provider/data_base_provider.dart';
+import 'package:ktao/app/modules/home/home_controller.dart';
+import 'package:ktao/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
+import 'package:ktao/app/utils/lecturas_utils.dart';
 
 //! TODO: no funciona el control del flash del movil
 // import 'package:lamp/lamp.dart';
@@ -20,7 +20,7 @@ class LecturaController extends GetxController
   List<LecturaModel> get lectOrdenadas => _lectOrdenadas;
 
   ///lista que contiene las tarjetas de las lecturas
-  RxList<TarjetaLectura> tarjetasLect = List<TarjetaLectura>().obs;
+  RxList<TarjetaLectura> tarjetasLect = List<TarjetaLectura>.empty(growable: true).obs;
 
   // Controladores de texto para dialogo adicionar lecturas
   final textCtr = TextEditingController();

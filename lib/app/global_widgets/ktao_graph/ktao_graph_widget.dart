@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/global_widgets/ktao_graph/ktao_graph_controller.dart';
-import 'package:healthCalc/app/utils/math_util.dart';
+import 'package:ktao/app/global_widgets/ktao_graph/ktao_graph_controller.dart';
+import 'package:ktao/app/utils/math_util.dart';
 
 class KTaoGraph extends StatelessWidget {
   final Map<String, List<double>> lectXmes;
@@ -43,7 +43,7 @@ class KTaoGraph extends StatelessWidget {
                 SizedBox(
                   width: 60,
                   height: 34,
-                  child: FlatButton(
+                  child: TextButton(
                     onPressed: () {
                       _.showAvg = !_.showAvg;
                       _.update();
@@ -68,8 +68,8 @@ class KTaoGraph extends StatelessWidget {
     Map<String, num> extremeYaxis = utilgetExtremeValues(this.tasasConsumo);
     final minYaxis = extremeYaxis["minValue"];
     final maxYaxis = extremeYaxis["maxValue"];
-    final centerYaxis = (maxYaxis - minYaxis)/2;
-    
+    final centerYaxis = (maxYaxis - minYaxis) / 2;
+
     ctr.setYTitlesExtremes(minYaxis, maxYaxis);
 
     return LineChartData(
@@ -121,12 +121,24 @@ class KTaoGraph extends StatelessWidget {
       //! OJO para variar el eje X,hacerlos depender de los maximos que tienen las lect
       maxX: this.tasasConsumo.length.toDouble(),
       minY: minYaxis,
-      maxY: maxYaxis + (centerYaxis/4),
+      maxY: maxYaxis + (centerYaxis / 4),
+      lineTouchData: LineTouchData(
+          enabled: true,
+          touchTooltipData: LineTouchTooltipData(
+              showOnTopOfTheChartBoxArea: true,
+              // fitInsideVertically: true,
+              getTooltipItems: (data) {
+                final myitem = LineTooltipItem(
+                    "x: ${data[0].x.toStringAsFixed(0)} y: ${data[0].y}",
+                    TextStyle(fontSize: 8, color: Colors.blue));
+                return [myitem];
+              })),
       lineBarsData: [
         LineChartBarData(
-          spots: ctr
-              .getGraphSpots(this.tasasConsumo), //! LOS DATOS PARA GRAFICAR
+          spots:
+              ctr.getGraphSpots(this.tasasConsumo), //! LOS DATOS PARA GRAFICAR
           isCurved: true,
+          curveSmoothness: 0.2,
           colors: ctr.gradientColors,
           barWidth: 5,
           isStrokeCapRound: true,

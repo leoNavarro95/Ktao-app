@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/data/model/contador_model.dart';
-import 'package:healthCalc/app/data/model/lectura_model.dart';
-import 'package:healthCalc/app/global_widgets/widgets.dart';
-import 'package:healthCalc/app/modules/home/local_widgets/bottom_sheet_opciones.dart';
-import 'package:healthCalc/app/routes/app_routes.dart';
-import 'package:healthCalc/app/theme/text_theme.dart';
-import 'package:healthCalc/app/utils/lecturas_utils.dart';
+import 'package:ktao/app/data/model/contador_model.dart';
+import 'package:ktao/app/data/model/lectura_model.dart';
+import 'package:ktao/app/global_widgets/widgets.dart';
+import 'package:ktao/app/modules/home/local_widgets/bottom_sheet_opciones.dart';
+import 'package:ktao/app/routes/app_routes.dart';
+import 'package:ktao/app/theme/text_theme.dart';
+import 'package:ktao/app/utils/lecturas_utils.dart';
 
 class TarjetaContador extends StatelessWidget {
   final ContadorModel contador;

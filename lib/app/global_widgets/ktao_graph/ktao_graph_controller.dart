@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
 
 class KtaoGraphController extends GetxController {
   /// mapa con llave fecha y valores lecturas para esa fecha
@@ -120,7 +119,7 @@ class KtaoGraphController extends GetxController {
     List<FlSpot> spots = [];
     int index = 0;
     for (double tasas in tasasConsumo) {
-      final spot = FlSpot(index.toDouble(), tasas);
+      final spot = FlSpot(index.toDouble(), tasas.toPrecision(2));
       spots.add(spot);
       index++;
     }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/global_widgets/ktao_graph/ktao_graph_widget.dart';
-import 'package:healthCalc/app/modules/grafico/grafico_controller.dart';
-import 'package:healthCalc/app/utils/lecturas_utils.dart';
+import 'package:ktao/app/global_widgets/ktao_graph/ktao_graph_widget.dart';
+import 'package:ktao/app/modules/grafico/grafico_controller.dart';
+import 'package:ktao/app/utils/lecturas_utils.dart';
 
 class GraficoPage extends GetView<GraficoController> {
   final Map<String, List<double>> lectXmes; // tasaConsumo [(delta-kWh)/dia]
@@ -15,6 +15,7 @@ class GraficoPage extends GetView<GraficoController> {
           init: GraficoController(),
           builder: (_) {
             return Container(
+              margin: EdgeInsets.only(top: 50),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: KTaoGraph(

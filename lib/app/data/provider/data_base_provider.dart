@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:healthCalc/app/data/model/lectura_model.dart';
+import 'package:ktao/app/data/model/lectura_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import 'package:healthCalc/app/data/model/contador_model.dart';
-export 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:ktao/app/data/model/contador_model.dart';
+export 'package:ktao/app/data/model/contador_model.dart';
 
 /// motor de la base da datos de la aplicacion basada en sqlite
 

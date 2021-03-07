@@ -1,13 +1,13 @@
 import 'package:get/state_manager.dart';
-import 'package:healthCalc/app/data/model/lectura_model.dart';
-import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/modules/home/local_widgets/tarjeta_contador.dart';
-import 'package:healthCalc/app/utils/lecturas_utils.dart';
-import 'package:healthCalc/app/utils/math_util.dart';
+import 'package:ktao/app/data/model/lectura_model.dart';
+import 'package:ktao/app/data/provider/data_base_provider.dart';
+import 'package:ktao/app/modules/home/local_widgets/tarjeta_contador.dart';
+import 'package:ktao/app/utils/lecturas_utils.dart';
+import 'package:ktao/app/utils/math_util.dart';
 
 class HomeController extends GetxController {
   RxString resultado = ''.obs;
-  RxList<TarjetaContador> tarjetas = List<TarjetaContador>().obs;
+  RxList<TarjetaContador> tarjetas = List<TarjetaContador>.empty(growable: true).obs;
 
   @override
   void onInit() {

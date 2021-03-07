@@ -1,8 +1,8 @@
 
 
 import 'package:get/get.dart';
-import 'package:healthCalc/app/modules/home/home_controller.dart';
-import 'package:healthCalc/app/modules/home/home_page.dart';
+import 'package:ktao/app/modules/home/home_controller.dart';
+import 'package:ktao/app/modules/home/home_page.dart';
 
 
 class SplashController extends GetxController{

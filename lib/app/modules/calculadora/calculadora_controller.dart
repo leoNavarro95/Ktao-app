@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/utils/math_util.dart';
+import 'package:ktao/app/utils/math_util.dart';
 
 class CalculadoraController extends GetxController{
 
@@ -12,8 +12,8 @@ class CalculadoraController extends GetxController{
 
   RxInt consumo  = 0.obs;
   RxDouble costo = 0.0.obs;
-  RxList<double> listConsumo = List<double>().obs;
-  RxList<double> listPrecio = List<double>().obs;
+  RxList<double> listConsumo = [0.0].obs;
+  RxList<double> listPrecio = [0.0].obs;//List<double>().obs;
 
   RxBool expanded = false.obs;
 

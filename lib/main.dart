@@ -3,9 +3,9 @@ import 'package:get/get.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-import 'package:healthCalc/app/modules/splash/splash_binding.dart';
-import 'package:healthCalc/app/modules/splash/splash_page.dart';
-import 'package:healthCalc/app/routes/app_pages.dart';
+import 'package:ktao/app/modules/splash/splash_binding.dart';
+import 'package:ktao/app/modules/splash/splash_page.dart';
+import 'package:ktao/app/routes/app_pages.dart';
 
 void main(){
 

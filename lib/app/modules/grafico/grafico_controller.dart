@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:healthCalc/app/data/model/lectura_model.dart';
-import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
+import 'package:ktao/app/data/model/lectura_model.dart';
+import 'package:ktao/app/modules/lectura/lectura_controller.dart';
 
 class GraficoController extends GetxController {
 

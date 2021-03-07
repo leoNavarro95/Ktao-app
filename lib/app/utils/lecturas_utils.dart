@@ -1,6 +1,6 @@
-import 'package:healthCalc/app/data/model/lectura_model.dart';
-import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
+import 'package:ktao/app/data/model/lectura_model.dart';
+import 'package:ktao/app/data/provider/data_base_provider.dart';
+import 'package:ktao/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 
 List<int> getVectOrdenadoFecha(List<LecturaModel> lecturas) {
   List<String> fechas = [];

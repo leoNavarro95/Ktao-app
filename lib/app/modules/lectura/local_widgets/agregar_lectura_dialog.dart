@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/global_widgets/widgets.dart';
-import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
-import 'package:healthCalc/app/modules/lectura/local_widgets/lecturas_form_widget.dart';
-import 'package:healthCalc/app/theme/text_theme.dart';
+import 'package:ktao/app/global_widgets/widgets.dart';
+import 'package:ktao/app/modules/lectura/lectura_controller.dart';
+import 'package:ktao/app/modules/lectura/local_widgets/lecturas_form_widget.dart';
+import 'package:ktao/app/theme/text_theme.dart';
 
 Future<void> agregarLecturaDialog(
   GlobalKey<FormState> formKey,
@@ -37,7 +37,7 @@ Future<void> agregarLecturaDialog(
       content: formulario,
       actions: <Widget>[
         Container(
-          child: FlatButton(
+          child: TextButton(
             child: Text('OK'),
             onPressed: () async {
               final String dbStatus = await formulario.guardaLectura(textCtr,
@@ -52,7 +52,7 @@ Future<void> agregarLecturaDialog(
             },
           ),
         ),
-        FlatButton(
+        TextButton(
             child: Text('CANCELAR'),
             onPressed: () {
               textCtr.clear();

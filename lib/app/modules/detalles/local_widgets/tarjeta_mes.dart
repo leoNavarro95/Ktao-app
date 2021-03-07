@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
-import 'package:healthCalc/app/theme/text_theme.dart';
-import 'package:healthCalc/app/utils/math_util.dart';
+import 'package:ktao/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
+import 'package:ktao/app/theme/text_theme.dart';
+import 'package:ktao/app/utils/math_util.dart';
 
 /// contiene las lecturas efectuadas por mes/anho, lo que permite ordenar las lecturas por periodos de tiempo
 class TarjetaMes extends StatelessWidget {

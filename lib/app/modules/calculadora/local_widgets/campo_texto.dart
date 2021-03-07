@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:healthCalc/app/modules/calculadora/calculadora_controller.dart';
+import 'package:ktao/app/modules/calculadora/calculadora_controller.dart';
 
 class CampoTextoCalculadora extends StatelessWidget {
   

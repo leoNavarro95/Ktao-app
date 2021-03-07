@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/data/model/contador_model.dart';
-import 'package:healthCalc/app/theme/text_theme.dart';
+import 'package:ktao/app/data/model/contador_model.dart';
+import 'package:ktao/app/theme/text_theme.dart';
 
 ///Dialogo que si se acepta devuelve true y si se cancela devuelve false
 Future<bool> myboolDialog(
@@ -21,13 +21,13 @@ Future<bool> myboolDialog(
         style: TemaTexto().bottomSheetBody,
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text('OK'),
           onPressed: () {
             Get.back(result: true);
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text('CANCELAR'),
           onPressed: () => Get.back(result: false),
         ),
@@ -46,13 +46,13 @@ Future<bool> borraContadorDialog(ContadorModel contador) async {
       content: Text(
           "El contador ${contador.nombre} sera eliminado completamente de la base de datos"),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text('OK'),
           onPressed: () {
             Get.back(result: true);
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text('CANCELAR'),
           onPressed: () => Get.back(result: false),
         ),
@@ -101,7 +101,7 @@ Future<String> textEditOptionDialog(
         ],
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text('OK'),
           onPressed: () {
             //validate() devuelve true si el formulario es valido
@@ -110,7 +110,7 @@ Future<String> textEditOptionDialog(
             }
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text('CANCELAR'),
           onPressed: () =>
               Get.back(), //! va a retornar null, manejarlo del otro lado
