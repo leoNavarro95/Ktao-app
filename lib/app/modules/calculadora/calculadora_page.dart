@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:healthCalc/app/global_widgets/menu_lateral.dart';
-import 'package:healthCalc/app/modules/calculadora/calculadora_controller.dart';
-import 'package:healthCalc/app/modules/calculadora/local_widgets/campo_texto.dart';
-import 'package:healthCalc/app/modules/calculadora/local_widgets/tabla_widget.dart';
-import 'package:healthCalc/app/theme/text_theme.dart';
-import 'package:healthCalc/app/utils/math_util.dart';
+import 'package:ktao/app/global_widgets/menu_lateral.dart';
+import 'package:ktao/app/modules/calculadora/calculadora_controller.dart';
+import 'package:ktao/app/modules/calculadora/local_widgets/campo_texto.dart';
+import 'package:ktao/app/modules/calculadora/local_widgets/tabla_widget.dart';
+import 'package:ktao/app/theme/text_theme.dart';
+import 'package:ktao/app/utils/math_util.dart';
 
 class CalculadoraPage extends StatelessWidget {
 
@@ -30,7 +30,7 @@ class CalculadoraPage extends StatelessWidget {
       children: <Widget>[
         SizedBox(height: 20),
         Text(
-          'Calcula el consumo en kWh',
+          'Calcula el costo en CUP',
           textAlign: TextAlign.center,
           style: TemaTexto().titulo,
         ),
@@ -87,7 +87,7 @@ class CalculadoraPage extends StatelessWidget {
         campoTexto = [
           CampoTextoCalculadora(
               textController: calcCtr.textCtrLectura1,
-              titulo: "Lectura",
+              titulo: "Consumo",
               calcCtr: calcCtr),
           
         ];

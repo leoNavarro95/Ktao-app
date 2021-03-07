@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/global_widgets/widgets.dart';
-import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
-import 'package:healthCalc/app/modules/lectura/local_widgets/lecturas_form_widget.dart';
-import 'package:healthCalc/app/theme/text_theme.dart';
+import 'package:ktao/app/global_widgets/widgets.dart';
+import 'package:ktao/app/modules/lectura/lectura_controller.dart';
+import 'package:ktao/app/modules/lectura/local_widgets/lecturas_form_widget.dart';
+import 'package:ktao/app/theme/text_theme.dart';
 
 Future<void> agregarLecturaDialog(
   GlobalKey<FormState> formKey,
@@ -37,30 +37,27 @@ Future<void> agregarLecturaDialog(
       content: formulario,
       actions: <Widget>[
         Container(
-          child: FlatButton(
+          child: TextButton(
             child: Text('OK'),
             onPressed: () async {
-              final bool isSaved = await formulario.guardaLectura(textCtr,
+              final String dbStatus = await formulario.guardaLectura(textCtr,
                   inputDateCtr); //si es true se logro guardar sino hubo error
-              if (isSaved) {
+              if (dbStatus.substring(0, 5) != "Error") {
                 Get.back();
-                mySnackbar(
-                  title: 'Nueva lectura guardada',
-                  subtitle: ' ',
-                );
-              } else{
-                mySnackbar(
-                    title: 'Error en base de datos',
-                    subtitle: 'No se guardó la lectura',
-                  );
               }
+              mySnackbar(
+                title: dbStatus,
+                subtitle: ' ',
+              );
             },
           ),
         ),
-        FlatButton(
-          child: Text('CANCELAR'),
-          onPressed: () => Get.back(),
-        ),
+        TextButton(
+            child: Text('CANCELAR'),
+            onPressed: () {
+              textCtr.clear();
+              Get.back();
+            }),
       ],
     ),
     barrierDismissible: false,

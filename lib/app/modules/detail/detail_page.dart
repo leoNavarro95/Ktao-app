@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
-// import 'package:healthCalc/app/global_widgets/menu_lateral.dart';
-import 'package:healthCalc/app/modules/detail/detail_controller.dart';
+// import 'package:ktao/app/global_widgets/menu_lateral.dart';
+import 'package:ktao/app/modules/detail/detail_controller.dart';
 
 import 'local_widgets/my_widgets.dart';
 

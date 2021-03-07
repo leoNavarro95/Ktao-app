@@ -1,7 +1,7 @@
 
 
 import 'package:get/get.dart';
-import 'package:healthCalc/app/modules/detail/detail_controller.dart';
+import 'package:ktao/app/modules/detail/detail_controller.dart';
 
 class DetailBinding extends Bindings{
   

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:healthCalc/app/data/model/lectura_model.dart';
-import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/modules/lectura/lectura_controller.dart';
-import 'package:healthCalc/app/theme/text_theme.dart';
+import 'package:ktao/app/global_widgets/widgets.dart';
+import 'package:ktao/app/utils/lecturas_utils.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
+import 'package:ktao/app/data/model/lectura_model.dart';
+import 'package:ktao/app/data/provider/data_base_provider.dart';
+import 'package:ktao/app/modules/lectura/lectura_controller.dart';
+import 'package:ktao/app/theme/text_theme.dart';
 
 class LecturaForm extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -13,12 +16,10 @@ class LecturaForm extends StatelessWidget {
   final TextEditingController textCtr;
   final TextEditingController inputDateCtr;
 
-  LecturaForm(
-      {this.formKey, this.lectCtr, this.textCtr, this.inputDateCtr});
+  LecturaForm({this.formKey, this.lectCtr, this.textCtr, this.inputDateCtr});
 
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -27,47 +28,72 @@ class LecturaForm extends StatelessWidget {
             _texto(),
             _inputTextLectura(textCtr),
             _crearFecha(inputDateCtr),
-            //_botonAgregarLect(textCtr, inputDateCtr)
+            // myCheckBoxSelector(text: "Lectura de recibo",output: checkboxValue),
+            MyCheckBox("Lectura de recibo"),
           ],
         ),
       ),
     );
   }
 
-  Future<bool> guardaLectura(
+
+  Future<String> guardaLectura(
       TextEditingController textCtr, TextEditingController dateCtr) async {
+    MyCheckBoxController checkBoxLectReciboCtr = Get
+        .find(); //este es el checkbox para indicar que es una lectura de recibo de fin de mes
+
     //validate() devuelve true si el formulario es valido
     if (formKey.currentState.validate()) {
-      final int lecturaEntrada = int.parse(textCtr.text);
+      final double lecturaEntrada = double.parse(textCtr.text);
       // final String fecha = date
       if (lecturaEntrada != null) {
         final lect = LecturaModel(
-            lectura: lecturaEntrada,
-            idContador: lectCtr.contador.id,
-            fecha: dateCtr.text);
-        await DBProvider.db.insertarLectura(lect);
-        await lectCtr.updateVisualFromDB();
-        textCtr.clear();
-        return true;
+          lectura: lecturaEntrada,
+          idContador: lectCtr.contador.id,
+          fecha: dateCtr.text,
+          isRecibo: checkBoxLectReciboCtr.checkValue ? 1 : 0,
+        );
+        //* Comprobar que el mes no esté cerrado por una lectura de recibo
+        final bool isClosed = await DBProvider.db
+            .isMonthClosedDB(lectCtr.contador, setToMonthYear((dateCtr.text)));
+
+        if (isClosed) return "Error, no se pueden agregar lecturas a meses cerrados";
+
+        //* Hay que comprobar que no exista una lectura con la misma fecha
+        final List<LecturaModel> lectConMismaFecha = await DBProvider.db
+            .getLecturasByFechaPattern(lectCtr.contador, dateCtr.text);
+
+        if (lectConMismaFecha.length != 0) {
+          return "Error, Ya existe una lectura para esa fecha";
+        } else {
+          await DBProvider.db.insertarLectura(lect);
+          await lectCtr.updateVisualFromDB();
+          textCtr.clear();
+          return "Lectura guardada con éxito";
+        }
       } else {
         throw Error();
       }
     }
-    return false; // no se guardó nada por error de entrada
+    return "Error, no se guardó la lectura"; // no se guardó nada por error de entrada
   }
 
   Container _texto() {
     return Container(
-        margin: EdgeInsets.only(bottom:8),
+        margin: EdgeInsets.only(bottom: 8),
         child: Text(
           'Introduzca una nueva lectura',
           style: TemaTexto().bottomSheetBody,
+          textAlign: TextAlign.center,
         ));
   }
 
   String _validacion(String value) {
     if (value.isEmpty) {
       return 'Campo vacio';
+    }
+    if ((value.length < 5) | (value.length > 7)) {
+      return 'Lectura inválida';
     }
     return null;
   }
@@ -81,7 +107,9 @@ class LecturaForm extends StatelessWidget {
         key: formKey,
         child: TextFormField(
           inputFormatters: [
-            FilteringTextInputFormatter.deny(RegExp('[ .,-]')),
+            // FilteringTextInputFormatter.deny(RegExp('[ ,-]')),
+            MaskTextInputFormatter(
+                mask: '#####.#', filter: {"#": RegExp(r'[0-9]')}),
           ],
           keyboardType: TextInputType.numberWithOptions(),
           decoration: InputDecoration(

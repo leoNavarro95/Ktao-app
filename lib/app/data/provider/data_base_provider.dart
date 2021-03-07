@@ -1,10 +1,10 @@
 import 'package:get/get.dart';
-import 'package:healthCalc/app/data/model/lectura_model.dart';
+import 'package:ktao/app/data/model/lectura_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-import 'package:healthCalc/app/data/model/contador_model.dart';
-export 'package:healthCalc/app/data/model/contador_model.dart';
+import 'package:ktao/app/data/model/contador_model.dart';
+export 'package:ktao/app/data/model/contador_model.dart';
 
 /// motor de la base da datos de la aplicacion basada en sqlite
 
@@ -25,7 +25,7 @@ class DBProvider {
 
   //Constanes
   static final String databaseName = 'ktao11.db'; //nombre de la base de datos
-  static int version = 2;
+  static int version = 9;
 
   //Parametros de la tabla: contadores
   static final String contadoresTable = 'contadores';
@@ -50,13 +50,15 @@ class DBProvider {
   static final String columnLecturasLect = 'lectura';
   static final String columnLecturasFecha = 'fecha';
   static final String columnLecturasContadorId = 'id_contador';
+  static final String columnIsRecibo = 'is_recibo';
 
   //Sentencias SQL para crear la tabla Lecturas
   static final String createTableLecturas = 'CREATE TABLE $lecturasTable ('
       ' $columnLecturasId INTEGER PRIMARY KEY,'
-      ' $columnLecturasLect INTEGER NOT NULL,'
+      ' $columnLecturasLect REAL NOT NULL,'
       " $columnLecturasFecha TEXT DEFAULT 'no disponible',"
-      ' $columnLecturasContadorId INTERGER,'
+      ' $columnLecturasContadorId INTEGER,'
+      " $columnIsRecibo INTEGER,"
       ' FOREIGN KEY($columnLecturasContadorId) REFERENCES $contadoresTable($columnContadoresId) ON DELETE CASCADE'
       ')';
 
@@ -101,7 +103,7 @@ class DBProvider {
     await batch.commit();
   }
 
-  /// Metodo para guardar en la Base de Datos una nueva instancia de ContadorModel
+  /// Guarda en la Base de Datos una nueva instancia de ContadorModel
   /// Se le pasa una instancia del [nuevoContador] la cual sera guardada en la base de datoss
   /// de los contadores
   Future<int> nuevoContador(ContadorModel nuevoContador) async {
@@ -190,8 +192,8 @@ class DBProvider {
     //* await db.rawQuery("SELECT * FROM $lecturasTable WHERE id_contador='$contador.id'");
 
     final db = await database;
-    final resultado =
-        await db.query(lecturasTable, where: 'id_contador = ?', whereArgs: [
+    final resultado = await db
+        .query(lecturasTable, where: 'id_contador = ?', whereArgs: [
       contador.id
     ]); //se encuesta la tabla en busqueda de un id que sea igual al id pasado como parametro
     final lecturasByContador = resultado.isNotEmpty
@@ -233,13 +235,31 @@ class DBProvider {
    */
 
   /// Devuelve las lecturas del [contador] dado encerradas en un mes y un anho. [fechaPattern] debe tener esta forma: /MM/YYYY, para que busque las lecturas tomadas en tal mes/anho
-  Future<List<LecturaModel>> getLecturasByFechaPattern(ContadorModel contador, String fechaPattern) async {
+  Future<List<LecturaModel>> getLecturasByFechaPattern(
+      ContadorModel contador, String fechaPattern) async {
     final db = await database;
-    final resultado =
-        await db.rawQuery("SELECT * FROM $lecturasTable WHERE id_contador='${contador.id}' AND $columnLecturasFecha LIKE '%$fechaPattern'");
+    final resultado = await db.rawQuery(
+        "SELECT * FROM $lecturasTable WHERE id_contador='${contador.id}' AND $columnLecturasFecha LIKE '%$fechaPattern'");
     List<LecturaModel> list = resultado.isNotEmpty
         ? resultado.map((e) => LecturaModel.fromJson(e)).toList()
         : []; //si esta vacia la base de datos returna una lista empty
     return list;
+  }
+
+  ///Comprueba si para el mes dado ya existe lectura de recibo, retorna true si ya existe tal lectura y false sino. En caso de existir una lectura de recibo no se debe permitir introducir mas lecturas para ese mes pues este ya esta "cerrado". [fechaPattern] debe ser en el formato /MM/YYYY
+  Future<bool> isMonthClosedDB(
+      ContadorModel contador, String fechaPattern) async {
+    final db = await database;
+    final resultado = await db.rawQuery(
+        "SELECT * FROM $lecturasTable WHERE $columnLecturasContadorId='${contador.id}' AND $columnLecturasFecha LIKE '%$fechaPattern' AND $columnIsRecibo='1' ");
+    List<LecturaModel> list = resultado.isNotEmpty
+        ? resultado.map((e) => LecturaModel.fromJson(e)).toList()
+        : []; //si esta vacia la base de datos returna una lista empty
+
+    bool mesCerrado = false; //indica que ya el mes tiene lectura de recibo
+    if (list.isNotEmpty) {
+      mesCerrado = true;
+    }
+    return mesCerrado;
   }
 }

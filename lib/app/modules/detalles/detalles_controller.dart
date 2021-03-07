@@ -1,64 +1,71 @@
 import 'package:get/get.dart';
-import 'package:healthCalc/app/data/model/contador_model.dart';
-import 'package:healthCalc/app/data/model/lectura_model.dart';
-import 'package:healthCalc/app/data/provider/data_base_provider.dart';
-import 'package:healthCalc/app/modules/historial/local_widgets/tarjeta_mes.dart';
-import 'package:healthCalc/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
+import 'package:ktao/app/data/model/contador_model.dart';
+import 'package:ktao/app/data/model/lectura_model.dart';
+import 'package:ktao/app/data/provider/data_base_provider.dart';
+import 'package:ktao/app/modules/detalles/local_widgets/tarjeta_mes.dart';
+import 'package:ktao/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
+import 'package:ktao/app/utils/lecturas_utils.dart';
 import 'package:meta/meta.dart';
 
-class HistorialController extends GetxController {
+class DetallesController extends GetxController {
   final ContadorModel contador;
-  HistorialController({@required this.contador}) : assert(contador != null);
+  DetallesController({@required this.contador}) : assert(contador != null);
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    updateVisualFromDB();
+    // await updateVisualFromDB();
   }
 
   ///lista que contiene las tarjetas de los meses
-  RxList<TarjetaMes> tarjetasMes = List<TarjetaMes>().obs;
+  List<TarjetaMes> _tarjetasMes = [];
+  List<TarjetaMes> get tarjetasMes => _tarjetasMes;
 
   ///lista que contiene las tarjetas de las lecturas
-  List<TarjetaLectura> tarjetasLect = [];
+  List<TarjetaLectura> _tarjetasLect = [];
 
-  Future<void> updateVisualFromDB() async {
-    tarjetasMes.clear();
+  ///para ser usada en la grafica, va a tener un string por cada mes de lecturas y una lista de las lectuars para el mismo
+  Map<String, List<double>> lecturasXmes = {};
+
+  Future<List<TarjetaMes>> updateVisualFromDB() async {
+    _tarjetasMes.clear();
     List<String> fechasAcotadas = await _getMonthYears();
     for (int i = 0; i < fechasAcotadas.length; i++) {
       List<LecturaModel> listaLecturas = await DBProvider.db
           .getLecturasByFechaPattern(contador, fechasAcotadas[i]);
+      final List<LecturaModel> lectOrdenadas = ordenarPorFecha(listaLecturas);
 
-      _llenarTarjetasLect(listaLecturas);
-      _llenarTarjetasMes(fechasAcotadas[i]);
+      _tarjetasLect = utilFillCardLectura(lectOrdenadas, _tarjetasLect);
+      await _llenarTarjetasMes(fechasAcotadas[i]);
     }
+    return _tarjetasMes;
   }
-
-  void _llenarTarjetasLect(List<LecturaModel> listaLecturas) {
-    tarjetasLect.clear();
-    for (int i = 0; i < listaLecturas.length; i++) {
-      tarjetasLect.add(TarjetaLectura(
-        lectura: listaLecturas[i],
-        isDeletable: false,
-      ));
-    }
-  }
-
-  void _llenarTarjetasMes(String fecha) {
-    final tarjetaMes = TarjetaMes(
-      fecha: fechaLiteral(fecha),
-      lecturasMes: tarjetasLect,
+ 
+  Future<void> _llenarTarjetasMes(String fecha) async {
+    final bool _isClosed =
+        await DBProvider.db.isMonthClosedDB(this.contador, fecha);
+    _tarjetasMes.add(
+      TarjetaMes(
+        isClosed: _isClosed,
+        fecha: fechaLiteral(fecha),
+        lecturasMes: _tarjetasLect
+            .toList(), //* toList() crea una nueva lista y evita pasar directamente la referencia de _tarjetasLect. Si se pasa directamente la referencia luego cuando se limpie se borra tambien de aqui
+      ),
     );
-    tarjetasMes.add(tarjetaMes);
-  }
 
+    final List<double> lecturas = [];
+    for (TarjetaLectura lect in _tarjetasLect) {
+      lecturas.add(lect.lectura.lectura);
+    }
+    lecturasXmes.addAll({fechaLiteral(fecha): lecturas});
+  }
 
   /// obtiene la lista de monthYears (organizado) sin repetir de las lecturas para el contador dado.
   /// monthYear es en el formato /mes/año (/MM/YY)
   Future<List<String>> _getMonthYears() async {
     final List<LecturaModel> lecturas =
         await DBProvider.db.getLecturasByContador(contador);
-    if(lecturas == null){
+    if (lecturas == null) {
       return [];
     }
     final List<String> monthYears =
