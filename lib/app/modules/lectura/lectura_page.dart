@@ -33,18 +33,19 @@ class LecturaPage extends GetView<LecturaController> {
     return GetBuilder<LecturaController>(
       builder: (_) {
         return Scaffold(
-            appBar: AppBar(
-              title: Text('Lecturas'),
-              bottom: TabBar(
-                controller: _.tabController,
-                tabs: _.myTabs,
-              ),
-            ),
-            body: TabBarView(
+          appBar: AppBar(
+            title: Text('Lecturas'),
+            bottom: TabBar(
               controller: _.tabController,
-              children: paginas,
+              tabs: _.myTabs,
             ),
-            floatingActionButton: _myFloatingActionButton());
+          ),
+          body: TabBarView(
+            controller: _.tabController,
+            children: paginas,
+          ),
+          floatingActionButton: _myFloatingActionButton(),
+        );
       },
     );
   }

@@ -20,7 +20,8 @@ class LecturaController extends GetxController
   List<LecturaModel> get lectOrdenadas => _lectOrdenadas;
 
   ///lista que contiene las tarjetas de las lecturas
-  RxList<TarjetaLectura> tarjetasLect = List<TarjetaLectura>.empty(growable: true).obs;
+  RxList<TarjetaLectura> tarjetasLect =
+      List<TarjetaLectura>.empty(growable: true).obs;
 
   // Controladores de texto para dialogo adicionar lecturas
   final textCtr = TextEditingController();
@@ -30,7 +31,7 @@ class LecturaController extends GetxController
   final List<Tab> myTabs = <Tab>[
     Tab(text: 'Gestión'),
     Tab(text: 'Detalles'),
-    Tab(text: 'Gráficos'),
+    Tab(text: 'Análisis'),
   ];
   TabController tabController;
   RxInt indice = 0.obs;
@@ -51,7 +52,7 @@ class LecturaController extends GetxController
   }
 
   @override
-  void onClose() async{
+  void onClose() async {
     final homeCtr = Get.find<HomeController>();
     homeCtr.updateVisualFromDB();
 
@@ -70,10 +71,12 @@ class LecturaController extends GetxController
 
     if (lecturasOrd.isNotEmpty) {
       tarjetasLect.addAll(utilFillCardLectura(
-          lecturasOrd, tarjetasLect.toList(),
-          cardIsDeletable: true,
-          cardIsElevated: true,
-          cardMostrarConsumo: false));
+        lecturasOrd,
+        tarjetasLect.toList(),
+        cardIsDeletable: true,
+        cardIsElevated: true,
+        cardMostrarConsumo: false,
+      ));
     }
   }
 }

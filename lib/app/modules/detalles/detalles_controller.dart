@@ -30,6 +30,7 @@ class DetallesController extends GetxController {
   Future<List<TarjetaMes>> updateVisualFromDB() async {
     _tarjetasMes.clear();
     List<String> fechasAcotadas = await _getMonthYears();
+    fechasAcotadas = fechasAcotadas.reversed.toList();
     for (int i = 0; i < fechasAcotadas.length; i++) {
       List<LecturaModel> listaLecturas = await DBProvider.db
           .getLecturasByFechaPattern(contador, fechasAcotadas[i]);

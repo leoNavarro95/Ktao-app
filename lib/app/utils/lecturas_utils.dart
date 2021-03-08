@@ -12,7 +12,9 @@ List<int> getVectOrdenadoFecha(List<LecturaModel> lecturas) {
 
   final List<String> sortedDates =
       fechas.toList(); //se crea una copia con una nueva instancia de fechas
-  sortedDates.sort();
+  sortedDates
+      .sort((b, a) => a.compareTo(b)); //ordena en orden descendente [3,2,1]
+  // sortedDates.sort(); //por defecto ordena en orden ascendente [1,2,3]
 
   List<int> vector = [];
   //! OJO este algoritmo esta pensado para una lista de lecturas en las que existe una sola lectura por fecha, nunca va a haber una fecha con mas de una lectura (se le impide al usuario)
@@ -54,7 +56,7 @@ String setToMonthYear(String date) {
 
 double getConsumoTotal(List<LecturaModel> lecturas) {
   if (lecturas == null) return 0;
-  final lecturasOrdenadas = ordenarPorFecha(lecturas).toList();
+  final lecturasOrdenadas = ordenarPorFecha(lecturas).reversed.toList();
   final double consumoTotal =
       lecturasOrdenadas[lecturasOrdenadas.length - 1].lectura -
           lecturasOrdenadas[0].lectura;
@@ -98,10 +100,12 @@ List<TarjetaLectura> utilFillCardLectura(
 
   double _delta = 0.0, _deltaAnterior = 0.0;
   for (int i = 0; i < listaLecturas.length; i++) {
-    if (i > 0) {
-      //delta = lectura_actual - lectura_anterior
-      _delta = listaLecturas[i].lectura - listaLecturas[i - 1].lectura;
+    //delta = lectura_actual - lectura_anterior
+    //! ojo cambiar el orden de la resta
+    if (i < (listaLecturas.length - 1)) {
+      _delta = listaLecturas[i].lectura - listaLecturas[i + 1].lectura;
     }
+
     tarjetasLect.add(TarjetaLectura(
       lectura: listaLecturas[i],
       isDeletable: cardIsDeletable,
@@ -114,6 +118,7 @@ List<TarjetaLectura> utilFillCardLectura(
     ));
 
     _deltaAnterior = _delta;
+    _delta = 0.0;
   }
   return tarjetasLect.toList(); // tolist para retornar otra instancia
 }
