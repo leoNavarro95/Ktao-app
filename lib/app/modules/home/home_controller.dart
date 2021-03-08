@@ -6,7 +6,6 @@ import 'package:ktao/app/utils/lecturas_utils.dart';
 import 'package:ktao/app/utils/math_util.dart';
 
 class HomeController extends GetxController {
-  RxString resultado = ''.obs;
   RxList<TarjetaContador> tarjetas = List<TarjetaContador>.empty(growable: true).obs;
 
   @override

@@ -9,17 +9,18 @@ class KtaoGraphController extends GetxController {
   KtaoGraphController({
     this.lectXmes,
   }) : assert(lectXmes != null);
-  List<String> mesesShort;
-  List<int> vectorXaxis;
+  List<String> mesesShort = [];
+  List<int> vectorXaxis = [];
 
   @override
   void onInit() {
     super.onInit();
-    // final lectCtr = Get.find<LecturaController>();
-    // print(lectCtr.lectOrdenadas);
-    mesesShort =
-        this._getMesesShort(this.extractMesesRaw(this.lectXmes)).toList();
-    vectorXaxis = this.getvectorXaxis(this.lectXmes);
+
+    if (this.lectXmes.isNotEmpty) {
+      mesesShort =
+          this._getMesesShort(this.extractMesesRaw(this.lectXmes)).reversed.toList();
+      vectorXaxis = this.getvectorXaxis(this.lectXmes).toList();
+    }
   }
 
   //* ###########Tratamiento de los datos para graficarlos#################
@@ -58,7 +59,8 @@ class KtaoGraphController extends GetxController {
     for (final val in lecturasXmes.values) {
       lect4mes.add(val.length);
     }
-
+    lect4mes = lect4mes.reversed.toList();
+    
     for (int i = 0; i < (lect4mes.length - 1); i++) {
       vector.add(lect4mes[i] + vector[i]);
     }
@@ -128,8 +130,7 @@ class KtaoGraphController extends GetxController {
 
   List<LineTooltipItem> getTooltipItems(List<LineBarSpot> data) {
     final myitem = LineTooltipItem(
-        "${data[0].y} KWh/día",
-        TextStyle(fontSize: 12, color: Colors.blue));
+        "${data[0].y} KWh/día", TextStyle(fontSize: 12, color: Colors.blue));
     return [myitem];
   }
 }

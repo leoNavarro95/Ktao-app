@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ktao/app/data/model/contador_model.dart';
 import 'package:ktao/app/data/model/lectura_model.dart';
+import 'package:ktao/app/global_widgets/ktao_graph/ktao_graph_widget.dart';
 import 'package:ktao/app/global_widgets/widgets.dart';
 import 'package:ktao/app/modules/home/local_widgets/bottom_sheet_opciones.dart';
 import 'package:ktao/app/routes/app_routes.dart';
@@ -33,27 +34,42 @@ class TarjetaContador extends StatelessWidget {
       shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(_borderR)),
       elevation: 5,
-      child: InkWell(
-        splashColor: Colors.blue.withAlpha(50),
-        onLongPress: () async {
-          await bottomSheetOpciones(contador);
+      child: FutureBuilder(
+        future: getLecturasOrdenadas(this.contador),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<LecturaModel>> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Container(
+              child: Center(
+                  child: Text(
+                'Cargando...',
+                style: TemaTexto().titulo,
+              )),
+            );
+          }
+          final lecturasOrdenadas = snapshot.data;
+
+          return InkWell(
+          splashColor: Colors.blue.withAlpha(50),
+          onLongPress: () async {
+            await bottomSheetOpciones(contador);
+          },
+          onTap: () {
+            Get.toNamed(AppRoutes.LECTURAS, arguments: {
+              "contador": this.contador,
+              "lectOrdenadas": lecturasOrdenadas,
+            });
+          },
+          child: Container(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _header(this.contador.nombre, _borderR),
+              _body(lecturasOrdenadas),
+            ],
+          )),
+        );
         },
-        onTap: () async {
-          final List<LecturaModel> lectOrdenadas = await getLecturasOrdenadas(this.contador);
-          
-          Get.toNamed(AppRoutes.LECTURAS, arguments: {
-            "contador": this.contador,
-            "lectOrdenadas": lectOrdenadas,
-          });
-        },
-        child: Container(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _header(this.contador.nombre, _borderR),
-            _body(),
-          ],
-        )),
       ),
     );
   }
@@ -84,22 +100,25 @@ class TarjetaContador extends StatelessWidget {
     );
   }
 
-  Widget _body() {
+  Widget _body(List<LecturaModel> lectOrdenada) {
     return Column(
       children: [
         _info(),
         Divider(
           height: 1,
         ),
-        _graphic()
+        _graphic(lectOrdenada),
       ],
     );
   }
 
-  Widget _graphic() {
+  Widget _graphic(List<LecturaModel> lecturasOrdenadas) {
     return Column(
       children: [
-        Icon(Icons.bar_chart_sharp, color: Colors.blue, size: 50),
+        // KTaoGraph(
+        //   lectXmes: {},
+        //   tasasConsumo: utilGetTasasConsumo(lecturasOrdenadas),
+        // ),
         myroundedContainer(
           bkgColor: Colors.blue.withAlpha(20),
           icon: Icons.check_box,

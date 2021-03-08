@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:ktao/app/global_widgets/ktao_graph/ktao_graph_controller.dart';
 import 'package:ktao/app/utils/math_util.dart';
 
+/// Dibuja un grafico de tasas de consumo.
+/// Dejar lectXmes vacio {} para que sea un grafico minimalista sin info en los ejes
 class KTaoGraph extends StatelessWidget {
   final Map<String, List<double>> lectXmes;
   final List<double> tasasConsumo;
@@ -66,6 +68,8 @@ class KTaoGraph extends StatelessWidget {
   }
 
   LineChartData mainData(KtaoGraphController ctr) {
+    bool showAxis = this.lectXmes.isNotEmpty;
+
     Map<String, num> extremeYaxis = utilgetExtremeValues(this.tasasConsumo);
     final minYaxis = extremeYaxis["minValue"];
     final maxYaxis = extremeYaxis["maxValue"];
@@ -91,16 +95,16 @@ class KTaoGraph extends StatelessWidget {
         },
       ),
       titlesData: FlTitlesData(
-        show: true,
+        show: showAxis, //si no hay datos en lectXmes no se muestran
         bottomTitles: SideTitles(
-          showTitles: true,
+          showTitles: showAxis,
           reservedSize: 22,
           getTextStyles: (value) => const TextStyle(
               color: Color(0xff68737d),
               fontWeight: FontWeight.bold,
               fontSize: 16),
           // value va a tener todos los valores del eje X a medida que se renderiza el grafico
-          getTitles: ctr.bottomRenderTitles,
+          getTitles: ctr.bottomRenderTitles,//showAxis ? ctr.bottomRenderTitles: (value){return '';},
           margin: 8,
         ),
         leftTitles: SideTitles(

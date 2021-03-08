@@ -26,7 +26,6 @@ class HomePage extends StatelessWidget {
               children: <Widget>[
                 // _buildTableContadores(contadores: _.tarjetas),
                 Column(
-                  
                   children: _.tarjetas,
                 ),
               ],
@@ -87,7 +86,6 @@ class HomePage extends StatelessWidget {
       ],
     );
   }
-        
 
   Future<void> _agregarContador() async {
     String nombre = await textEditOptionDialog(

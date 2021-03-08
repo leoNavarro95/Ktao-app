@@ -11,7 +11,7 @@ class GraficoController extends GetxController {
   void onInit() {
     super.onInit();
     final lectCtr = Get.find<LecturaController>();
-    lectOrd = lectCtr.lectOrdenadas.toList();   
+    lectOrd = lectCtr.lectOrdenadas.reversed.toList();
   }
   
 }

@@ -11,7 +11,7 @@ class SplashController extends GetxController{
   void onReady() {
     super.onReady();
     Future.delayed(Duration(seconds: 1), (){
-      Get.off(HomePage(), transition: Transition.size);
+      Get.off(() => HomePage(), transition: Transition.size);
     });
       
   }
