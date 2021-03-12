@@ -14,7 +14,7 @@ class DetallesController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    // await updateVisualFromDB();
+    await updateVisualFromDB();
   }
 
   ///lista que contiene las tarjetas de los meses
@@ -30,20 +30,21 @@ class DetallesController extends GetxController {
   Future<List<TarjetaMes>> updateVisualFromDB() async {
     _tarjetasMes.clear();
     List<String> fechasAcotadas = await _getMonthYears();
+    fechasAcotadas = fechasAcotadas.reversed.toList();
     for (int i = 0; i < fechasAcotadas.length; i++) {
       List<LecturaModel> listaLecturas = await DBProvider.db
           .getLecturasByFechaPattern(contador, fechasAcotadas[i]);
       final List<LecturaModel> lectOrdenadas = ordenarPorFecha(listaLecturas);
 
       _tarjetasLect = utilFillCardLectura(lectOrdenadas, _tarjetasLect);
-      await _llenarTarjetasMes(fechasAcotadas[i]);
+      await _llenarTarjetasMes(fechasAcotadas[i], this.contador);
     }
     return _tarjetasMes;
   }
  
-  Future<void> _llenarTarjetasMes(String fecha) async {
+  Future<void> _llenarTarjetasMes(String fecha, ContadorModel contador) async {
     final bool _isClosed =
-        await DBProvider.db.isMonthClosedDB(this.contador, fecha);
+        await DBProvider.db.isMonthClosedDB(contador, fecha);
     _tarjetasMes.add(
       TarjetaMes(
         isClosed: _isClosed,

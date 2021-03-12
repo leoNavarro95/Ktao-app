@@ -4,67 +4,148 @@ import 'package:get/get.dart';
 import 'package:ktao/app/global_widgets/ktao_graph/ktao_graph_controller.dart';
 import 'package:ktao/app/utils/math_util.dart';
 
+/// Dibuja un grafico de tasas de consumo.
+/// Dejar lectXmes vacio {} para que sea un grafico minimalista sin info en los ejes
 class KTaoGraph extends StatelessWidget {
   final Map<String, List<double>> lectXmes;
   final List<double> tasasConsumo;
+  final Color bkgColor;
+  final bool hasBorder,
+      hasLabelOnYaxis,
+      hasLabelOnXaxis,
+      hasLineTouch,
+      hasNegativeData;
+  final double aspectRatio, lineWidth;
   KTaoGraph({
-    Key key,
-    this.lectXmes,
+    this.lectXmes = const {},
+    this.hasBorder = true,
+    this.hasLabelOnYaxis = true,
+    this.hasNegativeData = false,
+    this.hasLabelOnXaxis = true,
+    this.hasLineTouch = true,
+    this.bkgColor,
+    this.aspectRatio = 2,
+    this.lineWidth = 4,
     this.tasasConsumo,
-  }) : super(key: key);
+  }); //  : lectXmes = lectXmes ?? const {};
+
+  final KtaoGraphController graphCtr = Get.find<KtaoGraphController>();
 
   @override
   Widget build(BuildContext context) {
+    graphCtr.lectXmes = this.lectXmes;
+    Widget _buttonOnYaxis = Container();
+    Widget _labelOnXaxis = Container();
+
+    Widget _chartWidget = Container();
+
+    if (this.hasNegativeData) {
+      _chartWidget = errorGraphWidget(
+          message: 'Existe algún error en sus datos',
+          color: Colors.redAccent,
+          icon: Icons.error_outline_rounded);
+    } else if (this.tasasConsumo.length < 2) {
+      _chartWidget = errorGraphWidget(
+          message: 'Debe tener al menos 2 lecturas',
+          color: Colors.blueAccent,
+          icon: Icons.bar_chart);
+    } else {
+      if (this.hasLabelOnXaxis) {
+        _labelOnXaxis = Positioned(
+          bottom: 10,
+          right: 20,
+          child: Container(
+            child: Text(
+              'meses',
+              style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                  color: graphCtr.showAvg
+                      ? Colors.white.withOpacity(0.5)
+                      : Color(0xff67727d)),
+            ),
+          ),
+        );
+      }
+
+      if (this.hasLabelOnYaxis) {
+        _buttonOnYaxis = Positioned(
+          top: 10,
+          left: 5,
+          child: Text(
+            'KWh/día',
+            style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.bold,
+                color: graphCtr.showAvg
+                    ? Colors.white.withOpacity(0.5)
+                    : Color(0xff67727d)),
+          ),
+        );
+      }
+
+      _chartWidget = LineChart(
+        graphCtr.showAvg ? avgData(graphCtr) : mainData(graphCtr),
+      );
+    }
+    return Stack(
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: this.aspectRatio,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(
+                Radius.circular(18),
+              ),
+              color: bkgColor,
+            ),
+            child: Padding(
+              padding: EdgeInsets.only(
+                right:  (this.aspectRatio < 3) ? 18 : 5,
+                left:   (this.aspectRatio < 3) ? 12 : 5,
+                top:    (this.aspectRatio < 3) ? 24 : 5,
+                bottom: (this.aspectRatio < 3) ? 15 : 5,
+              ),
+              child: _chartWidget,
+            ),
+          ),
+        ),
+        _buttonOnYaxis,
+        _labelOnXaxis,
+      ],
+    );
+  }
+
+  // Local Widgets
+  Widget errorGraphWidget(
+      {IconData icon = Icons.error_outline,
+      String message = 'Error',
+      Color color = Colors.red}) {
     return Container(
-      child: GetBuilder<KtaoGraphController>(
-          init: KtaoGraphController(lectXmes: this.lectXmes),
-          builder: (_) {
-            return Stack(
-              children: <Widget>[
-                AspectRatio(
-                  aspectRatio: 1.70,
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(18),
-                      ),
-                      // color: Color(0xff232d37),
-                      color: Color(0xb590d4fe), //ARGB
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          right: 18.0, left: 12.0, top: 24, bottom: 12),
-                      child: LineChart(
-                        _.showAvg ? avgData() : mainData(_),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 60,
-                  height: 34,
-                  child: TextButton(
-                    onPressed: () {
-                      _.showAvg = !_.showAvg;
-                      _.update();
-                    },
-                    child: Text(
-                      'avg',
-                      style: TextStyle(
-                          fontSize: 12,
-                          color: _.showAvg
-                              ? Colors.white.withOpacity(0.5)
-                              : Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }),
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: color,
+              size: (this.aspectRatio < 3) ? 100 : 20,
+            ),
+            Text(
+              message,
+              style: TextStyle(
+                  fontSize: (this.aspectRatio < 3) ? 20 : 8, color: color),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   LineChartData mainData(KtaoGraphController ctr) {
+    bool showAxis = this.lectXmes.isNotEmpty;
+    if (showAxis) ctr.setXaxisData(this.lectXmes);
+
     Map<String, num> extremeYaxis = utilgetExtremeValues(this.tasasConsumo);
     final minYaxis = extremeYaxis["minValue"];
     final maxYaxis = extremeYaxis["maxValue"];
@@ -90,9 +171,9 @@ class KTaoGraph extends StatelessWidget {
         },
       ),
       titlesData: FlTitlesData(
-        show: true,
+        show: showAxis, //si no hay datos en lectXmes no se muestran
         bottomTitles: SideTitles(
-          showTitles: true,
+          showTitles: showAxis,
           reservedSize: 22,
           getTextStyles: (value) => const TextStyle(
               color: Color(0xff68737d),
@@ -103,7 +184,7 @@ class KTaoGraph extends StatelessWidget {
           margin: 8,
         ),
         leftTitles: SideTitles(
-          showTitles: true,
+          showTitles: showAxis,
           getTextStyles: (value) => const TextStyle(
             color: Color(0xff67727d),
             fontWeight: FontWeight.bold,
@@ -115,7 +196,7 @@ class KTaoGraph extends StatelessWidget {
         ),
       ),
       borderData: FlBorderData(
-          show: true,
+          show: this.hasBorder,
           border: Border.all(color: const Color(0xff37434d), width: 1)),
       minX: 0,
       //! OJO para variar el eje X,hacerlos depender de los maximos que tienen las lect
@@ -123,16 +204,13 @@ class KTaoGraph extends StatelessWidget {
       minY: minYaxis,
       maxY: maxYaxis + (centerYaxis / 4),
       lineTouchData: LineTouchData(
-          enabled: true,
-          touchTooltipData: LineTouchTooltipData(
-              showOnTopOfTheChartBoxArea: true,
-              // fitInsideVertically: true,
-              getTooltipItems: (data) {
-                final myitem = LineTooltipItem(
-                    "x: ${data[0].x.toStringAsFixed(0)} y: ${data[0].y}",
-                    TextStyle(fontSize: 8, color: Colors.blue));
-                return [myitem];
-              })),
+        enabled: this.hasLineTouch,
+        touchTooltipData: LineTouchTooltipData(
+          showOnTopOfTheChartBoxArea: true,
+          // fitInsideVertically: true,
+          getTooltipItems: ctr.getTooltipItems,
+        ),
+      ),
       lineBarsData: [
         LineChartBarData(
           spots:
@@ -140,7 +218,7 @@ class KTaoGraph extends StatelessWidget {
           isCurved: true,
           curveSmoothness: 0.2,
           colors: ctr.gradientColors,
-          barWidth: 5,
+          barWidth: this.lineWidth,
           isStrokeCapRound: true,
           dotData: FlDotData(
             show: false,
@@ -156,8 +234,7 @@ class KTaoGraph extends StatelessWidget {
     );
   }
 
-  LineChartData avgData() {
-    final graphCtr = Get.find<KtaoGraphController>();
+  LineChartData avgData(KtaoGraphController graphCtr) {
     return LineChartData(
       lineTouchData: LineTouchData(enabled: false),
       gridData: FlGridData(

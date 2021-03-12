@@ -11,7 +11,7 @@ class SplashBinding extends Bindings {
   void dependencies() {
     //* Hace que no sea necesario tener que usar init en la pagina padre
     Get.lazyPut(() => SplashController());
-    Get.lazyPut<HomeController>(() => HomeController(), fenix: true);
+    Get.put<HomeController>(HomeController(), permanent: true);
     Get.lazyPut<CalculadoraController>(() => CalculadoraController());
     Get.lazyPut<TarjetaLectController>(() => TarjetaLectController());
 

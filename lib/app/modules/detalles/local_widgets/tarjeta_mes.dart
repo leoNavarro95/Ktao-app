@@ -22,13 +22,6 @@ class TarjetaMes extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isWinter = true;
 
-    // final String initFecha =
-    //     fecha.substring(0, 3); //toma los tres primeros caracteres de la fecha
-    // if ((initFecha == 'nov') | (initFecha == 'dic') | (initFecha == 'ene')| (initFecha == 'feb')) {
-    //   isWinter = true;
-    // } else {
-    //   isWinter = false;
-    // }
 
     return Container(
       child: contenedorMes(this.fecha, isWinter),
@@ -47,8 +40,8 @@ class TarjetaMes extends StatelessWidget {
   }
 
   Widget _encabezado(String fecha, bool isWinter) {
-    double consumo = this.lecturasMes[lecturasMes.length - 1].lectura.lectura -
-        this.lecturasMes[0].lectura.lectura;
+    double consumo = this.lecturasMes[0].lectura.lectura -
+        this.lecturasMes[lecturasMes.length - 1].lectura.lectura;
 
     Map<String, dynamic> calculos = calcCosto(consumo);
     double costo = calculos["costo"];

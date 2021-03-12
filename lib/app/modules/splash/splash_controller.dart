@@ -1,6 +1,7 @@
 
 
 import 'package:get/get.dart';
+import 'package:ktao/app/modules/home/home_binding.dart';
 import 'package:ktao/app/modules/home/home_controller.dart';
 import 'package:ktao/app/modules/home/home_page.dart';
 
@@ -11,7 +12,7 @@ class SplashController extends GetxController{
   void onReady() {
     super.onReady();
     Future.delayed(Duration(seconds: 1), (){
-      Get.off(HomePage(), transition: Transition.size);
+      Get.off(() => HomePage(), transition: Transition.size, binding: HomeBinding());
     });
       
   }

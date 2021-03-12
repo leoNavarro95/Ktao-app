@@ -150,3 +150,12 @@ Map<String, num> utilgetExtremeValues(List<num> list) {
     "maxValue": maxValue,
   };
 }
+
+///recorre la lista de double y devuelve true cuando tiene algun numero negativo
+bool utilHasNegativeData(List<double> numList){
+  for(double numb in numList){
+    if(numb.isNegative)
+      return true;
+  }
+  return false;
+}
