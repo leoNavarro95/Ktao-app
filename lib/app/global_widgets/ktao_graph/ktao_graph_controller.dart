@@ -4,26 +4,36 @@ import 'package:get/get.dart';
 
 class KtaoGraphController extends GetxController {
   /// mapa con llave fecha y valores lecturas para esa fecha
-  final Map<String, List<double>> lectXmes;
+  Map<String, List<double>> _lectXmes = {};
 
-  KtaoGraphController({
-    this.lectXmes,
-  }) : assert(lectXmes != null);
+  /// mapa con llave fecha y valores lecturas para esa fecha
+  // ignore: unnecessary_getters_setters
+  Map<String, List<double>> get lectXmes => _lectXmes;
+
+  /// mapa con llave fecha y valores lecturas para esa fecha
+  // ignore: unnecessary_getters_setters
+  set lectXmes(Map<String, List<double>> lectXmes) {
+    _lectXmes = lectXmes;
+  }
+
+  // KtaoGraphController({
+  //   Map<String, List<double>> lectXmes,
+  // }): lectXmes = lectXmes ?? const {}; //si es nulo lo inicializa empty
+
   List<String> mesesShort = [];
   List<int> vectorXaxis = [];
 
-  @override
-  void onInit() {
-    super.onInit();
-
-    if (this.lectXmes.isNotEmpty) {
-      mesesShort =
-          this._getMesesShort(this.extractMesesRaw(this.lectXmes)).reversed.toList();
-      vectorXaxis = this.getvectorXaxis(this.lectXmes).toList();
+  //* ###########Tratamiento de los datos para graficarlos#################
+  /// setea a mesesShort y a vectorXaxis para poder graficar en el ejeX los meses
+  void setXaxisData(Map<String, List<double>> lecturaXmes) {
+    if (lecturaXmes.isNotEmpty) {
+      mesesShort = this
+          ._getMesesShort(this.extractMesesRaw(lecturaXmes))
+          .reversed
+          .toList();
+      vectorXaxis = this.getvectorXaxis(lecturaXmes).toList();
     }
   }
-
-  //* ###########Tratamiento de los datos para graficarlos#################
 
   /// retorna una lista con todas los meses en raw (como vienen desde detalles page)
   List<String> extractMesesRaw(Map<String, List<double>> _lectXmes) {
@@ -53,14 +63,14 @@ class KtaoGraphController extends GetxController {
   List<int> getvectorXaxis(Map<String, List<double>> lecturasXmes) {
     //! OJO este vector siempre va a empezar por 0, es el primer mes para la primera lectura
     List<int> vector = [0];
-    List<int> lect4mes =
-        []; // [1, 3, 3]  cantidad de lecturas para cada mes segun orden en el map
+    // [1, 3, 3]  cantidad de lecturas para cada mes segun orden en el map
+    List<int> lect4mes = [];
 
     for (final val in lecturasXmes.values) {
       lect4mes.add(val.length);
     }
     lect4mes = lect4mes.reversed.toList();
-    
+
     for (int i = 0; i < (lect4mes.length - 1); i++) {
       vector.add(lect4mes[i] + vector[i]);
     }
@@ -110,6 +120,7 @@ class KtaoGraphController extends GetxController {
   }
 
   String bottomRenderTitles(double axisValues) {
+    //poner una funcion que se ejecute una sola vez para que llene a vectorXaxis y a mesesShort
     int axisInt = axisValues.toInt();
     if (vectorXaxis.contains(axisInt)) {
       return mesesShort[vectorXaxis.indexOf(axisInt)];

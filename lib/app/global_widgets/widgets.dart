@@ -156,7 +156,9 @@ Widget myroundedContainer(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: iconColor, size: 18),
-            SizedBox(width: 5,),
+            SizedBox(
+              width: 5,
+            ),
             text,
           ],
         )),

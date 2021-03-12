@@ -8,6 +8,7 @@ import 'package:ktao/app/modules/home/local_widgets/bottom_sheet_opciones.dart';
 import 'package:ktao/app/routes/app_routes.dart';
 import 'package:ktao/app/theme/text_theme.dart';
 import 'package:ktao/app/utils/lecturas_utils.dart';
+import 'package:ktao/app/utils/math_util.dart';
 
 class TarjetaContador extends StatelessWidget {
   final ContadorModel contador;
@@ -50,25 +51,25 @@ class TarjetaContador extends StatelessWidget {
           final lecturasOrdenadas = snapshot.data;
 
           return InkWell(
-          splashColor: Colors.blue.withAlpha(50),
-          onLongPress: () async {
-            await bottomSheetOpciones(contador);
-          },
-          onTap: () {
-            Get.toNamed(AppRoutes.LECTURAS, arguments: {
-              "contador": this.contador,
-              "lectOrdenadas": lecturasOrdenadas,
-            });
-          },
-          child: Container(
-              child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _header(this.contador.nombre, _borderR),
-              _body(lecturasOrdenadas),
-            ],
-          )),
-        );
+            splashColor: Colors.blue.withAlpha(50),
+            onLongPress: () async {
+              await bottomSheetOpciones(contador);
+            },
+            onTap: () {
+              Get.toNamed(AppRoutes.LECTURAS, arguments: {
+                "contador": this.contador,
+                "lectOrdenadas": lecturasOrdenadas,
+              });
+            },
+            child: Container(
+                child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _header(this.contador.nombre, _borderR),
+                _body(lecturasOrdenadas),
+              ],
+            )),
+          );
         },
       ),
     );
@@ -113,22 +114,53 @@ class TarjetaContador extends StatelessWidget {
   }
 
   Widget _graphic(List<LecturaModel> lecturasOrdenadas) {
-    return Column(
-      children: [
-        // KTaoGraph(
-        //   lectXmes: {},
-        //   tasasConsumo: utilGetTasasConsumo(lecturasOrdenadas),
-        // ),
-        myroundedContainer(
-          bkgColor: Colors.blue.withAlpha(20),
-          icon: Icons.check_box,
-          iconColor: Colors.blue,
-          text: Text(
-            'Gráfico aquí',
-            style: TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14)),
-          ),
+    KTaoGraph _grafico;
+    Widget _chartInfo = Container();
+
+    final List<double> _tasasConsumo =
+        utilGetTasasConsumo(lecturasOrdenadas.reversed.toList());
+    bool _hasNegativeData = utilHasNegativeData(_tasasConsumo);
+
+    if (_hasNegativeData) {
+      //con lecXmes vacio se logra que no se pinten los detalles del grafico
+      _grafico = new KTaoGraph(
+        lectXmes: {},
+        tasasConsumo: [], //vacia a proposito para que no mueste nada
+        hasLabelOnYaxis: false,
+        hasLabelOnXaxis: false,
+        hasBorder: false,
+        hasNegativeData: _hasNegativeData,
+        hasLineTouch: false,
+        aspectRatio: 5,
+        lineWidth: 2,
+      );
+
+      _chartInfo = myroundedContainer(
+        bkgColor: Colors.blue.withAlpha(20),
+        icon: Icons.warning_amber_rounded,
+        iconColor: Colors.redAccent,
+        text: Text(
+          'Datos que dan resultados negativos',
+          style: TemaTexto()
+              .infoTarjeta
+              .merge(TextStyle(fontSize: 14, color: Colors.redAccent)),
         ),
-      ],
+      );
+    } else {
+      _grafico = new KTaoGraph(
+        lectXmes: {},
+        tasasConsumo: _tasasConsumo,
+        hasLabelOnYaxis: false,
+        hasLabelOnXaxis: false,
+        hasBorder: false,
+        hasLineTouch: false,
+        aspectRatio: 4,
+        lineWidth: 2,
+      );
+    }
+
+    return Column(
+      children: [_grafico, _chartInfo],
     );
   }
 
@@ -148,13 +180,23 @@ class TarjetaContador extends StatelessWidget {
             icon: Icons.monetization_on_outlined,
             iconColor: Colors.blue,
             text: Text('${utilFormatNum(costoTotal.toStringAsFixed(0))} CUP',
-                style: TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14))),
+                style: (costoTotal.isNegative)
+                    ? TemaTexto()
+                        .infoTarjeta
+                        .merge(TextStyle(fontSize: 14, color: Colors.redAccent))
+                    : TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14))),
           ),
           myroundedContainer(
             icon: Icons.flash_on,
             iconColor: Colors.blue,
-            text: Text('${utilFormatNum(consumoTotal.toStringAsFixed(0))} KWh',
-                style: TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14))),
+            text: Text(
+              '${utilFormatNum(consumoTotal.toStringAsFixed(0))} KWh',
+              style: (consumoTotal.isNegative)
+                  ? TemaTexto()
+                      .infoTarjeta
+                      .merge(TextStyle(fontSize: 14, color: Colors.redAccent))
+                  : TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14)),
+            ),
           ),
         ],
       ),

@@ -14,17 +14,14 @@ import 'lectura_controller.dart';
 
 class LecturaPage extends GetView<LecturaController> {
   final lecturaCtr = Get.find<LecturaController>();
+  final detallesCtr = Get.find<DetallesController>();
   final formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final detalles = DetallesPage(contador: lecturaCtr.contador);
-    Get.put(DetallesController(contador: lecturaCtr.contador));
-
-    final graficos = GraficoPage(
-      lectXmes: detalles.controller.lecturasXmes,
-      // tasaConsumo: utilGetTasasConsumo(lecturaCtr.lectOrdenadas),
-    );
+    //! Get.put(DetallesController(contador: lecturaCtr.contador));  debe funcionar pues esta inyectado en el binding de Home
+    final graficos = GraficoPage(); //lectXmes: detallesCtr.lecturasXmes
 
     //las paginas que se van a encontrar en el tabBarView
     final List<Widget> paginas = [_contenido(), detalles, graficos];

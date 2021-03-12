@@ -6,6 +6,6 @@ import 'detalles_controller.dart';
 class DetallesBinding implements Bindings {
 @override
 void dependencies() {
-  Get.lazyPut< DetallesController>(() => DetallesController(contador: ContadorModel()), fenix: true);
+  // Get.lazyPut<DetallesController>(() => DetallesController(contador: ContadorModel()), fenix: true);
   }
 }
