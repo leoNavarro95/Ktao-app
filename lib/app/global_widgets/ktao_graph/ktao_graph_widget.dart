@@ -129,12 +129,12 @@ class KTaoGraph extends StatelessWidget {
             Icon(
               icon,
               color: color,
-              size: (this.aspectRatio < 3) ? 100 : 20,
+              size: (this.aspectRatio < 3) ? 100 : 45,
             ),
             Text(
               message,
               style: TextStyle(
-                  fontSize: (this.aspectRatio < 3) ? 20 : 8, color: color),
+                  fontSize: (this.aspectRatio < 3) ? 20 : 10, color: color),
             ),
           ],
         ),

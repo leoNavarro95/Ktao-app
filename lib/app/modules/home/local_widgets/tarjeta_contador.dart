@@ -140,10 +140,10 @@ class TarjetaContador extends StatelessWidget {
         icon: Icons.warning_amber_rounded,
         iconColor: Colors.redAccent,
         text: Text(
-          'Datos que dan resultados negativos',
+          'Resultados negativos',
           style: TemaTexto()
               .infoTarjeta
-              .merge(TextStyle(fontSize: 14, color: Colors.redAccent)),
+              .merge(TextStyle(fontSize: 12, color: Colors.redAccent)),
         ),
       );
     } else {

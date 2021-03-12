@@ -47,10 +47,10 @@ class HomePage extends StatelessWidget {
   Future<bool> onWillPop() {
     return myboolDialog(
       titulo: '¿Desea cerrar la app?',
-      subtitulo: 'Presione Ok para cerrarla'
+      subtitulo: ' '
     );
   }
-  
+
   AppBar buildAppBar() {
     return AppBar(
       title: Text('Inicio'),
