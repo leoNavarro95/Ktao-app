@@ -22,14 +22,14 @@ Future<bool> myboolDialog(
       ),
       actions: <Widget>[
         TextButton(
+          child: Text('CANCELAR'),
+          onPressed: () => Get.back(result: false),
+        ),
+        TextButton(
           child: Text('OK'),
           onPressed: () {
             Get.back(result: true);
           },
-        ),
-        TextButton(
-          child: Text('CANCELAR'),
-          onPressed: () => Get.back(result: false),
         ),
       ],
     ),
@@ -121,13 +121,18 @@ Future<String> textEditOptionDialog(
   );
 }
 
-void mySnackbar(
-    {String title,
-    String subtitle,
-    IconData icon = Icons.warning,
-    Color iconColor = Colors.red,
-    int showMillisecs = 2500}) {
+void mySnackbar({
+  String title,
+  String subtitle,
+  IconData icon = Icons.warning,
+  Color iconColor = Colors.red,
+  int showMillisecs = 2500,
+  bool isDisplayedInBottom = false,
+}) {
   return Get.snackbar(title, subtitle,
+      
+      snackPosition:
+          isDisplayedInBottom ? SnackPosition.BOTTOM : SnackPosition.TOP,
       borderWidth: 2,
       borderColor: Colors.black12,
       colorText: Colors.black,

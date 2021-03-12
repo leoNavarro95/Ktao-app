@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:ktao/app/global_widgets/menu_lateral.dart';
+import 'package:ktao/app/global_widgets/widgets.dart';
 import 'package:ktao/app/modules/calculadora/calculadora_controller.dart';
 import 'package:ktao/app/modules/calculadora/local_widgets/campo_texto.dart';
 import 'package:ktao/app/modules/calculadora/local_widgets/tabla_widget.dart';
@@ -15,14 +16,24 @@ class CalculadoraPage extends StatelessWidget {
     final calcCtr = Get.find<CalculadoraController>();
 
     return GetBuilder<CalculadoraController>(builder: (_) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('Calculadora'),
+      return WillPopScope(
+        onWillPop: onWillPop,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Calculadora'),
+          ),
+          drawer: MenuLateral(),
+          body: Center(child: _principal(calcCtr)),
         ),
-        drawer: MenuLateral(),
-        body: Center(child: _principal(calcCtr)),
       );
     });
+  }
+
+  Future<bool> onWillPop() {
+    return myboolDialog(
+      titulo: '¿Desea cerrar la app?',
+      subtitulo: 'Presione Ok para cerrarla'
+    );
   }
 
   Widget _principal(CalculadoraController calcCtr) {

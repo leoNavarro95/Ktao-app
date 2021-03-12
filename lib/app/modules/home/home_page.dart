@@ -17,63 +17,40 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(builder: (_) {
-      return Scaffold(
-        drawer: MenuLateral(),
-        appBar: buildAppBar(),
-        body: Obx(() {
-          if (_.tarjetas.isNotEmpty) {
-            return ListView(
-              children: <Widget>[
-                // _buildTableContadores(contadores: _.tarjetas),
-                Column(
-                  children: _.tarjetas,
-                ),
-              ],
-            );
-          }
-          return TarjetaContador();
-        }),
-        floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: _agregarContador,
+      return WillPopScope(
+        onWillPop: onWillPop,
+        child: Scaffold(
+          drawer: MenuLateral(),
+          appBar: buildAppBar(),
+          body: Obx(() {
+            if (_.tarjetas.isNotEmpty) {
+              return ListView(
+                children: <Widget>[
+                  // _buildTableContadores(contadores: _.tarjetas),
+                  Column(
+                    children: _.tarjetas,
+                  ),
+                ],
+              );
+            }
+            return TarjetaContador();
+          }),
+          floatingActionButton: FloatingActionButton(
+            child: Icon(Icons.add),
+            onPressed: _agregarContador,
+          ),
         ),
       );
     });
   }
-
-  Widget _buildTableContadores({List<TarjetaContador> contadores}) {
-    List<TableRow> _lista = [];
-    List<Widget> _fila = [];
-    int cantidadFilas = 0;
-    //! TODO: Hacer que cambie a 3 cuando el movil este en portrait
-    const int cantidad_columnas = 2;
-
-    //calculando el numero de filas necesario
-    if (contadores.length % 2 == 0) {
-      //si es par
-      cantidadFilas = (contadores.length) ~/ 2;
-    } else {
-      cantidadFilas = (contadores.length ~/ 2) + 1;
-    }
-
-    int index = 0;
-
-    for (int i = 0; i < cantidadFilas; i++) {
-      for (int j = 0; j < cantidad_columnas; j++) {
-        if (index >= contadores.length) {
-          _fila.add(Container());
-        } else {
-          _fila.add(contadores[index]);
-        }
-        index++;
-      }
-      _lista.add(TableRow(children: _fila.toList()));
-      _fila.clear();
-    }
-    // return Column(children: contadores,);
-    return Table(children: _lista);
+  
+  Future<bool> onWillPop() {
+    return myboolDialog(
+      titulo: '¿Desea cerrar la app?',
+      subtitulo: 'Presione Ok para cerrarla'
+    );
   }
-
+  
   AppBar buildAppBar() {
     return AppBar(
       title: Text('Inicio'),
