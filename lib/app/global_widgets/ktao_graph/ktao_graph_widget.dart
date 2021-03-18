@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 import 'package:ktao/app/global_widgets/ktao_graph/ktao_graph_controller.dart';
+import 'package:ktao/app/theme/text_theme.dart';
 import 'package:ktao/app/utils/math_util.dart';
+
+import '../widgets.dart';
 
 /// Dibuja un grafico de tasas de consumo.
 /// Dejar lectXmes vacio {} para que sea un grafico minimalista sin info en los ejes
@@ -45,6 +48,14 @@ class KTaoGraph extends StatelessWidget {
           color: Colors.redAccent,
           icon: Icons.error_outline_rounded);
     } else if (this.tasasConsumo.length < 2) {
+      if (this.aspectRatio > 3)
+        return myroundedContainer(
+          bkgColor: Colors.blue.withAlpha(20),
+          icon: Icons.warning_amber_rounded,
+          iconColor: Colors.blue,
+          text: Text('Faltan datos', style: TemaTexto().infoTarjeta),
+        );
+
       _chartWidget = errorGraphWidget(
           message: 'Debe tener al menos 2 lecturas',
           color: Colors.blueAccent,
@@ -99,20 +110,24 @@ class KTaoGraph extends StatelessWidget {
               ),
               color: bkgColor,
             ),
-            child: Padding(
-              padding: EdgeInsets.only(
-                right:  (this.aspectRatio < 3) ? 18 : 5,
-                left:   (this.aspectRatio < 3) ? 12 : 5,
-                top:    (this.aspectRatio < 3) ? 24 : 5,
-                bottom: (this.aspectRatio < 3) ? 15 : 5,
-              ),
-              child: _chartWidget,
-            ),
+            child: _chartPadding(_chartWidget),
           ),
         ),
         _buttonOnYaxis,
         _labelOnXaxis,
       ],
+    );
+  }
+
+  Padding _chartPadding(Widget _chartWidget) {
+    return Padding(
+      padding: EdgeInsets.only(
+        right: (this.aspectRatio < 3) ? 18 : 5,
+        left: (this.aspectRatio < 3) ? 12 : 5,
+        top: (this.aspectRatio < 3) ? 24 : 5,
+        bottom: (this.aspectRatio < 3) ? 15 : 5,
+      ),
+      child: _chartWidget,
     );
   }
 

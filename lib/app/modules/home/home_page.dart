@@ -55,12 +55,12 @@ class HomePage extends StatelessWidget {
     return AppBar(
       title: Text('Inicio'),
       centerTitle: true,
-      actions: [
-        IconButton(
-          icon: Icon(Icons.delete),
-          onPressed: _eliminarContadores,
-        )
-      ],
+      // actions: [
+      //   IconButton(
+      //     icon: Icon(Icons.delete),
+      //     onPressed: _eliminarContadores,
+      //   )
+      // ],
     );
   }
 
