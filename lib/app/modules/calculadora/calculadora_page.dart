@@ -29,6 +29,7 @@ class CalculadoraPage extends StatelessWidget {
   Future<bool> onWillPop() {
     return myboolDialog(
       titulo: '¿Desea cerrar la app?',
+      subtitulo: ' '
     );
   }
 
