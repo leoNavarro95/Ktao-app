@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:ktao/app/global_widgets/ktao_graph/ktao_graph_controller.dart';
-import 'package:ktao/app/modules/detalles/detalles_controller.dart';
 import 'package:ktao/app/modules/lectura/lectura_controller.dart';
 
 import 'home_controller.dart';

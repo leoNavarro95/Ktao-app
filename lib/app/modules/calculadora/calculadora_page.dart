@@ -27,10 +27,7 @@ class CalculadoraPage extends StatelessWidget {
 
   /// onWillPop es un callBack que se ejecuta cuando se desea cerrar la pantalla
   Future<bool> onWillPop() {
-    return myboolDialog(
-      titulo: '¿Desea cerrar la app?',
-      subtitulo: ' '
-    );
+    return myboolDialog(titulo: '¿Desea cerrar la app?', subtitulo: ' ');
   }
 
   Widget _pageContent(CalculadoraController calcCtr) {
@@ -39,7 +36,7 @@ class CalculadoraPage extends StatelessWidget {
         _title(),
         _formulario(),
         _calcResults(),
-        Obx(() => (calcCtr.lectura1.value != null) ? _tabla() : Container()),
+        _tabla()
       ],
     );
   }
@@ -57,7 +54,6 @@ class CalculadoraPage extends StatelessWidget {
     );
   }
 
-  //! TODO: BUG: solo actualiza la tabla los cambios en el campo lectura 1, campo lectura 2 cuando es editado no hace que cambie la tabla
   Widget _formulario() {
     return Obx(() => Container(
           padding: EdgeInsets.all(10),
@@ -108,19 +104,21 @@ class CalculadoraPage extends StatelessWidget {
     );
   }
 
-  Tabla _tabla() {
-    return Tabla(
-      titleRow: ['Rango', 'Consumo', 'Precio', 'Importe'],
-      titleColor: Color.fromRGBO(120, 200, 220, 1),
-      primaryColor: Color.fromRGBO(0, 180, 210, 0.7),
-      secundaryColor: Color.fromRGBO(10, 100, 180, 0.3),
-      cuerpo: [
-        rangos, //rango
-        calcCtr.listConsumo, //consumo
-        precios, //precios por rango
-        calcCtr.listPrecio, //importe
-      ],
-    );
+  Widget _tabla() {
+    return Obx(() => calcCtr.listConsumo.isNotEmpty
+        ? Tabla(
+            titleRow: ['Rango', 'Consumo', 'Precio', 'Importe'],
+            titleColor: Color.fromRGBO(120, 200, 220, 1),
+            primaryColor: Color.fromRGBO(0, 180, 210, 0.7),
+            secundaryColor: Color.fromRGBO(10, 100, 180, 0.3),
+            cuerpo: [
+              rangos, //rango
+              calcCtr.listConsumo, //consumo
+              precios, //precios por rango
+              calcCtr.listPrecio, //importe
+            ],
+          )
+        : Container());
   }
 
   Widget _buttonExpandLecturas() {

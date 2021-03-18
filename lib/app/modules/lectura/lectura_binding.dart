@@ -9,7 +9,7 @@ class LecturaBinding implements Bindings {
 @override
 void dependencies() {
   // Get.lazyPut< LecturaController>(() => LecturaController());
-  final detallesCtr = Get.put<DetallesController>(
+  Get.put<DetallesController>(
         DetallesController(contador: Get.find<LecturaController>().contador));
   }
 }

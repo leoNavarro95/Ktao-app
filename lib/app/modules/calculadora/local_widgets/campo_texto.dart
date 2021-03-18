@@ -44,7 +44,6 @@ class CampoTextoCalculadora extends StatelessWidget {
               //TODO: Implementar uso de user_preferences para guardar Lecturas
               calcCtr.lectura1.value = valor;
               calcCtr.calcular();
-              // print("lectura1 = ${calcCtr.lectura1.value.toString()} ");
             }
             else if( titulo == "Lectura 2"){
               
