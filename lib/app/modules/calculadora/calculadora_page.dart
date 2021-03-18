@@ -54,6 +54,7 @@ class CalculadoraPage extends StatelessWidget {
     );
   }
 
+  //! TODO: BUG al editar el text de la lectura2 y contraerla se queda el valor de esa lectura en el controller
   Widget _formulario() {
     return Obx(() => Container(
           padding: EdgeInsets.all(10),

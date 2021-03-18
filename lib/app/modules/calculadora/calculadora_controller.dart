@@ -34,6 +34,9 @@ class CalculadoraController extends GetxController{
 
   void expand(){
     expanded.value = !expanded.value;
+    lectura2.value = 0;
+    textCtrLectura2.clear();
+    this.calcular();
   }
 
   

@@ -41,7 +41,6 @@ class CampoTextoCalculadora extends StatelessWidget {
             }
 
             if( (titulo == "Lectura 1") || (titulo == "Consumo")){
-              //TODO: Implementar uso de user_preferences para guardar Lecturas
               calcCtr.lectura1.value = valor;
               calcCtr.calcular();
             }
