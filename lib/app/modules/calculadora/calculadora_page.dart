@@ -32,12 +32,7 @@ class CalculadoraPage extends StatelessWidget {
 
   Widget _pageContent(CalculadoraController calcCtr) {
     return ListView(
-      children: <Widget>[
-        _title(),
-        _formulario(),
-        _calcResults(),
-        _tabla()
-      ],
+      children: <Widget>[_title(), _formulario(), _calcResults(), _tabla()],
     );
   }
 
@@ -54,7 +49,6 @@ class CalculadoraPage extends StatelessWidget {
     );
   }
 
-  //! TODO: BUG al editar el text de la lectura2 y contraerla se queda el valor de esa lectura en el controller
   Widget _formulario() {
     return Obx(() => Container(
           padding: EdgeInsets.all(10),
@@ -75,21 +69,10 @@ class CalculadoraPage extends StatelessWidget {
   List<CampoTextoCalculadora> getCampoTexto(bool isExpanded) {
     return isExpanded
         ? [
-            CampoTextoCalculadora(
-                textController: calcCtr.textCtrLectura1,
-                titulo: "Lectura 1",
-                calcCtr: calcCtr),
-            CampoTextoCalculadora(
-                textController: calcCtr.textCtrLectura2,
-                titulo: "Lectura 2",
-                calcCtr: calcCtr),
+            CampoTextoCalculadora(titulo: "Lectura 1"),
+            CampoTextoCalculadora(titulo: "Lectura 2")
           ]
-        : [
-            CampoTextoCalculadora(
-                textController: calcCtr.textCtrLectura1,
-                titulo: "Consumo",
-                calcCtr: calcCtr),
-          ];
+        : [CampoTextoCalculadora(titulo: "Consumo")];
   }
 
   Container _calcResults() {

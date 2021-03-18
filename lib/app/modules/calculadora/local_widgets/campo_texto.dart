@@ -1,56 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:ktao/app/modules/calculadora/calculadora_controller.dart';
 
 class CampoTextoCalculadora extends StatelessWidget {
-  
-  final CalculadoraController calcCtr;
-  final TextEditingController textController;
   final String titulo;
+  CampoTextoCalculadora({@required this.titulo});
 
-  const CampoTextoCalculadora(
-    {
-      @required this.textController, 
-      @required this.titulo,
-      @required this.calcCtr,
-    }
-    );
+  final CalculadoraController calcCtr = Get.find<CalculadoraController>();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        // color: Colors.blue[100],
-        // padding: EdgeInsets.symmetric(horizontal: 30.0),
-        width: 150,
-        
-        child: TextField(
-          
-          inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ .,-]')),],
-          keyboardType: TextInputType.numberWithOptions(decimal: true),
-          controller: textController,
-          decoration: InputDecoration(
-            icon: Icon(Icons.flash_on),
-            labelText: titulo,
-            ),
-          onChanged: (val) {
-            int valor = 0;
-            if(val.length == 0){
-              valor = 0;
-            } else{
-              valor = int.parse(val).toInt();
-            }
+    return buildTextField();
+  }
 
-            if( (titulo == "Lectura 1") || (titulo == "Consumo")){
-              calcCtr.lectura1.value = valor;
-              calcCtr.calcular();
-            }
-            else if( titulo == "Lectura 2"){
-              
-              calcCtr.lectura2.value = valor;
-              calcCtr.calcular();
-            }
-          },
-        ),
-        );
+  Container buildTextField() {
+    return Container(
+      width: Get.width * 0.4,
+      child: TextField(
+        inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[ .,-]'))],
+        keyboardType: TextInputType.numberWithOptions(decimal: true),
+        controller: getTextControler(this.titulo),
+        decoration:
+            InputDecoration(icon: Icon(Icons.flash_on), labelText: titulo),
+        onChanged: onTextFieldChanged,
+      ),
+    );
+  }
+
+  void onTextFieldChanged(String val) {
+    int valor = val.isNotEmpty ? int.parse(val).toInt() : 0;
+    if ((titulo == "Lectura 1") || (titulo == "Consumo")) {
+      calcCtr.lectura1.value = valor;
+    } else {
+      calcCtr.lectura2.value = valor;
+    }
+    calcCtr.calcular();
+  }
+
+  TextEditingController getTextControler(String titulo) {
+    switch (titulo) {
+      case "Lectura 1":
+        return calcCtr.textCtrLectura1;
+      case "Lectura 2":
+        return calcCtr.textCtrLectura2;
+    }
+    return calcCtr.textCtrLectura1;
   }
 }
