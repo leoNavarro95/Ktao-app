@@ -146,6 +146,7 @@ void mySnackbar({
 Widget myroundedContainer(
     {Text text,
     IconData icon,
+    double iconSize = 18,
     Color bkgColor,
     Color iconColor,
     Function onTap}) {
@@ -160,7 +161,7 @@ Widget myroundedContainer(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: iconColor, size: 18),
+            Icon(icon, color: iconColor, size: iconSize),
             SizedBox(
               width: 5,
             ),
