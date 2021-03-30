@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ktao/app/data/model/contador_model.dart';
 import 'package:ktao/app/theme/text_theme.dart';
+import 'package:ktao/app/theme/theme_services.dart';
 
 ///Dialogo que si se acepta devuelve true y si se cancela devuelve false
 Future<bool> myboolDialog(
@@ -22,14 +23,14 @@ Future<bool> myboolDialog(
       ),
       actions: <Widget>[
         TextButton(
-          child: Text('CANCELAR'),
-          onPressed: () => Get.back(result: false),
-        ),
-        TextButton(
           child: Text('OK'),
           onPressed: () {
             Get.back(result: true);
           },
+        ),
+        TextButton(
+          child: Text('CANCELAR'),
+          onPressed: () => Get.back(result: false),
         ),
       ],
     ),
@@ -47,14 +48,14 @@ Future<bool> borraContadorDialog(ContadorModel contador) async {
           "El contador ${contador.nombre} sera eliminado completamente de la base de datos"),
       actions: <Widget>[
         TextButton(
+          child: Text('CANCELAR'),
+          onPressed: () => Get.back(result: false),
+        ),
+        TextButton(
           child: Text('OK'),
           onPressed: () {
             Get.back(result: true);
           },
-        ),
-        TextButton(
-          child: Text('CANCELAR'),
-          onPressed: () => Get.back(result: false),
         ),
       ],
     ),
@@ -73,7 +74,10 @@ Future<String> textEditOptionDialog(
   return await Get.dialog(
     AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      title: Text(title,style: Get.theme.textTheme.headline6,),
+      title: Text(
+        title,
+        style: Get.theme.textTheme.headline5,
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -82,6 +86,7 @@ Future<String> textEditOptionDialog(
             child: Column(
               children: [
                 TextFormField(
+                  style: Get.theme.textTheme.headline6,
                   decoration: InputDecoration(
                     labelText: labelHelp,
                     icon: Icon(Icons.add_box),
@@ -101,6 +106,11 @@ Future<String> textEditOptionDialog(
       ),
       actions: <Widget>[
         TextButton(
+          child: Text('CANCELAR'),
+          onPressed: () =>
+              Get.back(), //! va a retornar null, manejarlo del otro lado
+        ),
+        TextButton(
           child: Text('OK'),
           onPressed: () {
             //validate() devuelve true si el formulario es valido
@@ -108,11 +118,6 @@ Future<String> textEditOptionDialog(
               Get.back(result: _valorInput);
             }
           },
-        ),
-        TextButton(
-          child: Text('CANCELAR'),
-          onPressed: () =>
-              Get.back(), //! va a retornar null, manejarlo del otro lado
         ),
       ],
     ),
@@ -128,13 +133,15 @@ void mySnackbar({
   int showMillisecs = 2500,
   bool isDisplayedInBottom = false,
 }) {
+  Color colorText =
+      ThemeService().isSavedDarkMode() ? Colors.grey[300] 
+      : Colors.grey[900];
   return Get.snackbar(title, subtitle,
-      
       snackPosition:
           isDisplayedInBottom ? SnackPosition.BOTTOM : SnackPosition.TOP,
       borderWidth: 2,
-      borderColor: Colors.black12,
-      colorText: Colors.black,
+      // borderColor: Colors.black12,
+      colorText: colorText,
       icon: Icon(
         icon,
         color: iconColor,

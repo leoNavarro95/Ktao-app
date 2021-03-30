@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:ktao/app/global_widgets/widgets.dart';
 import 'package:ktao/app/modules/lectura/lectura_controller.dart';
 import 'package:ktao/app/modules/lectura/local_widgets/lecturas_form_widget.dart';
-import 'package:ktao/app/theme/text_theme.dart';
 
 Future<void> agregarLecturaDialog(
   GlobalKey<FormState> formKey,
@@ -27,37 +26,34 @@ Future<void> agregarLecturaDialog(
       titlePadding: EdgeInsets.all(10),
       contentPadding: EdgeInsets.all(0),
       actionsPadding: EdgeInsets.all(0),
-      backgroundColor: Colors.lightBlue[50],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       title: Text(
         title,
         textAlign: TextAlign.center,
-        style: TemaTexto().bottomSheetTitulo,
+        style: Get.theme.textTheme.headline5//bottomSheetTitulo,
       ),
       content: formulario,
       actions: <Widget>[
-        Container(
-          child: TextButton(
-            child: Text('OK'),
-            onPressed: () async {
-              final String dbStatus = await formulario.guardaLectura(textCtr,
-                  inputDateCtr); //si es true se logro guardar sino hubo error
-              if (dbStatus.substring(0, 5) != "Error") {
-                Get.back();
-              }
-              mySnackbar(
-                title: dbStatus,
-                subtitle: ' ',
-              );
-            },
-          ),
-        ),
         TextButton(
-            child: Text('CANCELAR'),
+            child: Text('CANCELAR', style: TextStyle(color: Get.theme.indicatorColor),),
             onPressed: () {
               textCtr.clear();
               Get.back();
             }),
+        TextButton(
+          child: Text('OK', style: TextStyle(color: Get.theme.indicatorColor),),
+          onPressed: () async {
+            final String dbStatus = await formulario.guardaLectura(textCtr,
+                inputDateCtr); //si es true se logro guardar sino hubo error
+            if (dbStatus.substring(0, 5) != "Error") {
+              Get.back();
+            }
+            mySnackbar(
+              title: dbStatus,
+              subtitle: ' ',
+            );
+          },
+        ),
       ],
     ),
     barrierDismissible: false,
