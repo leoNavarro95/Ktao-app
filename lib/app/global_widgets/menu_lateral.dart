@@ -21,66 +21,68 @@ class MenuLateral extends StatelessWidget {
   0.2126, 0.7152, 0.0722, 0, 0,
   0,      0,      0,      1, 0,
 ]);
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          DrawerHeader(
-            child: Container(),
-            decoration: BoxDecoration(
-              // borderRadius: BorderRadius.circular(20),           
-              image: DecorationImage(
-                  image: AssetImage(
-                    'assets/electric_meter.jpeg',
-                  ),
-                  colorFilter: ThemeService().isSavedDarkMode() ? greyscale : ColorFilter.srgbToLinearGamma(),
-                  fit: BoxFit.cover),
-            ),
-          ),
-          menuHeader(),
-          ListTile(
-            leading: Icon(
-              Icons.home,
-              color: Colors.blue,
-              size: _iconsSize,
-            ),
-            title: Text('Inicio'),
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.blue,
-            ),
-            onTap: () {
-              // Navigator.pushReplacementNamed(context, HomePage.routeName);
-              Get.offNamed(AppRoutes.HOME);
-              // Get.back();
-              // Get.toNamed(AppRoutes.HOME);
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.info,
-              color: Colors.blue,
-              size: _iconsSize,
-            ),
-            title: Text('Detalles'),
-            trailing: Icon(
-              Icons.arrow_forward_ios,
-              color: Colors.blue,
-            ),
-            onTap: () {
-              // Navigator.pushReplacementNamed(context, CalculadorasMainPage.routeName);
-              Get.offNamed(AppRoutes.DETAIL);
-              // Get.back();
-              // Get.toNamed(AppRoutes.DETAIL);
-            },
-          ),
-          ListTile(
-            leading: Icon(
-              Icons.calculate,
-              color: Colors.blue,
-              size: _iconsSize,
-            ),
-            title: Text('Calculadora de consumo'),
+    final textTheme = Get.theme.textTheme;
+
+        return Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Container(),
+                decoration: BoxDecoration(
+                  // borderRadius: BorderRadius.circular(20),           
+                  image: DecorationImage(
+                      image: AssetImage(
+                        'assets/electric_meter.jpeg',
+                      ),
+                      colorFilter: ThemeService().isSavedDarkMode() ? greyscale : ColorFilter.srgbToLinearGamma(),
+                      fit: BoxFit.cover),
+                ),
+              ),
+              menuHeader(),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.blue,
+                  size: _iconsSize,
+                ),
+                title: Text('Inicio', style: textTheme.bodyText2,),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.blue,
+                ),
+                onTap: () {
+                  // Navigator.pushReplacementNamed(context, HomePage.routeName);
+                  Get.offNamed(AppRoutes.HOME);
+                  // Get.back();
+                  // Get.toNamed(AppRoutes.HOME);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.info,
+                  color: Colors.blue,
+                  size: _iconsSize,
+                ),
+                title: Text('Detalles', style: textTheme.bodyText2,),
+                trailing: Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.blue,
+                ),
+                onTap: () {
+                  // Navigator.pushReplacementNamed(context, CalculadorasMainPage.routeName);
+                  Get.offNamed(AppRoutes.DETAIL);
+                  // Get.back();
+                  // Get.toNamed(AppRoutes.DETAIL);
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.calculate,
+                  color: Colors.blue,
+                  size: _iconsSize,
+                ),
+                title: Text('Calculadora de consumo', style: textTheme.bodyText2,),
             trailing: Icon(
               Icons.arrow_forward_ios,
               color: Colors.blue,

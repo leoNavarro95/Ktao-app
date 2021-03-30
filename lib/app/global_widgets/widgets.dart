@@ -72,9 +72,8 @@ Future<String> textEditOptionDialog(
 
   return await Get.dialog(
     AlertDialog(
-      backgroundColor: Colors.lightBlue[50],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      title: Text(title),
+      title: Text(title,style: Get.theme.textTheme.headline6,),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
