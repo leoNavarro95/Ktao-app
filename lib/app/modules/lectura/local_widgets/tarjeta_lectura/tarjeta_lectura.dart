@@ -181,7 +181,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       _icono = Icons.error;
     } else {
       _deltaText = Text('${this.trending["delta"].toStringAsFixed(1)} kWh',
-          style: TemaTexto().infoTarjeta);
+          style: Get.theme.textTheme.subtitle2);
       final double _delt = trending["delta"];
       final double _deltAnt = trending["deltaAnterior"];
       if (_delt > _deltAnt)
@@ -193,7 +193,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     double costoDbl = calculos["costo"];
 
     final Text costoTxt = Text('${costoDbl.toStringAsFixed(1)} CUP',
-        style: TemaTexto().infoTarjeta);
+        style: Get.theme.textTheme.subtitle2 );
 
     Widget deltaConsumo;
     if (this.mostrarConsumo) {
@@ -229,14 +229,14 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
         child: Column(
           children: [
             deltaConsumo,
-            this.mostrarConsumo ? Divider() : SizedBox(height: 8),
+            this.mostrarConsumo ? Divider(height: 5,) : SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('${this.lectura.fecha} ',
-                      style: TemaTexto().infoTarjeta),
+                      style: Get.theme.textTheme.subtitle2),
                   _haceXTiempo(),
                 ],
               ),
@@ -315,7 +315,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       tiempoStr =
           '(Hace ${tiempoDesde.inDays} ${(tiempoDesde.inDays == 1) ? 'día' : 'días'})';
     }
-    return Text(tiempoStr, style: TemaTexto().infoTarjeta);
+    return Text(tiempoStr, style: Get.theme.textTheme.subtitle2);
   }
 
   void _onTapConsumo(String deltaConsumo) {
