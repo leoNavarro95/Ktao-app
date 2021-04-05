@@ -48,15 +48,9 @@ class TarjetaMes extends StatelessWidget {
 
     final String reciboStr = this.isClosed ? "Mes cerrado" : "Mes sin cerrar";
 
-    Color myColor;
-    if (isWinter)
-      myColor = Color.fromRGBO(100, 150, 200, 1);
-    else
-      myColor = Colors.deepOrangeAccent;
-
     return Container(
       width: Get.width,
-      color: myColor,
+      color: Get.theme.disabledColor,//Color.fromRGBO(100, 150, 200, 1),
       padding: EdgeInsets.symmetric(vertical: 5),
       child: Center(
         child: Column(
@@ -88,7 +82,7 @@ class TarjetaMes extends StatelessWidget {
                   '${consumo.toStringAsFixed(2)} kWh',
                   style:
                       (consumo.isNegative)
-                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Colors.red))
+                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Get.theme.errorColor))
                       : TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
                   textAlign: TextAlign.center,
                 ),
@@ -96,7 +90,7 @@ class TarjetaMes extends StatelessWidget {
                   '${costo.toStringAsFixed(2)} CUP',
                   style:
                       (costo.isNegative)
-                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Colors.red))
+                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Get.theme.errorColor))
                       : TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
                   textAlign: TextAlign.center,
                 ),

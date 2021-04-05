@@ -52,7 +52,7 @@ Future<void> bottomSheetOpciones(ContadorModel contador) {
                         _formKey,
                         title: 'Editar contador',
                         labelHelp: 'Nombre nuevo',
-                        errorLabel: 'Introduzca un nombre',
+                        errorLabel: 'campo vacío',
                       );
                       if (nombre != null) {
                         final nuevoContador = ContadorModel(

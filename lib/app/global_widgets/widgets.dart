@@ -15,11 +15,11 @@ Future<bool> myboolDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       title: Text(
         titulo,
-        style: TemaTexto().bottomSheetTitulo,
+        style: Get.theme.textTheme.headline5,
       ),
       content: Text(
         subtitulo,
-        style: TemaTexto().bottomSheetBody,
+        style: Get.theme.textTheme.headline5,
       ),
       actions: <Widget>[
         TextButton(
@@ -215,7 +215,7 @@ class MyCheckBox extends GetView<MyCheckBoxController> {
                 ),
                 Text(
                   this.text,
-                  style: TemaTexto().bottomSheetBody,
+                  style: Get.theme.textTheme.headline6,
                 )
               ],
             );

@@ -44,8 +44,8 @@ class KTaoGraph extends StatelessWidget {
 
     if (this.hasNegativeData) {
       _chartWidget = errorGraphWidget(
-          message: 'Existe algún error en sus datos',
-          color: Colors.redAccent,
+          message: 'Error en sus datos',
+          color: Colors.red,
           icon: Icons.error_outline_rounded);
     } else if (this.tasasConsumo.length < 2) {
       if (this.aspectRatio > 3)

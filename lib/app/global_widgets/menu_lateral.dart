@@ -107,7 +107,7 @@ class MenuLateral extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Ktao App", style: TemaTexto().titulo,),
+                Text("Ktao App", style: Get.theme.textTheme.headline6,),
                 Divider(indent: 20,)
               ],
             ),

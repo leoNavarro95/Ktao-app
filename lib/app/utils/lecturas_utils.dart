@@ -93,7 +93,7 @@ List<TarjetaLectura> utilFillCardLectura(
   List<LecturaModel> listaLecturas,
   List<TarjetaLectura> tarjetasLect, {
   cardIsDeletable = false,
-  cardIsElevated = false,
+  cardIsElevated = true,
   cardMostrarConsumo = true,
 }) {
   if (tarjetasLect.isNotEmpty) tarjetasLect.clear();

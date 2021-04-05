@@ -55,12 +55,6 @@ class HomePage extends StatelessWidget {
     return AppBar(
       title: Text('Inicio'),
       centerTitle: true,
-      // actions: [
-      //   IconButton(
-      //     icon: Icon(Icons.delete),
-      //     onPressed: _eliminarContadores,
-      //   )
-      // ],
     );
   }
 
@@ -69,7 +63,7 @@ class HomePage extends StatelessWidget {
       _formKey,
       title: 'Adicionar contador',
       labelHelp: 'Nombre contador',
-      errorLabel: 'Introduzca un nombre',
+      errorLabel: 'campo vacío',
     );
     if (nombre != null) {
       final contador = ContadorModel(
