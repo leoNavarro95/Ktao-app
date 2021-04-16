@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ktao/app/data/model/contador_model.dart';
-import 'package:ktao/app/theme/text_theme.dart';
 import 'package:ktao/app/theme/theme_services.dart';
 
 ///Dialogo que si se acepta devuelve true y si se cancela devuelve false
@@ -11,7 +10,6 @@ Future<bool> myboolDialog(
     AlertDialog(
       actionsPadding: EdgeInsets.all(0),
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
-      backgroundColor: Colors.lightBlue[50],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       title: Text(
         titulo,
@@ -23,14 +21,14 @@ Future<bool> myboolDialog(
       ),
       actions: <Widget>[
         TextButton(
+          child: Text('CANCELAR'),
+          onPressed: () => Get.back(result: false),
+        ),
+        TextButton(
           child: Text('OK'),
           onPressed: () {
             Get.back(result: true);
           },
-        ),
-        TextButton(
-          child: Text('CANCELAR'),
-          onPressed: () => Get.back(result: false),
         ),
       ],
     ),

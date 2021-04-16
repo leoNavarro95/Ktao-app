@@ -6,7 +6,7 @@ class Themes {
 
   ThemeData lightTheme = ThemeData.light().copyWith(
     //primary
-    primaryColor: primaryBlue, //Colors.blue,
+    primaryColor: primaryBlue,
     //secundary = blue
     accentColor: carolinaBlue,
     toggleableActiveColor: carolinaBlue,
@@ -79,6 +79,7 @@ class Themes {
     toggleableActiveColor: Colors.cyan,
     indicatorColor: Colors.cyan[200],
     hintColor: Colors.cyan[800],
+    disabledColor: Color(0xFF2D677C),
     textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.cyan[200]),
 
     splashColor: Colors.grey[300],

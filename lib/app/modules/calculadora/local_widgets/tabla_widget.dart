@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Tabla extends StatelessWidget {
 
@@ -97,7 +98,7 @@ class Loza extends StatelessWidget {
       width: 100,
       height: 30,
       color: color,
-      child: Center(child: Text(text)),
+      child: Center(child: Text(text, style: Get.theme.textTheme.subtitle2.merge(TextStyle(color: Colors.white)),)),
     );
   }
 }

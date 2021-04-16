@@ -52,7 +52,7 @@ class CalculadoraPage extends StatelessWidget {
   Widget _formulario() {
     return Obx(() => Container(
           padding: EdgeInsets.all(10),
-          color: Colors.blue[100],
+          color: Get.theme.cardColor,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -77,7 +77,7 @@ class CalculadoraPage extends StatelessWidget {
 
   Container _calcResults() {
     return Container(
-      color: Color.fromRGBO(10, 100, 180, 0.4),
+      color: Get.theme.disabledColor,
       child: Obx(
         () => Text(
           "${calcCtr.consumo.value} kWh \n${calcCtr.costo.value.toStringAsFixed(2)} CUP",
@@ -92,9 +92,9 @@ class CalculadoraPage extends StatelessWidget {
     return Obx(() => calcCtr.listConsumo.isNotEmpty
         ? Tabla(
             titleRow: ['Rango', 'Consumo', 'Precio', 'Importe'],
-            titleColor: Color.fromRGBO(120, 200, 220, 1),
-            primaryColor: Color.fromRGBO(0, 180, 210, 0.7),
-            secundaryColor: Color.fromRGBO(10, 100, 180, 0.3),
+            titleColor: Get.theme.accentColor,
+            primaryColor: Get.theme.primaryColor,
+            secundaryColor: Get.theme.disabledColor,
             cuerpo: [
               rangos, //rango
               calcCtr.listConsumo, //consumo
@@ -121,9 +121,8 @@ class CalculadoraPage extends StatelessWidget {
   }
 
   Icon getExpandIcon(bool isExpanded) {
-    const iconColor = Colors.black38;
     return isExpanded
-        ? Icon(Icons.expand_less, color: iconColor)
-        : Icon(Icons.expand_more, color: iconColor);
+        ? Icon(Icons.expand_less)
+        : Icon(Icons.expand_more);
   }
 }
