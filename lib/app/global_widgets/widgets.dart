@@ -36,6 +36,44 @@ Future<bool> myboolDialog(
   );
 }
 
+Future<void> dialogInfo({String titulo = "Title", String subtitulo = "Subtitle", IconData icon = Icons.info}) async{
+  return await Get.dialog(
+                  AlertDialog(
+                    actionsPadding: EdgeInsets.all(0),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    title: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Icon(icon),
+                            SizedBox(width: 10),
+                            Text(
+                              titulo,
+                              style: Get.theme.textTheme.headline5,
+                            ),
+                          ],
+                        ),
+                        Divider()
+                      ],
+                    ),
+                    content: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                      decoration: BoxDecoration(
+                        color: Get.theme.primaryColor,
+                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))
+                      ),
+                      child: Text(
+                        subtitulo,
+                        style: Get.theme.textTheme.headline6,
+                      ),
+                    ),
+                  ),
+                );
+}
+
 Future<bool> borraContadorDialog(ContadorModel contador) async {
   return await Get.dialog(
     AlertDialog(
