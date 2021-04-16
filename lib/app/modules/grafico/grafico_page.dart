@@ -20,7 +20,7 @@ class GraficoPage extends GetView<GraficoController> {
     final _grafico = new KTaoGraph(
       lectXmes: graficoCtr.lecturasXmes,
       tasasConsumo: _tasasConsumo,
-      bkgColor: Color(0xb590d4fe),
+      bkgColor: Get.theme.cardColor,
       hasLabelOnYaxis: true,
       hasNegativeData: _hasNegativeData,
     );
@@ -30,7 +30,7 @@ class GraficoPage extends GetView<GraficoController> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            buildTasaConsumo(),
+            buildTasaConsumoHeader(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: _grafico,
@@ -41,7 +41,7 @@ class GraficoPage extends GetView<GraficoController> {
     );
   }
 
-  Widget buildTasaConsumo(){
+  Widget buildTasaConsumoHeader(){
     return myroundedContainer(
               text: Text('Tasa de consumo', style: Get.theme.textTheme.headline5,),
               icon: Icons.info_outline,

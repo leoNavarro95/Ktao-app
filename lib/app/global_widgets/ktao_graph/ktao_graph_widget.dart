@@ -48,7 +48,8 @@ class KTaoGraph extends StatelessWidget {
           color: Colors.red,
           icon: Icons.error_outline_rounded);
     } else if (this.tasasConsumo.length < 2) {
-      if (this.aspectRatio > 3)
+      if (this.aspectRatio >
+          3) // para contruirlo en la tarjeta del contador cuando faltan datos
         return myroundedContainer(
           bkgColor: Colors.blue.withAlpha(20),
           icon: Icons.warning_amber_rounded,
@@ -66,32 +67,20 @@ class KTaoGraph extends StatelessWidget {
           bottom: 10,
           right: 20,
           child: Container(
-            child: Text(
-              'meses',
-              style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: graphCtr.showAvg
-                      ? Colors.white.withOpacity(0.5)
-                      : Color(0xff67727d)),
-            ),
+            child: Text('meses',
+                style: Get.theme.textTheme.bodyText1
+                    .merge(TextStyle(color: Get.theme.accentColor))),
           ),
         );
       }
 
       if (this.hasLabelOnYaxis) {
         _buttonOnYaxis = Positioned(
-          top: 10,
+          top: 5,
           left: 5,
-          child: Text(
-            'KWh/día',
-            style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: graphCtr.showAvg
-                    ? Colors.white.withOpacity(0.5)
-                    : Color(0xff67727d)),
-          ),
+          child: Text('KWh/día',
+              style: Get.theme.textTheme.bodyText1
+                  .merge(TextStyle(color: Get.theme.accentColor))),
         );
       }
 
@@ -190,21 +179,14 @@ class KTaoGraph extends StatelessWidget {
         bottomTitles: SideTitles(
           showTitles: showAxis,
           reservedSize: 22,
-          getTextStyles: (value) => const TextStyle(
-              color: Color(0xff68737d),
-              fontWeight: FontWeight.bold,
-              fontSize: 16),
+          getTextStyles: (value) => Get.theme.textTheme.subtitle2,
           // value va a tener todos los valores del eje X a medida que se renderiza el grafico
           getTitles: ctr.bottomRenderTitles,
           margin: 8,
         ),
         leftTitles: SideTitles(
           showTitles: showAxis,
-          getTextStyles: (value) => const TextStyle(
-            color: Color(0xff67727d),
-            fontWeight: FontWeight.bold,
-            fontSize: 10,
-          ),
+          getTextStyles: (value) => Get.theme.textTheme.subtitle2,
           getTitles: ctr.leftRenderTitles,
           reservedSize: 28,
           margin: 12,
@@ -212,7 +194,7 @@ class KTaoGraph extends StatelessWidget {
       ),
       borderData: FlBorderData(
           show: this.hasBorder,
-          border: Border.all(color: const Color(0xff37434d), width: 1)),
+          border: Border.all(color: Get.theme.splashColor, width: 1)),
       minX: 0,
       //! OJO para variar el eje X,hacerlos depender de los maximos que tienen las lect
       maxX: this.tasasConsumo.length.toDouble(),
