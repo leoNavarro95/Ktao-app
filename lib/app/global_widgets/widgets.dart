@@ -36,42 +36,48 @@ Future<bool> myboolDialog(
   );
 }
 
-Future<void> dialogInfo({String titulo = "Title", String subtitulo = "Subtitle", IconData icon = Icons.info}) async{
+Future<void> dialogInfo(
+    {String titulo = "Title",
+    String subtitulo = "Subtitle",
+    IconData icon = Icons.info}) async {
   return await Get.dialog(
-                  AlertDialog(
-                    actionsPadding: EdgeInsets.all(0),
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0)),
-                    title: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Icon(icon),
-                            SizedBox(width: 10),
-                            Text(
-                              titulo,
-                              style: Get.theme.textTheme.headline5,
-                            ),
-                          ],
-                        ),
-                        Divider()
-                      ],
-                    ),
-                    content: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                      decoration: BoxDecoration(
-                        color: Get.theme.primaryColor,
-                        borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20), bottomRight: Radius.circular(20))
-                      ),
-                      child: Text(
-                        subtitulo,
-                        style: Get.theme.textTheme.headline6,
-                      ),
-                    ),
-                  ),
-                );
+    AlertDialog(
+      actionsPadding: EdgeInsets.all(0),
+      titlePadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      title: Column(
+        children: [
+          Row(
+            children: [
+              Icon(icon),
+              SizedBox(width: 10),
+              Text(
+                titulo,
+                style: Get.theme.textTheme.headline5,
+              ),
+            ],
+          ),
+        ],
+      ),
+      content: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        decoration: BoxDecoration(
+            color: Get.theme.primaryColor,
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
+        child: Text(
+          subtitulo,
+          style:
+              Get.theme.textTheme.caption.merge(TextStyle(color: Colors.white)),
+        ),
+      ),
+    ),
+  );
 }
 
 Future<bool> borraContadorDialog(ContadorModel contador) async {
@@ -170,8 +176,7 @@ void mySnackbar({
   bool isDisplayedInBottom = false,
 }) {
   Color colorText =
-      ThemeService().isSavedDarkMode() ? Colors.grey[300] 
-      : Colors.grey[900];
+      ThemeService().isSavedDarkMode() ? Colors.grey[300] : Colors.grey[900];
   return Get.snackbar(title, subtitle,
       snackPosition:
           isDisplayedInBottom ? SnackPosition.BOTTOM : SnackPosition.TOP,

@@ -30,17 +30,7 @@ class GraficoPage extends GetView<GraficoController> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            myroundedContainer(
-              text: Text('Tasa de consumo'),
-              icon: Icons.info_outline,
-              onTap: () async {
-                return await dialogInfo(
-                  icon: Icons.info_outline,
-                  titulo: 'Tasa de consumo',
-                  subtitulo: 'La tasa de consumo es la variación del consumo eléctrico por días, lo que permite conocer cuánto está consumiendo su vivienda con respecto al paso del tiempo en días. Por ejemplo, si su casa ha consumido 100kWh en 5 días, la tasa de consumo sería de 100/5 kWh/día lo que daría como resultado 20 kWh/día'
-                );
-              },
-            ),
+            buildTasaConsumo(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: _grafico,
@@ -49,5 +39,19 @@ class GraficoPage extends GetView<GraficoController> {
         ),
       ),
     );
+  }
+
+  Widget buildTasaConsumo(){
+    return myroundedContainer(
+              text: Text('Tasa de consumo', style: Get.theme.textTheme.headline5,),
+              icon: Icons.info_outline,
+              onTap: () async {
+                return await dialogInfo(
+                  icon: Icons.info_outline,
+                  titulo: 'Tasa de consumo',
+                  subtitulo: 'La tasa de consumo es la variación del consumo eléctrico por días, lo que permite conocer cuánto está consumiendo su vivienda con respecto al paso del tiempo en días. Por ejemplo, si su casa ha consumido 100kWh en 5 días, la tasa de consumo sería de 100/5 kWh/día lo que daría como resultado 20 kWh/día para ese rango de tiempo'
+                );
+              },
+            );
   }
 }

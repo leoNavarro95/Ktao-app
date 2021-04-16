@@ -79,7 +79,7 @@ class Themes {
     toggleableActiveColor: Colors.cyan,
     indicatorColor: Colors.cyan[200],
     hintColor: Colors.cyan[800],
-    disabledColor: Color(0xFF2D677C),
+    disabledColor: Colors.blueGrey[600],
     textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.cyan[200]),
 
     splashColor: Colors.grey[300],
@@ -94,7 +94,7 @@ class Themes {
       
       headline5: TextStyle(
           color: Colors.grey[300],
-          fontFamily: 'Montserrat-Italic',
+          fontFamily: 'Montserrat-Regular',
           fontStyle: FontStyle.normal),
       headline6: TextStyle(
         color: Colors.grey[300],
