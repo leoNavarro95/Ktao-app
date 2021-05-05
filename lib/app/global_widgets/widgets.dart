@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ktao/app/data/model/contador_model.dart';
-import 'package:ktao/app/theme/text_theme.dart';
+import 'package:ktao/app/theme/theme_services.dart';
 
 ///Dialogo que si se acepta devuelve true y si se cancela devuelve false
 Future<bool> myboolDialog(
@@ -10,26 +10,25 @@ Future<bool> myboolDialog(
     AlertDialog(
       actionsPadding: EdgeInsets.all(0),
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 5),
-      backgroundColor: Colors.lightBlue[50],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       title: Text(
         titulo,
-        style: TemaTexto().bottomSheetTitulo,
+        style: Get.theme.textTheme.headline5,
       ),
       content: Text(
         subtitulo,
-        style: TemaTexto().bottomSheetBody,
+        style: Get.theme.textTheme.headline5,
       ),
       actions: <Widget>[
+        TextButton(
+          child: Text('CANCELAR'),
+          onPressed: () => Get.back(result: false),
+        ),
         TextButton(
           child: Text('OK'),
           onPressed: () {
             Get.back(result: true);
           },
-        ),
-        TextButton(
-          child: Text('CANCELAR'),
-          onPressed: () => Get.back(result: false),
         ),
       ],
     ),
@@ -37,24 +36,101 @@ Future<bool> myboolDialog(
   );
 }
 
+Widget listTileNavigation(
+    {double iconSize = 40,
+    IconData icon = Icons.home,
+    String message = 'Message',
+    String routeNavigate = '/home'}) {
+  final _iconColor = Get.theme.accentColor;
+
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: 10),
+    child: ListTile(
+      leading: Icon(
+        icon,
+        color: _iconColor,
+        size: iconSize,
+      ),
+      title: Text(
+        message,
+        style: Get.theme.textTheme.caption,
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        color: _iconColor,
+      ),
+      onTap: () {
+        // Navigator.pushReplacementNamed(context, HomePage.routeName);
+        Get.offNamed(routeNavigate);
+        // Get.back();
+        // Get.toNamed(AppRoutes.HOME);
+      },
+    ),
+  );
+}
+
+/// Para mostrar informacion de ayuda al usuario, es dismissible
+Future<void> dialogInfo(
+    {String titulo = "Title",
+    String subtitulo = "Subtitle",
+    IconData icon = Icons.info}) async {
+  return await Get.dialog(
+    AlertDialog(
+      actionsPadding: EdgeInsets.all(0),
+      titlePadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20),
+        bottomLeft: Radius.circular(20),
+        bottomRight: Radius.circular(20),
+      )),
+      title: Column(
+        children: [
+          Row(
+            children: [
+              Icon(icon),
+              SizedBox(width: 10),
+              Text(
+                titulo,
+                style: Get.theme.textTheme.headline5,
+              ),
+            ],
+          ),
+        ],
+      ),
+      content: Container(
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+        decoration: BoxDecoration(
+            color: Get.theme.primaryColor,
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20))),
+        child: Text(
+          subtitulo,
+          style:
+              Get.theme.textTheme.caption.merge(TextStyle(color: Colors.white)),
+        ),
+      ),
+    ),
+  );
+}
+
 Future<bool> borraContadorDialog(ContadorModel contador) async {
   return await Get.dialog(
     AlertDialog(
-      backgroundColor: Colors.lightBlue[50],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       title: Text('¿Desea eliminar el contador?'),
       content: Text(
-          "El contador ${contador.nombre} sera eliminado completamente de la base de datos"),
+          "El contador \"${contador.nombre}\" será eliminado completamente de la base de datos"),
       actions: <Widget>[
+        TextButton(
+          child: Text('CANCELAR'),
+          onPressed: () => Get.back(result: false),
+        ),
         TextButton(
           child: Text('OK'),
           onPressed: () {
             Get.back(result: true);
           },
-        ),
-        TextButton(
-          child: Text('CANCELAR'),
-          onPressed: () => Get.back(result: false),
         ),
       ],
     ),
@@ -72,9 +148,11 @@ Future<String> textEditOptionDialog(
 
   return await Get.dialog(
     AlertDialog(
-      backgroundColor: Colors.lightBlue[50],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-      title: Text(title),
+      title: Text(
+        title,
+        style: Get.theme.textTheme.headline5,
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -83,6 +161,7 @@ Future<String> textEditOptionDialog(
             child: Column(
               children: [
                 TextFormField(
+                  style: Get.theme.textTheme.headline6,
                   decoration: InputDecoration(
                     labelText: labelHelp,
                     icon: Icon(Icons.add_box),
@@ -102,6 +181,11 @@ Future<String> textEditOptionDialog(
       ),
       actions: <Widget>[
         TextButton(
+          child: Text('CANCELAR'),
+          onPressed: () =>
+              Get.back(), //! va a retornar null, manejarlo del otro lado
+        ),
+        TextButton(
           child: Text('OK'),
           onPressed: () {
             //validate() devuelve true si el formulario es valido
@@ -110,27 +194,28 @@ Future<String> textEditOptionDialog(
             }
           },
         ),
-        TextButton(
-          child: Text('CANCELAR'),
-          onPressed: () =>
-              Get.back(), //! va a retornar null, manejarlo del otro lado
-        ),
       ],
     ),
     barrierDismissible: false,
   );
 }
 
-void mySnackbar(
-    {String title,
-    String subtitle,
-    IconData icon = Icons.warning,
-    Color iconColor = Colors.red,
-    int showMillisecs = 2500}) {
+void mySnackbar({
+  String title,
+  String subtitle,
+  IconData icon = Icons.warning,
+  Color iconColor = Colors.red,
+  int showMillisecs = 2500,
+  bool isDisplayedInBottom = false,
+}) {
+  Color colorText =
+      ThemeService().isSavedDarkMode() ? Colors.grey[300] : Colors.grey[900];
   return Get.snackbar(title, subtitle,
+      snackPosition:
+          isDisplayedInBottom ? SnackPosition.BOTTOM : SnackPosition.TOP,
       borderWidth: 2,
-      borderColor: Colors.black12,
-      colorText: Colors.black,
+      // borderColor: Colors.black12,
+      colorText: colorText,
       icon: Icon(
         icon,
         color: iconColor,
@@ -141,6 +226,7 @@ void mySnackbar(
 Widget myroundedContainer(
     {Text text,
     IconData icon,
+    double iconSize = 18,
     Color bkgColor,
     Color iconColor,
     Function onTap}) {
@@ -155,7 +241,7 @@ Widget myroundedContainer(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: iconColor, size: 18),
+            Icon(icon, color: iconColor, size: iconSize),
             SizedBox(
               width: 5,
             ),
@@ -203,7 +289,7 @@ class MyCheckBox extends GetView<MyCheckBoxController> {
                 ),
                 Text(
                   this.text,
-                  style: TemaTexto().bottomSheetBody,
+                  style: Get.theme.textTheme.headline6,
                 )
               ],
             );

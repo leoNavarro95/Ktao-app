@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Tabla extends StatelessWidget {
 
@@ -42,7 +43,7 @@ class Tabla extends StatelessWidget {
     
     //* TitleRow, el titulo da la tabla
           tabla.add(TableRow(
-            children: titleRow.map((e) => Loza( color: titleColor, title: e,),).toList()
+            children: titleRow.map((e) => Loza( color: titleColor, text: e,),).toList()
           ));
 
     //? se toma como referencia del tamanho de la tabla a cuerpo[0], primera fila
@@ -64,11 +65,11 @@ class Tabla extends StatelessWidget {
           } else {
             _titulo = cuerpo[j][i].toStringAsFixed(2);
           }
-          _row.add(Loza( color: _color, title: _titulo));
+          _row.add(Loza( color: _color, text: _titulo));
         }
         //* de lo contrario la Loza se llena con un string vacio 
         else {
-          _row.add(Loza( color: _color, title: " "));
+          _row.add(Loza( color: _color, text: " "));
         }
 
       }
@@ -85,9 +86,9 @@ class Tabla extends StatelessWidget {
 class Loza extends StatelessWidget {
   
   final Color color;
-  final String title;
+  final String text;
 
-  const Loza({@required this.color, @required this.title});
+  const Loza({@required this.color, @required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +98,7 @@ class Loza extends StatelessWidget {
       width: 100,
       height: 30,
       color: color,
-      child: Center(child: Text(title)),
+      child: Center(child: Text(text, style: Get.theme.textTheme.subtitle2.merge(TextStyle(color: Colors.white)),)),
     );
   }
 }

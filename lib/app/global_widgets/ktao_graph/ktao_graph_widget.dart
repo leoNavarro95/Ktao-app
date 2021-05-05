@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:get/get.dart';
 import 'package:ktao/app/global_widgets/ktao_graph/ktao_graph_controller.dart';
+import 'package:ktao/app/theme/text_theme.dart';
 import 'package:ktao/app/utils/math_util.dart';
+
+import '../widgets.dart';
 
 /// Dibuja un grafico de tasas de consumo.
 /// Dejar lectXmes vacio {} para que sea un grafico minimalista sin info en los ejes
@@ -41,10 +44,19 @@ class KTaoGraph extends StatelessWidget {
 
     if (this.hasNegativeData) {
       _chartWidget = errorGraphWidget(
-          message: 'Existe algún error en sus datos',
-          color: Colors.redAccent,
+          message: 'Error en sus datos',
+          color: Colors.red,
           icon: Icons.error_outline_rounded);
     } else if (this.tasasConsumo.length < 2) {
+      if (this.aspectRatio >
+          3) // para contruirlo en la tarjeta del contador cuando faltan datos
+        return myroundedContainer(
+          bkgColor: Colors.blue.withAlpha(20),
+          icon: Icons.warning_amber_rounded,
+          iconColor: Colors.blue,
+          text: Text('Faltan datos', style: TemaTexto().infoTarjeta),
+        );
+
       _chartWidget = errorGraphWidget(
           message: 'Debe tener al menos 2 lecturas',
           color: Colors.blueAccent,
@@ -55,32 +67,20 @@ class KTaoGraph extends StatelessWidget {
           bottom: 10,
           right: 20,
           child: Container(
-            child: Text(
-              'meses',
-              style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                  color: graphCtr.showAvg
-                      ? Colors.white.withOpacity(0.5)
-                      : Color(0xff67727d)),
-            ),
+            child: Text('meses',
+                style: Get.theme.textTheme.bodyText1
+                    .merge(TextStyle(color: Get.theme.accentColor))),
           ),
         );
       }
 
       if (this.hasLabelOnYaxis) {
         _buttonOnYaxis = Positioned(
-          top: 10,
+          top: 5,
           left: 5,
-          child: Text(
-            'KWh/día',
-            style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: graphCtr.showAvg
-                    ? Colors.white.withOpacity(0.5)
-                    : Color(0xff67727d)),
-          ),
+          child: Text('KWh/día',
+              style: Get.theme.textTheme.bodyText1
+                  .merge(TextStyle(color: Get.theme.accentColor))),
         );
       }
 
@@ -99,20 +99,24 @@ class KTaoGraph extends StatelessWidget {
               ),
               color: bkgColor,
             ),
-            child: Padding(
-              padding: EdgeInsets.only(
-                right:  (this.aspectRatio < 3) ? 18 : 5,
-                left:   (this.aspectRatio < 3) ? 12 : 5,
-                top:    (this.aspectRatio < 3) ? 24 : 5,
-                bottom: (this.aspectRatio < 3) ? 15 : 5,
-              ),
-              child: _chartWidget,
-            ),
+            child: _chartPadding(_chartWidget),
           ),
         ),
         _buttonOnYaxis,
         _labelOnXaxis,
       ],
+    );
+  }
+
+  Padding _chartPadding(Widget _chartWidget) {
+    return Padding(
+      padding: EdgeInsets.only(
+        right: (this.aspectRatio < 3) ? 18 : 5,
+        left: (this.aspectRatio < 3) ? 12 : 5,
+        top: (this.aspectRatio < 3) ? 24 : 5,
+        bottom: (this.aspectRatio < 3) ? 15 : 5,
+      ),
+      child: _chartWidget,
     );
   }
 
@@ -129,12 +133,12 @@ class KTaoGraph extends StatelessWidget {
             Icon(
               icon,
               color: color,
-              size: (this.aspectRatio < 3) ? 100 : 20,
+              size: (this.aspectRatio < 3) ? 100 : 45,
             ),
             Text(
               message,
               style: TextStyle(
-                  fontSize: (this.aspectRatio < 3) ? 20 : 8, color: color),
+                  fontSize: (this.aspectRatio < 3) ? 20 : 10, color: color),
             ),
           ],
         ),
@@ -175,21 +179,14 @@ class KTaoGraph extends StatelessWidget {
         bottomTitles: SideTitles(
           showTitles: showAxis,
           reservedSize: 22,
-          getTextStyles: (value) => const TextStyle(
-              color: Color(0xff68737d),
-              fontWeight: FontWeight.bold,
-              fontSize: 16),
+          getTextStyles: (value) => Get.theme.textTheme.subtitle2,
           // value va a tener todos los valores del eje X a medida que se renderiza el grafico
           getTitles: ctr.bottomRenderTitles,
           margin: 8,
         ),
         leftTitles: SideTitles(
           showTitles: showAxis,
-          getTextStyles: (value) => const TextStyle(
-            color: Color(0xff67727d),
-            fontWeight: FontWeight.bold,
-            fontSize: 10,
-          ),
+          getTextStyles: (value) => Get.theme.textTheme.subtitle2,
           getTitles: ctr.leftRenderTitles,
           reservedSize: 28,
           margin: 12,
@@ -197,7 +194,7 @@ class KTaoGraph extends StatelessWidget {
       ),
       borderData: FlBorderData(
           show: this.hasBorder,
-          border: Border.all(color: const Color(0xff37434d), width: 1)),
+          border: Border.all(color: Get.theme.splashColor, width: 1)),
       minX: 0,
       //! OJO para variar el eje X,hacerlos depender de los maximos que tienen las lect
       maxX: this.tasasConsumo.length.toDouble(),

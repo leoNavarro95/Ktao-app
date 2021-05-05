@@ -88,7 +88,7 @@ class TarjetaContador extends StatelessWidget {
       child: Container(
           width: double.infinity,
           padding: EdgeInsets.all(5),
-          color: titlebkg,
+          color: Get.theme.accentColor,
           child: Text(
             titulo,
             textAlign: TextAlign.center,
@@ -137,14 +137,7 @@ class TarjetaContador extends StatelessWidget {
 
       _chartInfo = myroundedContainer(
         bkgColor: Colors.blue.withAlpha(20),
-        icon: Icons.warning_amber_rounded,
-        iconColor: Colors.redAccent,
-        text: Text(
-          'Datos que dan resultados negativos',
-          style: TemaTexto()
-              .infoTarjeta
-              .merge(TextStyle(fontSize: 14, color: Colors.redAccent)),
-        ),
+        text: Text(' '),
       );
     } else {
       _grafico = new KTaoGraph(
@@ -183,7 +176,7 @@ class TarjetaContador extends StatelessWidget {
                 style: (costoTotal.isNegative)
                     ? TemaTexto()
                         .infoTarjeta
-                        .merge(TextStyle(fontSize: 14, color: Colors.redAccent))
+                        .merge(TextStyle(fontSize: 14, color: Colors.red))
                     : TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14))),
           ),
           myroundedContainer(
@@ -194,7 +187,7 @@ class TarjetaContador extends StatelessWidget {
               style: (consumoTotal.isNegative)
                   ? TemaTexto()
                       .infoTarjeta
-                      .merge(TextStyle(fontSize: 14, color: Colors.redAccent))
+                      .merge(TextStyle(fontSize: 14, color: Colors.red))
                   : TemaTexto().infoTarjeta.merge(TextStyle(fontSize: 14)),
             ),
           ),

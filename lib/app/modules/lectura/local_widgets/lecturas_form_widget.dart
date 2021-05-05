@@ -83,7 +83,7 @@ class LecturaForm extends StatelessWidget {
         margin: EdgeInsets.only(bottom: 8),
         child: Text(
           'Introduzca una nueva lectura',
-          style: TemaTexto().bottomSheetBody,
+          style: Get.theme.textTheme.subtitle2,
           textAlign: TextAlign.center,
         ));
   }
@@ -106,6 +106,7 @@ class LecturaForm extends StatelessWidget {
       child: Form(
         key: formKey,
         child: TextFormField(
+          style: Get.theme.textTheme.headline6,
           inputFormatters: [
             // FilteringTextInputFormatter.deny(RegExp('[ ,-]')),
             MaskTextInputFormatter(
@@ -114,7 +115,8 @@ class LecturaForm extends StatelessWidget {
           keyboardType: TextInputType.numberWithOptions(),
           decoration: InputDecoration(
               labelText: 'Lectura',
-              labelStyle: TemaTexto().infoTarjeta,
+              
+              // labelStyle: TemaTexto().infoTarjeta,
               border: OutlineInputBorder()),
           controller: textCtr,
           validator: _validacion,
@@ -135,15 +137,13 @@ class LecturaForm extends StatelessWidget {
       child: TextField(
         enableInteractiveSelection: false,
         readOnly: true,
+        style: Get.theme.textTheme.headline6,
         controller: dateCtr,
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.always,
             labelText: 'Fecha',
-            // hintText: fecha,
-            labelStyle: TemaTexto().infoTarjeta,
             border: OutlineInputBorder()),
         onTap: () {
-          // FocusScope.of(Get.context).requestFocus(new FocusNode());
           _selectDate(dateCtr);
         },
       ),

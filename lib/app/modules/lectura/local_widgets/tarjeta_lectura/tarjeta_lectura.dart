@@ -56,7 +56,6 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
                 borderRadius: BorderRadius.circular(_borderR)),
             elevation: isElevated ? 2.0 : 0.0,
             child: InkWell(
-              splashColor: Colors.blue.withAlpha(50),
               child: Container(
                   width: Get.width,
                   child: Column(
@@ -65,7 +64,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
                       _header(
                         '${this.lectura.lectura}',
                         _borderR,
-                        titlebkg: Colors.yellow[300].withAlpha(120),
+                        titlebkg: Get.theme.cardColor,
                         tarjLectCtr: _,
                         lectCtr: lectCtr,
                       ),
@@ -88,11 +87,10 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
   Widget _botonEliminarLect(LecturaController lectCtr) {
     if (this.isDeletable) {
       return IconButton(
-          splashColor: Colors.blue[100],
           iconSize: 30,
           icon: Icon(
             Icons.delete_outline_outlined,
-            color: Colors.black38,
+            // color: Colors.black38,
           ),
           onPressed: () async {
             bool opcion = await myboolDialog(
@@ -130,11 +128,10 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
 
     if (tarjLectCtr != null) {
       iconoExpand = IconButton(
-          splashColor: Colors.blue[100],
           iconSize: 40,
           icon: Icon(
             myIcon,
-            color: Colors.black38,
+            // color: Colors.black38,
           ),
           onPressed: () {
             tarjLectCtr.expand(lectura.id.toString());
@@ -156,12 +153,12 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 (lectura.isRecibo == 1)
-                    ? Expanded(child: Container(margin: EdgeInsets.symmetric(horizontal: 2),child: Icon(Icons.done_all, color: Colors.grey)))
+                    ? Expanded(child: Container(margin: EdgeInsets.symmetric(horizontal: 2),child: Icon(Icons.done_all)))
                     : Spacer(flex: 1,),
                 Text(
                   'Lect: $titulo',
                   textAlign: TextAlign.center,
-                  style: TemaTexto().tituloTarjetaDark,
+                  style: Get.theme.textTheme.caption,
                 ),
                 Spacer(flex: 1,),
                 _botonEliminarLect(lectCtr),
@@ -184,7 +181,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       _icono = Icons.error;
     } else {
       _deltaText = Text('${this.trending["delta"].toStringAsFixed(1)} kWh',
-          style: TemaTexto().infoTarjeta);
+          style: Get.theme.textTheme.subtitle2);
       final double _delt = trending["delta"];
       final double _deltAnt = trending["deltaAnterior"];
       if (_delt > _deltAnt)
@@ -196,7 +193,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
     double costoDbl = calculos["costo"];
 
     final Text costoTxt = Text('${costoDbl.toStringAsFixed(1)} CUP',
-        style: TemaTexto().infoTarjeta);
+        style: Get.theme.textTheme.subtitle2 );
 
     Widget deltaConsumo;
     if (this.mostrarConsumo) {
@@ -228,18 +225,18 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
 
     if (controller.expanded) {
       return Container(
-        color: Colors.yellow[50],
+        
         child: Column(
           children: [
             deltaConsumo,
-            this.mostrarConsumo ? Divider() : SizedBox(height: 8),
+            this.mostrarConsumo ? Divider(height: 5,) : SizedBox(height: 8),
             Container(
               padding: const EdgeInsets.only(bottom: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text('${this.lectura.fecha} ',
-                      style: TemaTexto().infoTarjeta),
+                      style: Get.theme.textTheme.subtitle2),
                   _haceXTiempo(),
                 ],
               ),
@@ -264,7 +261,6 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(_borderR)),
               child: InkWell(
-                splashColor: Colors.blue.withAlpha(50),
                 child: Container(
                     width: 300,
                     height: 300,
@@ -276,7 +272,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
                           child: Text(
                             'No existen lecturas registradas',
                             textAlign: TextAlign.center,
-                            style: TemaTexto().tituloTarjetaDark,
+                            style: Get.theme.textTheme.headline5,
                           ),
                         ),
                         Container(
@@ -284,12 +280,11 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
                           child: Icon(
                             Icons.featured_play_list_outlined,
                             size: 100,
-                            color: Colors.grey[400],
                           ),
                         ),
                         Text(
                           'Agrege nuevas lecturas',
-                          style: TemaTexto().bottomSheetBody,
+                          style: Get.theme.textTheme.subtitle2,
                         )
                       ],
                     )),
@@ -320,7 +315,7 @@ class TarjetaLectura extends GetView<TarjetaLectController> {
       tiempoStr =
           '(Hace ${tiempoDesde.inDays} ${(tiempoDesde.inDays == 1) ? 'día' : 'días'})';
     }
-    return Text(tiempoStr, style: TemaTexto().infoTarjeta);
+    return Text(tiempoStr, style: Get.theme.textTheme.subtitle2);
   }
 
   void _onTapConsumo(String deltaConsumo) {

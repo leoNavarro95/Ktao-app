@@ -20,43 +20,36 @@ class TarjetaMes extends StatelessWidget {
         assert(lecturasMes != null);
   @override
   Widget build(BuildContext context) {
-    bool isWinter = true;
 
 
     return Container(
-      child: contenedorMes(this.fecha, isWinter),
+      child: contenedorMes(this.fecha),
     );
   }
 
-  Widget contenedorMes(String fecha, bool isWinter) {
+  Widget contenedorMes(String fecha) {
     return Container(
       child: Column(
         children: [
-          _encabezado(fecha, isWinter),
-          _lecturasMes(this.lecturasMes, isWinter),
+          _encabezado(fecha),
+          _lecturasMes(this.lecturasMes),
         ],
       ),
     );
   }
 
-  Widget _encabezado(String fecha, bool isWinter) {
+  Widget _encabezado(String fecha) {
     double consumo = this.lecturasMes[0].lectura.lectura -
         this.lecturasMes[lecturasMes.length - 1].lectura.lectura;
 
     Map<String, dynamic> calculos = calcCosto(consumo);
     double costo = calculos["costo"];
 
-    final String reciboStr = this.isClosed ? "Mes cerrado" : "Mes sin cerrar";
-
-    Color myColor;
-    if (isWinter)
-      myColor = Color.fromRGBO(100, 150, 200, 1);
-    else
-      myColor = Colors.deepOrangeAccent;
+    final String estatusMes = this.isClosed ? "Mes cerrado" : "Mes sin cerrar";
 
     return Container(
       width: Get.width,
-      color: myColor,
+      color: Get.theme.disabledColor,//Color.fromRGBO(100, 150, 200, 1),
       padding: EdgeInsets.symmetric(vertical: 5),
       child: Center(
         child: Column(
@@ -88,7 +81,7 @@ class TarjetaMes extends StatelessWidget {
                   '${consumo.toStringAsFixed(2)} kWh',
                   style:
                       (consumo.isNegative)
-                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Colors.red))
+                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Get.theme.errorColor))
                       : TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
                   textAlign: TextAlign.center,
                 ),
@@ -96,18 +89,14 @@ class TarjetaMes extends StatelessWidget {
                   '${costo.toStringAsFixed(2)} CUP',
                   style:
                       (costo.isNegative)
-                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Colors.red))
+                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Get.theme.errorColor))
                       : TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
                   textAlign: TextAlign.center,
                 ),
               ],
             ),
-            Divider(
-              color: Colors.white24,
-              height: 1,
-            ),
             Text(
-              reciboStr,
+              estatusMes,
               textAlign: TextAlign.center,
               style: TemaTexto()
                   .cuerpoTarjeta
@@ -119,16 +108,8 @@ class TarjetaMes extends StatelessWidget {
     );
   }
 
-  Widget _lecturasMes(List<TarjetaLectura> listaLecturasMes, bool isWinter) {
-    Color bkgColor;
-    if (isWinter) {
-      bkgColor = Color.fromRGBO(175, 241, 248, 0.5);
-    } else {
-      bkgColor = Color.fromRGBO(253, 226, 55, 0.6);
-    }
-
+  Widget _lecturasMes(List<TarjetaLectura> listaLecturasMes) {
     return Container(
-      color: bkgColor,
       child: Column(children: listaLecturasMes),
     );
   }

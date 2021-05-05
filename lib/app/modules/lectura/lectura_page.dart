@@ -105,11 +105,11 @@ class LecturaPage extends GetView<LecturaController> {
       child: Card(
         elevation: 3,
         margin: EdgeInsets.all(0),
-        color: Colors.blue[300],
+        color: Get.theme.toggleableActiveColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(10))),
         child: Text('${contador.nombre}',
-            textAlign: TextAlign.center, style: TemaTexto().tituloTarjeta),
+            textAlign: TextAlign.center, style: Get.theme.textTheme.headline4),
       ),
     );
   }

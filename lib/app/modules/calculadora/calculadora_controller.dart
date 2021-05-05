@@ -24,35 +24,35 @@ class CalculadoraController extends GetxController{
     lectura2.value = 0;
     consumo.value = 0;
     costo.value = 0.0;
-
-    listConsumo.add(0);
-    listPrecio.add(0.0);
-    
   }
   @override
   void onClose() {
     this.textCtrLectura1.dispose();
     this.textCtrLectura2.dispose();
-    print('cerrado');
     super.onClose();
   }
 
   void expand(){
     expanded.value = !expanded.value;
+    lectura2.value = 0;
+    textCtrLectura2.clear();
+    this.calcular();
   }
 
   
   void calcular(){
-    consumo.value = (lectura2.value - lectura1.value).abs(); //? OJO: abs() retorna el valor absoluto (|x|)
+    consumo.value = (lectura2.value - lectura1.value).abs();
     listPrecio.clear();
     listConsumo.clear();
     Map<String, dynamic> resultado = calcCosto(consumo.value.toDouble());
     
     costo.value = resultado["costo"]; // es de tipo RxDouble
     List<double> lc = resultado["listaConsumo"];
-    lc.forEach((e) { listConsumo.add(e);});
+    // lc.forEach((e) { listConsumo.add(e);});
+    listConsumo.addAll(lc.toList());
     List<double> lp = resultado["listaPrecio"];
-    lp.forEach((e) { listPrecio.add(e);});
+    // lp.forEach((e) { listPrecio.add(e);});
+    listPrecio.addAll(lp.toList());
     
 
   }

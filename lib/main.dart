@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get_storage/get_storage.dart';
 
 import 'package:ktao/app/modules/splash/splash_binding.dart';
 import 'package:ktao/app/modules/splash/splash_page.dart';
 import 'package:ktao/app/routes/app_pages.dart';
+import 'package:ktao/app/theme/theme_services.dart';
+import 'package:ktao/app/theme/themes.dart';
 
-void main(){
+void main() async{
+  await GetStorage.init();
 
   runApp(MyApp());
 }
@@ -31,10 +35,9 @@ class MyApp extends StatelessWidget {
         const Locale('es', 'ES'), //spanish
       ],
       
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+      theme: Themes().lightTheme,
+      darkTheme: Themes().darkTheme,
+      themeMode: ThemeService().getThemeMode(),
 
       home: SplashPage(),
       initialBinding: SplashBinding(),

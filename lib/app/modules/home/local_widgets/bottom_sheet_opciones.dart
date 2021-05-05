@@ -14,7 +14,7 @@ Future<void> bottomSheetOpciones(ContadorModel contador) {
   final homeCtr = Get.find<HomeController>();
   return Get.bottomSheet(
     BottomSheet(
-        backgroundColor: Colors.lightBlue[50],
+        // backgroundColor: Colors.lightBlue[50],
         clipBehavior: Clip.antiAlias,
         elevation: 10,
         enableDrag: true,
@@ -33,17 +33,17 @@ Future<void> bottomSheetOpciones(ContadorModel contador) {
                 ListTile(
                   title: Text(
                     'Configuración',
-                    style: TemaTexto().bottomSheetTitulo,
+                    style: Get.theme.textTheme.headline5,
                   ),
                   subtitle: Text('${contador.nombre}',
-                      style: TemaTexto().bottomSheetBody),
+                      style: Get.theme.textTheme.overline.merge(TextStyle(fontSize: 14),)),
                   leading: Icon(Icons.settings),
                 ),
-                Divider(),
+                Divider(height: 1),
                 ListTile(
                     title: Text(
                       'Editar contador',
-                      style: TemaTexto().bottomSheetBody,
+                      style: Get.theme.textTheme.subtitle2,
                     ),
                     leading: Icon(Icons.edit),
                     trailing: Icon(Icons.arrow_forward_ios),
@@ -52,7 +52,7 @@ Future<void> bottomSheetOpciones(ContadorModel contador) {
                         _formKey,
                         title: 'Editar contador',
                         labelHelp: 'Nombre nuevo',
-                        errorLabel: 'Introduzca un nombre',
+                        errorLabel: 'campo vacío',
                       );
                       if (nombre != null) {
                         final nuevoContador = ContadorModel(
@@ -80,7 +80,7 @@ Future<void> bottomSheetOpciones(ContadorModel contador) {
                 ListTile(
                   title: Text(
                     'Eliminar contador',
-                    style: TemaTexto().bottomSheetBody,
+                    style: Get.theme.textTheme.subtitle2,
                   ),
                   leading: Icon(Icons.delete),
                   trailing: Icon(Icons.arrow_forward_ios),
