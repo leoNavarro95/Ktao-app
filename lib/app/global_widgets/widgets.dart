@@ -36,6 +36,40 @@ Future<bool> myboolDialog(
   );
 }
 
+Widget listTileNavigation(
+    {double iconSize = 40,
+    IconData icon = Icons.home,
+    String message = 'Message',
+    String routeNavigate = '/home'}) {
+  final _iconColor = Get.theme.accentColor;
+
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: 10),
+    child: ListTile(
+      leading: Icon(
+        icon,
+        color: _iconColor,
+        size: iconSize,
+      ),
+      title: Text(
+        message,
+        style: Get.theme.textTheme.caption,
+      ),
+      trailing: Icon(
+        Icons.arrow_forward_ios,
+        color: _iconColor,
+      ),
+      onTap: () {
+        // Navigator.pushReplacementNamed(context, HomePage.routeName);
+        Get.offNamed(routeNavigate);
+        // Get.back();
+        // Get.toNamed(AppRoutes.HOME);
+      },
+    ),
+  );
+}
+
+/// Para mostrar informacion de ayuda al usuario, es dismissible
 Future<void> dialogInfo(
     {String titulo = "Title",
     String subtitulo = "Subtitle",
@@ -83,11 +117,10 @@ Future<void> dialogInfo(
 Future<bool> borraContadorDialog(ContadorModel contador) async {
   return await Get.dialog(
     AlertDialog(
-      backgroundColor: Colors.lightBlue[50],
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       title: Text('¿Desea eliminar el contador?'),
       content: Text(
-          "El contador ${contador.nombre} sera eliminado completamente de la base de datos"),
+          "El contador \"${contador.nombre}\" será eliminado completamente de la base de datos"),
       actions: <Widget>[
         TextButton(
           child: Text('CANCELAR'),
