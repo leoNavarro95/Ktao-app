@@ -3,6 +3,7 @@ import 'package:ktao/app/data/model/contador_model.dart';
 import 'package:ktao/app/data/model/lectura_model.dart';
 import 'package:ktao/app/data/provider/data_base_provider.dart';
 import 'package:ktao/app/modules/detalles/local_widgets/tarjeta_mes.dart';
+import 'package:ktao/app/modules/lectura/lectura_controller.dart';
 import 'package:ktao/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
 import 'package:ktao/app/utils/lecturas_utils.dart';
 import 'package:meta/meta.dart';
@@ -10,6 +11,8 @@ import 'package:meta/meta.dart';
 class DetallesController extends GetxController {
   final ContadorModel contador;
   DetallesController({@required this.contador}) : assert(contador != null);
+  
+  final lecturaCtr = Get.find<LecturaController>();
 
   @override
   void onInit() async {
@@ -29,28 +32,41 @@ class DetallesController extends GetxController {
 
   Future<List<TarjetaMes>> updateVisualFromDB() async {
     _tarjetasMes.clear();
-    List<String> fechasAcotadas = await _getMonthYears();
-    fechasAcotadas = fechasAcotadas.reversed.toList();
-    for (int i = 0; i < fechasAcotadas.length; i++) {
-      List<LecturaModel> listaLecturas = await DBProvider.db
-          .getLecturasByFechaPattern(contador, fechasAcotadas[i]);
-      final List<LecturaModel> lectOrdenadas = ordenarPorFecha(listaLecturas);
+    List<String> monthYear = await _getMonthYears();
+    monthYear = monthYear.reversed.toList();
 
-      _tarjetasLect = utilFillCardLectura(lectOrdenadas, _tarjetasLect);
-      await _llenarTarjetasMes(fechasAcotadas[i], this.contador);
+
+
+    for(int i = 0; i < monthYear.length; i++){
+      
+      List<TarjetaLectura> tarjetasXMes = getTarjetaLectByDate(lecturaCtr.tarjetasLect, monthYear[i]);
+      
+      await _llenarTarjetasMes(monthYear[i], tarjetasXMes);
+
     }
+
     return _tarjetasMes;
   }
- 
-  Future<void> _llenarTarjetasMes(String fecha, ContadorModel contador) async {
-    final bool _isClosed =
-        await DBProvider.db.isMonthClosedDB(contador, fecha);
+
+  List<TarjetaLectura> getTarjetaLectByDate(List<TarjetaLectura> tarjetasLectura, String monthYearDate){
+    List<TarjetaLectura> tarjetaLectXMes = [];
+    tarjetasLectura.forEach((tarLect) {
+          //se buscan las tarjetas de lecturas que sean de la fecha dada
+          if(tarLect.lectura.fecha.contains(monthYearDate)){
+            tarjetaLectXMes.add(tarLect);
+          }
+        });
+    return tarjetaLectXMes;
+  }
+
+  Future<void> _llenarTarjetasMes(String fecha, List<TarjetaLectura> tarjetasLect) async {
+    final bool _isClosed = await DBProvider.db.isMonthClosedDB(this.contador, fecha);
     _tarjetasMes.add(
       TarjetaMes(
         isClosed: _isClosed,
         fecha: fechaLiteral(fecha),
-        lecturasMes: _tarjetasLect
-            .toList(), //* toList() crea una nueva lista y evita pasar directamente la referencia de _tarjetasLect. Si se pasa directamente la referencia luego cuando se limpie se borra tambien de aqui
+        lecturasMes: tarjetasLect
+            .toList(), //* toList() crea una nueva lista y evita pasar directamente la referencia de tarjetasLect. Si se pasa directamente la referencia luego cuando se limpie se borra tambien de aqui
       ),
     );
 

@@ -7,7 +7,6 @@ import 'package:ktao/app/modules/detalles/detalles_controller.dart';
 import 'package:ktao/app/modules/grafico/grafico_page.dart';
 import 'package:ktao/app/modules/lectura/local_widgets/agregar_lectura_dialog.dart';
 import 'package:ktao/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
-import 'package:ktao/app/theme/text_theme.dart';
 import 'package:ktao/app/modules/detalles/detalles_page.dart';
 
 import 'lectura_controller.dart';
@@ -116,23 +115,24 @@ class LecturaPage extends GetView<LecturaController> {
 
   Widget _listaLecturas(ContadorModel contador) {
     return Obx(() {
-      if (lecturaCtr.tarjetasLect.isNotEmpty) {
-        return ListView.builder(
-          itemCount: lecturaCtr.tarjetasLect.length,
-          itemBuilder: (_, index) {
-            if (index == 0) {
-              return Column(
-                children: [
-                  SizedBox(height: 50),
-                  lecturaCtr.tarjetasLect[index],
-                ],
-              );
-            }
-            return lecturaCtr.tarjetasLect[index];
-          },
-        );
+      if (lecturaCtr.tarjetasLect.isEmpty) {
+        return TarjetaLectura(); //sin parametro ya devuelve que no tiene nada
       }
-      return TarjetaLectura(); //sin parametro ya devuelve que no tiene nada
+      //si hay contenido en las tarjetasLect se procede a mostrarlas
+      return ListView.builder(
+        itemCount: lecturaCtr.tarjetasLect.length,
+        itemBuilder: (_, index) {
+          if (index == 0) {
+            return Column(
+              children: [
+                SizedBox(height: 50),
+                lecturaCtr.tarjetasLect[index],
+              ],
+            );
+          }
+          return lecturaCtr.tarjetasLect[index];
+        },
+      );
     });
   }
 }

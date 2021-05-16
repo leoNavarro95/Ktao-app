@@ -4,7 +4,6 @@ import 'package:ktao/app/data/model/contador_model.dart';
 import 'package:ktao/app/data/provider/data_base_provider.dart';
 import 'package:ktao/app/modules/detalles/local_widgets/tarjeta_mes.dart';
 import 'package:ktao/app/modules/lectura/local_widgets/tarjeta_lectura/tarjeta_lectura.dart';
-import 'package:ktao/app/theme/text_theme.dart';
 
 import 'detalles_controller.dart';
 
@@ -27,7 +26,7 @@ class DetallesPage extends GetView<DetallesController> {
                 child: Center(
                     child: Text(
                   'Cargando...',
-                  style: TemaTexto().titulo,
+                  style: Get.theme.textTheme.bodyText1
                 )),
               );
             }

@@ -70,12 +70,12 @@ class LecturaController extends GetxController
     this._lectOrdenadas = lecturasOrd.toList();
 
     if (lecturasOrd.isNotEmpty) {
-      tarjetasLect.addAll(utilFillCardLectura(
+      tarjetasLect.addAll(fillCardLectura(
         lecturasOrd,
         tarjetasLect.toList(),
         cardIsDeletable: true,
         cardIsElevated: true,
-        cardMostrarConsumo: false,
+        cardMostrarConsumo: true,
       ));
     }
   }

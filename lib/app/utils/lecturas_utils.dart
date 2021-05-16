@@ -89,7 +89,7 @@ String utilsInvertirStr(String str) {
 }
 
 /// hay que pasarle una lista de lectura model con todas las lecturas, ademas una referencia de las tarjetas, retorna las tarjetas pasadas como referencias, pero llanas con la lista de lecturasmodel y sus deltas
-List<TarjetaLectura> utilFillCardLectura(
+List<TarjetaLectura> fillCardLectura(
   List<LecturaModel> listaLecturas,
   List<TarjetaLectura> tarjetasLect, {
   cardIsDeletable = false,
@@ -101,7 +101,6 @@ List<TarjetaLectura> utilFillCardLectura(
   double _delta = 0.0, _deltaAnterior = 0.0;
   for (int i = 0; i < listaLecturas.length; i++) {
     //delta = lectura_actual - lectura_anterior
-    //! ojo cambiar el orden de la resta
     if (i < (listaLecturas.length - 1)) {
       _delta = listaLecturas[i].lectura - listaLecturas[i + 1].lectura;
     }
