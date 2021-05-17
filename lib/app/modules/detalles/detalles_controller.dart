@@ -11,7 +11,7 @@ import 'package:meta/meta.dart';
 class DetallesController extends GetxController {
   final ContadorModel contador;
   DetallesController({@required this.contador}) : assert(contador != null);
-  
+
   final lecturaCtr = Get.find<LecturaController>();
 
   @override
@@ -35,32 +35,39 @@ class DetallesController extends GetxController {
     List<String> monthYear = await _getMonthYears();
     monthYear = monthYear.reversed.toList();
 
+    for (int i = 0; i < monthYear.length; i++) {
+      List<TarjetaLectura> tarjetasXMes =
+          getTarjetaLectByDate(lecturaCtr.tarjetasLect, monthYear[i]);
 
-
-    for(int i = 0; i < monthYear.length; i++){
-      
-      List<TarjetaLectura> tarjetasXMes = getTarjetaLectByDate(lecturaCtr.tarjetasLect, monthYear[i]);
-      
       await _llenarTarjetasMes(monthYear[i], tarjetasXMes);
-
     }
 
     return _tarjetasMes;
   }
 
-  List<TarjetaLectura> getTarjetaLectByDate(List<TarjetaLectura> tarjetasLectura, String monthYearDate){
+  List<TarjetaLectura> getTarjetaLectByDate(
+      List<TarjetaLectura> tarjetasLectura, String monthYearDate) {
     List<TarjetaLectura> tarjetaLectXMes = [];
+
     tarjetasLectura.forEach((tarLect) {
-          //se buscan las tarjetas de lecturas que sean de la fecha dada
-          if(tarLect.lectura.fecha.contains(monthYearDate)){
-            tarjetaLectXMes.add(tarLect);
-          }
-        });
+      //se buscan las tarjetas de lecturas que sean de la fecha dada
+      if (tarLect.lectura.fecha.contains(monthYearDate)) {
+        final tarjetaLect = TarjetaLectura(
+          lectura: tarLect.lectura,
+          trending: tarLect.trending,
+          isDeletable: false,
+          isElevated: true,
+        );
+        tarjetaLectXMes.add(tarjetaLect);
+      }
+    });
     return tarjetaLectXMes;
   }
 
-  Future<void> _llenarTarjetasMes(String fecha, List<TarjetaLectura> tarjetasLect) async {
-    final bool _isClosed = await DBProvider.db.isMonthClosedDB(this.contador, fecha);
+  Future<void> _llenarTarjetasMes(
+      String fecha, List<TarjetaLectura> tarjetasLect) async {
+    final bool _isClosed =
+        await DBProvider.db.isMonthClosedDB(this.contador, fecha);
     _tarjetasMes.add(
       TarjetaMes(
         isClosed: _isClosed,
