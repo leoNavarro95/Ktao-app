@@ -78,7 +78,7 @@ class DetallesController extends GetxController {
     );
 
     final List<double> lecturas = [];
-    for (TarjetaLectura lect in _tarjetasLect) {
+    for (TarjetaLectura lect in tarjetasLect) {
       lecturas.add(lect.lectura.lectura);
     }
     lecturasXmes.addAll({fechaLiteral(fecha): lecturas});
