@@ -8,6 +8,7 @@ import 'package:ktao/app/utils/math_util.dart';
 class TarjetaMes extends StatelessWidget {
   final String fecha; // en formato /MM/YYYY
   final List<TarjetaLectura> lecturasMes;
+  final double consumoMes;
 
   ///define que este mes ya esta cerrado por una lectura de recibo
   final bool isClosed;
@@ -15,41 +16,40 @@ class TarjetaMes extends StatelessWidget {
   const TarjetaMes({
     @required this.fecha,
     @required this.lecturasMes,
+    @required this.consumoMes,
     this.isClosed = false,
   })  : assert(fecha != null),
         assert(lecturasMes != null);
   @override
   Widget build(BuildContext context) {
-
-
     return Container(
-      child: contenedorMes(this.fecha),
+      child: contenedorMes(),
     );
   }
 
-  Widget contenedorMes(String fecha) {
+  Widget contenedorMes() {
     return Container(
       child: Column(
         children: [
-          _encabezado(fecha),
+          _encabezado(),
           _lecturasMes(this.lecturasMes),
         ],
       ),
     );
   }
 
-  Widget _encabezado(String fecha) {
-    double consumo = this.lecturasMes[0].lectura.lectura -
-        this.lecturasMes[lecturasMes.length - 1].lectura.lectura;
+  Widget _encabezado() {
+    
+    
 
-    Map<String, dynamic> calculos = calcCosto(consumo);
+    Map<String, dynamic> calculos = calcCosto(this.consumoMes);
     double costo = calculos["costo"];
 
     final String estatusMes = this.isClosed ? "Mes cerrado" : "Mes sin cerrar";
 
     return Container(
       width: Get.width,
-      color: Get.theme.disabledColor,//Color.fromRGBO(100, 150, 200, 1),
+      color: Get.theme.disabledColor, //Color.fromRGBO(100, 150, 200, 1),
       padding: EdgeInsets.symmetric(vertical: 5),
       child: Center(
         child: Column(
@@ -63,7 +63,7 @@ class TarjetaMes extends StatelessWidget {
                     : Container(),
                 Spacer(flex: 5),
                 Text(
-                  fecha,
+                  this.fecha,
                   style: TemaTexto().tituloTarjeta,
                   textAlign: TextAlign.center,
                 ),
@@ -78,19 +78,23 @@ class TarjetaMes extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  '${consumo.toStringAsFixed(2)} kWh',
-                  style:
-                      (consumo.isNegative)
-                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Get.theme.errorColor))
-                      : TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
+                  '${this.consumoMes.toStringAsFixed(2)} kWh',
+                  style: (this.consumoMes.isNegative)
+                      ? TemaTexto().tituloTarjeta.merge(
+                          TextStyle(fontSize: 14, color: Get.theme.errorColor))
+                      : TemaTexto()
+                          .tituloTarjeta
+                          .merge(TextStyle(fontSize: 14)),
                   textAlign: TextAlign.center,
                 ),
                 Text(
                   '${costo.toStringAsFixed(2)} CUP',
-                  style:
-                      (costo.isNegative)
-                      ? TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14, color: Get.theme.errorColor))
-                      : TemaTexto().tituloTarjeta.merge(TextStyle(fontSize: 14)),
+                  style: (costo.isNegative)
+                      ? TemaTexto().tituloTarjeta.merge(
+                          TextStyle(fontSize: 14, color: Get.theme.errorColor))
+                      : TemaTexto()
+                          .tituloTarjeta
+                          .merge(TextStyle(fontSize: 14)),
                   textAlign: TextAlign.center,
                 ),
               ],

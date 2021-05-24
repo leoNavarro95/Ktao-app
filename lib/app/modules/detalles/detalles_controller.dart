@@ -24,9 +24,6 @@ class DetallesController extends GetxController {
   List<TarjetaMes> _tarjetasMes = [];
   List<TarjetaMes> get tarjetasMes => _tarjetasMes;
 
-  ///lista que contiene las tarjetas de las lecturas
-  List<TarjetaLectura> _tarjetasLect = [];
-
   ///para ser usada en la grafica, va a tener un string por cada mes de lecturas y una lista de las lectuars para el mismo
   Map<String, List<double>> lecturasXmes = {};
 
@@ -35,12 +32,20 @@ class DetallesController extends GetxController {
     List<String> monthYear = await _getMonthYears();
     monthYear = monthYear.reversed.toList();
 
+    Map<String, List<TarjetaLectura>> tarjetasXmes = {};
+
     for (int i = 0; i < monthYear.length; i++) {
       List<TarjetaLectura> tarjetasXMes =
           getTarjetaLectByDate(lecturaCtr.tarjetasLect, monthYear[i]);
-
-      await _llenarTarjetasMes(monthYear[i], tarjetasXMes);
+      Map<String, List<double>> fechaAndLecturas =
+          getFechaAndLecturas(monthYear[i], tarjetasXMes);
+      lecturasXmes.addAll(fechaAndLecturas);
+      tarjetasXmes.addAll({fechaLiteral(monthYear[i]): tarjetasXMes});
     }
+
+    Map<String, double> consumoXmeses = calcularConsumoXmes(lecturasXmes);
+
+    await _llenarTarjetasMes(tarjetasXmes, consumoXmeses);
 
     return _tarjetasMes;
   }
@@ -64,24 +69,39 @@ class DetallesController extends GetxController {
     return tarjetaLectXMes;
   }
 
+  
   Future<void> _llenarTarjetasMes(
-      String fecha, List<TarjetaLectura> tarjetasLect) async {
-    final bool _isClosed =
-        await DBProvider.db.isMonthClosedDB(this.contador, fecha);
-    _tarjetasMes.add(
-      TarjetaMes(
-        isClosed: _isClosed,
-        fecha: fechaLiteral(fecha),
-        lecturasMes: tarjetasLect
-            .toList(), //* toList() crea una nueva lista y evita pasar directamente la referencia de tarjetasLect. Si se pasa directamente la referencia luego cuando se limpie se borra tambien de aqui
-      ),
-    );
+      Map<String, List<TarjetaLectura>> tarjetasXmes,
+      Map<String, double> consumoMeses,
+      ) async {
+    
+    for(int i = 0; i < tarjetasXmes.length; i++){
+      String fecha = tarjetasXmes.keys.toList()[i];
+      double consumoMes = consumoMeses[fecha];
+      List<TarjetaLectura> tarjetasLect = tarjetasXmes[fecha];
+      final bool _isClosed =
+          await DBProvider.db.isMonthClosedDB(this.contador, fecha);
+      _tarjetasMes.add(
+        TarjetaMes(
+          consumoMes: consumoMes,
+          isClosed: _isClosed,
+          fecha: fecha,
+          lecturasMes: tarjetasLect
+              .toList(), //* toList() crea una nueva lista y evita pasar directamente la referencia de tarjetasLect. Si se pasa directamente la referencia luego cuando se limpie se borra tambien de aqui
+        ),
+      );
+    }
+  
+  }
 
+  Map<String, List<double>> getFechaAndLecturas(
+      String fecha, List<TarjetaLectura> tarjetasLect) {
     final List<double> lecturas = [];
     for (TarjetaLectura lect in tarjetasLect) {
       lecturas.add(lect.lectura.lectura);
     }
-    lecturasXmes.addAll({fechaLiteral(fecha): lecturas});
+
+    return {fechaLiteral(fecha): lecturas};
   }
 
   /// obtiene la lista de monthYears (organizado) sin repetir de las lecturas para el contador dado.

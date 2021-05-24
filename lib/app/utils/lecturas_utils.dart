@@ -174,3 +174,32 @@ Future<List<LecturaModel>> getLecturasOrdenadas(ContadorModel contador) async {
 
   return (lecturas == null) ? [] : ordenarPorFecha(lecturas).toList();
 }
+
+
+/// devuelve un mapa con el mes y su consumo, ejmplo: {enero del 2021: 122; febrero del 2021: 33}
+  Map<String, double> calcularConsumoXmes(Map<String,List<double>> lecturasXmes){
+
+    double consumoMesActual = 0, ultimaLecturaMesAnterior = 0, ultimaLecturaMesActual = 0, primeraLecturaMesActual = 0;
+    Map<String, double> consumosXmes = {};
+
+    List<String> meses = lecturasXmes.keys.toList();
+
+    for(int i = lecturasXmes.length - 1; i >= 0 ; i--){
+
+      String mes = meses[i];
+      List<double> lecturas = lecturasXmes[mes];
+      ultimaLecturaMesActual = lecturas[0];
+      // primeraLecturaMesActual = lecturas.length == 1 ? 0 : lecturas[lecturas.length - 1];
+      primeraLecturaMesActual = lecturas[lecturas.length - 1];
+
+      consumoMesActual = ultimaLecturaMesAnterior == 0 
+                        ? (ultimaLecturaMesActual - primeraLecturaMesActual)
+                        : (ultimaLecturaMesActual - ultimaLecturaMesAnterior);
+
+      ultimaLecturaMesAnterior = ultimaLecturaMesActual;
+      
+      consumosXmes.addAll({mes:consumoMesActual});
+    }
+
+    return consumosXmes;
+  }
